@@ -1,4 +1,6 @@
 from tree import ASTree
+from error import *
+import lang
 
 class Parser:
 
@@ -9,8 +11,8 @@ class Parser:
         self.tokens = self.src.split()
         self.index = 0
         self.srclength = len(self.tokens)
-        self.keywords = ['pattern', 'Axiom', 'Production', 'Define', 'Defer', 'is']
         self.astree = ASTree("program")
+        self.keywords = lang.keywords
 
     def is_name(self, token):
         if token in self.keywords:
@@ -40,7 +42,7 @@ class Parser:
                 self.astree.add(token)
                 legals[token]()
             else:
-                raise InvalidBlockError()
+                raise InvalidBlockError(token)
 
     def pattern(self):
         legals = {"is": self.inherit,
@@ -122,3 +124,48 @@ class Parser:
         self.astree.add_static(self.get_token())
         self.astree.add_static(self.get_token())
         self.astree.ascend()
+
+
+class Valditor:
+    ''' Traverses the Abstract Syntax Tree and checks to make sure that all nodes form 
+    allowable expressions'''
+
+    def __init__(self, astree):
+        self.astree = astree
+        self.current = self.astree.root
+        self.symbtable = {'patterns':[]}
+
+    def program(self):
+        legals = {'patterns': pattern}
+        toplevels = self.astree.root.children
+        for toplevel in toplevels:
+            self.current = toplevel
+            legals[toplevel.data]()
+        print "Source file validated"
+
+    def pattern(self):
+        legals = {"is": self.inherit,
+                  "Axiom": self.axiom,
+                  "Production": self.production,
+                  "Define": self.define,
+                  "Defer": self.defer,
+                  "Assign": self.assign}
+        children = self.current.children
+        name = children.pop(0)
+        if name in self.symbtable['patterns']:
+            raise RepeatedPatternError
+        else:
+            self.symbtable.['patterns'].append(name)
+        for child in children:
+            self.current = child
+            legals[child]()
+
+    def inherit(self):
+        inherit_obj = self.current.children[0]
+        parent = inherit_obj.data
+        if not parent in self.symbtable['patterns']:
+            raise UndefinedPatternError
+
+    def axiom(self):
+        axiom = self.current.child[0].data
+
