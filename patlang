@@ -18,13 +18,12 @@ pattern tree
         Define root => exec $root
         Defer twig
 
-end 
 
 pattern Flowering is tree
         Production twig => @twig @leaf @flower
         Define flower  => exec $flower
         
-end 
+end
 
 pattern Oak is tree
         Assign split 0.3

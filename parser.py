@@ -1,6 +1,6 @@
 from tree import ASTree
 from error import *
-import lang
+#import lang
 
 class Parser:
 
@@ -12,7 +12,7 @@ class Parser:
         self.index = 0
         self.srclength = len(self.tokens)
         self.astree = ASTree("program")
-        self.keywords = lang.keywords
+        self.keywords = ["pattern"]
 
     def is_name(self, token):
         if token in self.keywords:
@@ -26,6 +26,7 @@ class Parser:
         if self.index < self.srclength:
             token = self.tokens[self.index]
             self.index += 1
+            print token
             return token
         else:
             exit()
@@ -61,7 +62,7 @@ class Parser:
                 self.astree.add(token)
                 legals[token]()
             else:
-                raise InvalidPatternRuleError()
+                raise InvalidPatternRuleError(token)
             token = self.get_token()
         self.astree.ascend()
 
@@ -126,14 +127,14 @@ class Parser:
         self.astree.ascend()
 
 
-class Valditor:
+class Validator:
     ''' Traverses the Abstract Syntax Tree and checks to make sure that all nodes form 
     allowable expressions'''
 
     def __init__(self, astree):
         self.astree = astree
         self.current = self.astree.root
-        self.symbtable = {'patterns':[]}
+        self.env_patterns = {}
 
     def program(self):
         legals = {'patterns': pattern}
@@ -151,21 +152,77 @@ class Valditor:
                   "Defer": self.defer,
                   "Assign": self.assign}
         children = self.current.children
-        name = children.pop(0)
-        if name in self.symbtable['patterns']:
+        name = children[0].data
+        if self.name in self.env_patterns:
             raise RepeatedPatternError
         else:
-            self.symbtable.['patterns'].append(name)
+            self.env_patterns[name] = {"terms": [],
+                                       "nonterms":[],
+                                       "productions": [],
+                                       "param": []}
+        self.instance = self.patterns[name]
         for child in children:
             self.current = child
             legals[child]()
 
+        terms = set(self.instance["terms"])
+        nonterms = set(self.instance["nonterms"])
+        prod = set(self.instance["productions"])
+        if len(nonterms.difference(prod)) != 0:
+            raise IncompleteProductionsError(name)
+        
+
+
     def inherit(self):
-        inherit_obj = self.current.children[0]
-        parent = inherit_obj.data
-        if not parent in self.symbtable['patterns']:
-            raise UndefinedPatternError
+        parent = self.current.children[0].data
+        if not parent in self.env_patterns:
+            raise UndefinedPatternError(parent)
+        else:
+            self.instance = copy(self.env_patterns[parent])
+            
 
     def axiom(self):
-        axiom = self.current.child[0].data
+        axiom = self.current.children[0].data
+        if is_nonterm(axiom):
+            self.instance["nonterms"].append(axiom)
+        else:
+            raise InvalidNontermError(axiom)
 
+    def production(self):
+        lhs = self.current.children[0]
+        rhs = self.current.children[1].children
+        if lhs.data == 'pnt':
+            if is_nonterm(lhs.children[0].data):
+                self.instance["nonterms"].append(lhs.children[0].data)
+                self.instance["param"].append(lhs.children[1].data)
+                self.instance["productions"].append(lhs.children[0].data)
+            else:
+                raise InvalidNameError(lhs.children[0].data)
+        else:
+            if is_nonterm(lhs.data):
+                self.instance["nonterms"].append(lhs.data)
+                self.instance["productions"].append(lhs.data)
+            else:
+                raise InvalidNameError(lhs.data)
+        for element in rhs:
+            if is_nonterm(element.data):
+                self.instance["nonterms"].append(element.data)
+            elif is_term(element.data):
+                self.instance["terms"].append(element.data)
+            else:
+                raise InvalidNameError(element.data)
+
+    def define(self):
+        legals = ["hook", "exec"]
+        element = self.current.children[0].data
+        if not (element in self.instance["nonterms"] or element in self.instance["terms"]):
+            raise UndefinedNameError(element)
+        func = self.current.children[1].children[0]
+        see = self.current.children[1].children[1]
+        if not func in legals:
+            raise UndefinedReferenceError(func)
+
+    def defer(self):
+        element = self.current.children[0].data
+        if not (element in self.instance["nonterms"] or element in self.instance["terms"]):
+            raise UndefinedNameError(element)
