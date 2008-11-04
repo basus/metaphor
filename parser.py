@@ -1,32 +1,37 @@
 from tree import ASTree
 from error import *
 #import lang
+from copy import deepcopy
+keywords = ["pattern", "Production", "Define", "Defer"]
+
+def is_nonterm(token):
+    if token.isalnum() and not token in keywords:
+        return True
+    else:
+        return False
+
+def is_term(token):
+    rest = token[1:]
+    if token[0] == '@' and rest.isalnum() and not rest in keywords:
+        return True
+    else:
+        return False
 
 class Parser:
 
     '''Takes in a text block and creates an Abstract Syntax Tree representing the entire source'''
-
     def __init__(self, file):
         self.src = file.read()
         self.tokens = self.src.split()
         self.index = 0
         self.srclength = len(self.tokens)
         self.astree = ASTree("program")
-        self.keywords = ["pattern"]
-
-    def is_name(self, token):
-        if token in self.keywords:
-            return False
-        elif token.isalnum():
-            return True
-        else:
-            return False
+        self.keywords = ["pattern", "Production", "Define", "Defer"]
 
     def get_token(self):
         if self.index < self.srclength:
             token = self.tokens[self.index]
             self.index += 1
-            print token
             return token
         else:
             exit()
@@ -52,9 +57,8 @@ class Parser:
                   "Define": self.define,
                   "Defer": self.defer,
                   "Assign": self.assign}
-
         token = self.get_token()
-        if self.is_name(token):
+        if is_nonterm(token):
             self.astree.add_static(token)
         token = self.get_token()
         while token != 'end':
@@ -66,17 +70,15 @@ class Parser:
             token = self.get_token()
         self.astree.ascend()
 
+
     def inherit(self):
         self.astree.add_static(self.get_token())
         self.astree.ascend()
 
     def axiom(self):
         token = self.get_token()
-        if self.is_name(token):
-            self.astree.add_static(token)
-            self.astree.ascend()
-        else:
-            raise InvalidNameError(token)
+        self.astree.add_static(token)
+        self.astree.ascend()
 
     def production(self):
         token = self.get_token()
@@ -88,6 +90,7 @@ class Parser:
             self.astree.add_static(token)
         if self.get_token() == '=>':
             self.astree.add('plist')
+            token = self.get_token()
             while not token in self.keywords: 
                 self.astree.add_static(token)
                 token = self.get_token()
@@ -114,7 +117,6 @@ class Parser:
             self.astree.ascend()
             self.astree.ascend()
         else:
-            print token
             raise InvalidDefinitionError(token)
 
     def defer(self):
@@ -137,7 +139,7 @@ class Validator:
         self.env_patterns = {}
 
     def program(self):
-        legals = {'patterns': pattern}
+        legals = {'pattern': self.pattern}
         toplevels = self.astree.root.children
         for toplevel in toplevels:
             self.current = toplevel
@@ -152,24 +154,26 @@ class Validator:
                   "Defer": self.defer,
                   "Assign": self.assign}
         children = self.current.children
-        name = children[0].data
-        if self.name in self.env_patterns:
+        name = children.pop(0).data
+        if name in self.env_patterns:
             raise RepeatedPatternError
         else:
             self.env_patterns[name] = {"terms": [],
                                        "nonterms":[],
                                        "productions": [],
-                                       "param": []}
-        self.instance = self.patterns[name]
+                                       "param": [],
+                                       "fill":[]}
+        self.instance = self.env_patterns[name]
         for child in children:
             self.current = child
-            legals[child]()
+            legals[child.data]()
 
+        self.env_patterns[name] = self.instance
         terms = set(self.instance["terms"])
         nonterms = set(self.instance["nonterms"])
         prod = set(self.instance["productions"])
         if len(nonterms.difference(prod)) != 0:
-            raise IncompleteProductionsError(name)
+            raise InvalidProductionsError(name)
         
 
 
@@ -178,15 +182,14 @@ class Validator:
         if not parent in self.env_patterns:
             raise UndefinedPatternError(parent)
         else:
-            self.instance = copy(self.env_patterns[parent])
-            
+            self.instance = deepcopy(self.env_patterns[parent])
 
     def axiom(self):
         axiom = self.current.children[0].data
         if is_nonterm(axiom):
             self.instance["nonterms"].append(axiom)
         else:
-            raise InvalidNontermError(axiom)
+            raise InvalidNameError(axiom)
 
     def production(self):
         lhs = self.current.children[0]
@@ -217,12 +220,24 @@ class Validator:
         element = self.current.children[0].data
         if not (element in self.instance["nonterms"] or element in self.instance["terms"]):
             raise UndefinedNameError(element)
-        func = self.current.children[1].children[0]
-        see = self.current.children[1].children[1]
+        func = self.current.children[1].children[0].data
+        see = self.current.children[1].children[1].data
         if not func in legals:
             raise UndefinedReferenceError(func)
+
 
     def defer(self):
         element = self.current.children[0].data
         if not (element in self.instance["nonterms"] or element in self.instance["terms"]):
             raise UndefinedNameError(element)
+
+    def assign(self):
+        param = self.current.children[0].data
+        try:
+            val = float(self.current.children[1].data)
+        except:
+            print val, " should be a number"
+        if param in self.instance["param"]:
+            self.instance["fill"].append((param, val))
+        else:
+            raise UndefinedNameError(param)

@@ -37,3 +37,19 @@ class InvalidDefinitionError(Exception):
 
     def __str__(self):
         return self.message
+
+class UndefinedReferenceError(Exception):
+    ''' Raised if a reference used in a Define is not present'''
+    def __init__(self, token):
+        self.message = " %s is used in a Define statement, but is not present in the file" % token
+
+    def __str__(self):
+        return self.message
+
+class UndefinedNameError(Exception):
+    '''Raised if a name is used in a Define or Defer without being used in a rule'''
+    def __init(self, token):
+        self.message = " %s has not been used in any pattern" % token
+
+    def __str__(self):
+        return self.message

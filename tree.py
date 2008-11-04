@@ -1,3 +1,4 @@
+from copy import deepcopy
 class ASTree:
     '''A generic tree class that can be used to implement an abstract syntax tree'''
 
@@ -44,13 +45,12 @@ class ASTree:
     def breadth_traverse(self, start):
         '''Performs a breadth-first traversal of the tree starting from a node'''
         current = start
-        children = current.children
+        children = deepcopy(current.children)
         elements = [current.data]
         for child in children:
             elements.append(child.data)
             for subchild in child.children:
                 children.append(subchild)
-        print elements
 
 class Pattern:
     def __init__(self, name, parent=None):

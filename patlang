@@ -17,16 +17,16 @@ pattern tree
         Define trunk => hook trunk.py
         Define root => exec $root
         Defer twig
-
+end
 
 pattern Flowering is tree
         Production twig => @twig @leaf @flower
-        Define flower  => exec $flower
+        Define @flower  => exec $flower
         
 end
 
 pattern Oak is tree
-        Assign split 0.3
-        Assign grow 0.5
-        Assign end 0.2
+        Assign split 0.30
+        Assign grow 0.50
+        Assign end 0.20
 end
