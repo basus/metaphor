@@ -1,8 +1,8 @@
 from tree import ASTree
 from error import *
-#import lang
 from copy import deepcopy
-keywords = ["pattern", "Production", "Define", "Defer"]
+import lang
+keywords = lang.keywords
 
 def is_nonterm(token):
     if token.isalnum() and not token in keywords:
