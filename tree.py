@@ -51,6 +51,7 @@ class ASTree:
             elements.append(child.data)
             for subchild in child.children:
                 children.append(subchild)
+        self.breadth = elements
 
 class Pattern:
     def __init__(self, name, parent=None):

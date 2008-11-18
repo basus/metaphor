@@ -9,7 +9,7 @@ pattern tree
 
         Production branch[split] => twig
         Production branch[grow] => branch branch
-        Production branch[end] => @branch
+        Production branch[stop] => @branch
 
         Production twig => @twig @leaf
 
@@ -28,5 +28,5 @@ end
 pattern Oak is tree
         Assign split 0.30
         Assign grow 0.50
-        Assign end 0.20
+        Assign stop 0.20
 end

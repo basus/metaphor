@@ -77,7 +77,12 @@ class Parser:
 
     def axiom(self):
         token = self.get_token()
-        self.astree.add_static(token)
+        axiom = []
+        while not token in self.keywords:
+            axiom.append(token)
+            token = self.get_token()
+        self.astree.add_static(axiom)
+        self.index -= 1
         self.astree.ascend()
 
     def production(self):
@@ -154,7 +159,8 @@ class Validator:
                   "Defer": self.defer,
                   "Assign": self.assign}
         children = self.current.children
-        name = children.pop(0).data
+        hold = children.pop(0)
+        name = hold.data
         if name in self.env_patterns:
             raise RepeatedPatternError
         else:
@@ -167,6 +173,8 @@ class Validator:
         for child in children:
             self.current = child
             legals[child.data]()
+
+        children.insert(0,hold)
 
         self.env_patterns[name] = self.instance
         terms = set(self.instance["terms"])
@@ -185,11 +193,11 @@ class Validator:
             self.instance = deepcopy(self.env_patterns[parent])
 
     def axiom(self):
-        axiom = self.current.children[0].data
-        if is_nonterm(axiom):
-            self.instance["nonterms"].append(axiom)
-        else:
-            raise InvalidNameError(axiom)
+        for axiom in self.current.children[0].data:
+            if is_nonterm(axiom):
+                self.instance["nonterms"].append(axiom)
+            else:
+                raise InvalidNameError(axiom)
 
     def production(self):
         lhs = self.current.children[0]
