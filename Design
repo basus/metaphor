@@ -1,0 +1,60 @@
+Metaphor is a system for expressing patterns as formal grammars and then viewing compliant instances of those patterns in a human-understandable (visual or auditory) form. At the heart of this system is the concept of a Metaphor: a Metaphor is combination of a pattern described as a formal grammar and the context in which the resulting strings are to be expressed. This conceptual organization translates cleanly into implementation:
+
+    * A Grammar file contains the formal grammar expressed in the form of a simplified notation -- the Metaphor Grammar Expression Notation (MeGEN).
+    * A Context file(s) contains actual executable code that creates the various interpretations of a grammar.
+
+
+This separation has the following benefits:
+
+   1. Abstraction: Users can concentrate on defining grammars and not be bothered about how the visual aspects are implemented.
+   2. Modularity: Separate teams can work on Grammars and Contexts as long as they agree on how the Grammar is to be interpeted.
+   3. Hot-pluggable: The same Grammar could be expressed in multiple contexts: a LOGO-style drawing, discrete image compositions (like we have now), SVGs, 3D models, sounds etc.
+   4. Platform independence: Metaphor is in Python, but I'm trying to build the Context system so that contexts could be in any language/graphical system. 
+
+And the following disadvantages:
+
+   1. Users are limited to dealing with grammars that can be expressed within the constraints of MeGEN. Of course, the modular nature of the system (see below) means that MeGEN can be incrementally augmented. MeGEN is also non-standard. Not quite sure if that is a problem.
+   2. The current state of graphical toolkits means that actually creating a Context will need some real programming. The best we can do is to ship a few example Contexts (built from Khine and Rhody's work).
+   3. No UI yet.
+
+The Metaphor system itself consists of the following parts:
+
+   1. The Grammar parser: Reads a Grammar file and creates a representation in memory (basically a group of rich, dynamic objects).
+         1. A Parser object reads the actual file generating an abstract syntax tree.
+         2. A Validator object traverses the tree and generates skeletons for the individual patterns described
+         3. A Constructor object traverses the tree and builds the actual Pattern objects.
+   2. The Probability model: Built into the Pattern objects, this allows for the automatic creation of strings compliant with the grammars.
+   3. The Context handler: Still working on this. It'll be a system for executing user-provided code and passing in the generated strings. Think GNU make. Ideally it will be a protocol/framework into which users can drop their own visualizers.
+
+A basic version of the grammar parser and the probability model is ready and currently generates symbol strings. The context handler is another matter. I'm trying to make it so that the current work can be dropped in without too much modification. However, first I'm going to try to write a simple LOGO-style context and build around it.
+
+
+Design of the Context Handler:
+
+The context handler is important because Grammars without Contexts are difficult to understand intuitively. The Grammar system is very flexible and the Contexts should be appropriately flexible in order to do full justice to the breadth of grammars (and compliant strings) that might be created. 
+
+Looking at the process by which a Grammar can be interpreted gives insight into how the Context system may be developed. The Grammar consists of distinct elements: the alphabet of the grammar and rules for their combinations. A string compliant with the Grammar has these elements in various combinations. In order to interpret a string, the representation of an element in a given Context must be unambiguously determined. Thus our Context system must have two parts: the Context itself, which defines a set of representations and a mapping from Grammar elements to Context representations. 
+
+As before this conceptual separation translates to implementation:
+
+   1. The Context must handle all details of forming the representations. It must be executable code with a clear interface to allow access to the representations it implements. 
+   2. The Mapping must be an injection from the elements to the representation i.e. all elements must be represented, but not all representations need be used. 
+
+    This separation is useful to the user by allowing abstraction, but it also allows flexibility. The Context system can be built to allow Mapping macros: each element can be mapped to a sequence of representations. In theory the choice of representation, could be made dynamic: each element has a choice of different representations. However, in our system this will be expressly forbidden. Such polymorphism should be built into the Grammar. There should be multiple Grammar elements each with a single representation rather than the other way round. Our goal is to encourage emphasis on the Grammar development, the mapping should be a much simpler process.
+
+    The Mapping is a part of the Grammar definition itself. Each mapping is a statement of the form "Map <element> => <representation>" The representation should be valid within the context and should conform to the Context Protocol (see below).
+
+What is a Context?
+     We can now define what exaclty a context is and how to can build one. A Context is a program which uses a string of representations and then combines those representations into a single final output. The Metaphor system provides functionality for transforming the generated string into equivalent representations. For Contexts written in Python, there is also a system for translating the representation strings into Context API calls (see Context Python Protocol). Non-Python Contexts (or Python Contexts that do not follow the CPP) must provide their own mechanisms for reading the representation strings. This task is simplified by the Context Protocol which defines a representation string.
+
+Context Protocol
+    The CP defines the string format that Contexts must interpret and how they should provide feedback to the Metaphor system. 
+    Each representation string is a space-separated list of representations. A representation is a single word with any number of parameters. Paramaters are a comma separated list enclosed in square parentheses [] immediately following the representation name. Though there are no restriction on the names for the representations, it is recommended that they be easy to understand and logical for the Context in question.
+    The representation string is saved in a file and the filename is passed to the Context program when it is started. The Context must open and read the file and perform its operations. As of now, the Context must handler error checking. In later versions, Metaphor will handle error checking but will require a list of legal representations from the Context. Before exiting the Context must save its output with a filename that is the same as the one passed to it, but with a different suffix. Optionally, the Context may display the output to the user. 
+
+Context Python Protocol
+    Since the Metaphor system is written in Python, we have defined an Object-Oriented Protocol to make it easier to write Contexts in Python. These Contexts must have a file with the same name as the Context which defines a class of the same name. An instance of this class will be created when it is time to interpret the generated string. All representations will be method calls on this instance (with parameters as needed). Thus all the representations that a Context supports must be defined as methods of the Context class. 
+    Additionally each Context class must provide a wrapup() method which saves the final output to a file and then returns the filename. Metaphor will handle display of image files (PNG, JPEG, GIF).
+
+Context File Format (.ctx)
+    .ctx files with the same name as the Grammars file supply instructions to the Metaphor system. They include the name of the context to determine as well as some other parameters. The exact format and operation of the .ctx files is to be determined.  
