@@ -19,6 +19,22 @@ pattern tree
         Defer twig
 end
 
+pattern Bush is tree
+        Production trunk[split] => trunk branch branch
+        Production trunk[grow] => @trunk trunk
+        Production trunk[stop] => @branch
+
+        Production branch[split] => twig twig
+        Production branch[split] => branch branch
+        Production branch[stop] => @branch
+
+        Production twig => @twig @leaf @leaf
+
+        Assign split 0.7
+        Assign grow 0.1
+        Assign stop 0.2
+end
+
 pattern Flowering is tree
         Production twig => @twig @leaf @flower
         Define @flower  => exec $flower
