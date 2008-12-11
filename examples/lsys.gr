@@ -32,3 +32,26 @@ pattern Sierpinski
         Map $left => left[60]
 end
 
+pattern Dragon
+        Axiom $F X
+
+        Production X => X $right Y $F $right 
+        Production Y => $left $F X $left Y
+
+        Map F => draw_forward
+        Map $right => right[90]
+        Map $left => left[90]
+end
+
+pattern FractalPlant
+        Axiom X
+
+        Production X => F $left $save $save X $restore $right X $restore $right F $save $right F X $restore $left X
+        Production F => F F
+
+        Map F => draw_forward
+        Map $left => left[20]
+        Map $right => right[20]
+        Map $save => save
+        Map $restore => restore
+end
