@@ -116,10 +116,7 @@ class Parser:
         token = self.get_token()
         self.astree.add_static(token)
         if self.get_token() == '=>':
-            self.astree.add('ref')
             self.astree.add_static(self.get_token())
-            self.astree.add_static(self.get_token())
-            self.astree.ascend()
             self.astree.ascend()
         else:
             raise InvalidDefinitionError(token)
@@ -224,14 +221,10 @@ class Validator:
                 raise InvalidNameError(element.data)
 
     def define(self):
-        legals = ["hook", "exec"]
         element = self.current.children[0].data
         if not (element in self.instance["nonterms"] or element in self.instance["terms"]):
             raise UndefinedNameError(element)
-        func = self.current.children[1].children[0].data
-        see = self.current.children[1].children[1].data
-        if not func in legals:
-            raise UndefinedReferenceError(func)
+
 
 
     def defer(self):

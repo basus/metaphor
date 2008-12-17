@@ -53,3 +53,13 @@ class UndefinedNameError(Exception):
 
     def __str__(self):
         return self.message
+
+class ContextError(Exception):
+    '''Raised if there is a problem with the Context-based transformation'''
+
+    def __init__(self, action):
+        self.message = "The element %s caused an error during the visualization step"
+
+    def __str__(self):
+        return self.message
+

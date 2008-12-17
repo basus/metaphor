@@ -2,8 +2,9 @@ from tree import ASTree
 from parser import Parser
 from parser import Validator
 from constructor import *
+from Turtle import Turtle
 
-fl = open('patlang')
+fl = open('cantor.gr')
 parse = Parser(fl)
 print "parser made"
 parse.program()
@@ -17,7 +18,7 @@ constructor.create()
 constructor.scan_tree()
 
 patterns = constructor.patterns
-tree = patterns['Oak']
+tree = patterns['CantorDust']
 tree.build_productions()
 
 ## for nt in tree.productions:
@@ -30,5 +31,19 @@ tree.build_productions()
 ##     print param, val
     
 #rint tree.transform('trunk')
-print tree.build_pattern(5)
+str =  tree.build_pattern(3)
+print str
 
+img = tree.represent(str)
+print img
+
+context = Turtle()
+for instr in img:
+    sep = instr.split('[')
+    call = sep[0]
+    args = sep[1].rstrip(']')
+    args = args.split(',')
+    if call == 'move_forward':
+        context.move_forward(int(args[0]))
+    if call == 'draw_forward':
+        context.draw_forward(int(args[0]))

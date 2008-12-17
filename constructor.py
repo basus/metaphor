@@ -14,6 +14,7 @@ class Pattern:
         self.defer = []
         self.assign = {}
         self.expansions = {}
+        self.map = {}
 
     def build_productions(self):
         '''Takes the tuple list of productions and converts it into a nested dictionary
@@ -73,6 +74,11 @@ class Pattern:
             generations -= 1
         return axiom
                     
+    def represent(self, string):
+        representation = []
+        for element in string:
+            representation.append(self.map[element])
+        return representation
 
 
 class Constructor:
@@ -112,6 +118,8 @@ class Constructor:
                 if construct.data == 'Assign':
                     param = construct.children[0].data
                     self.current.assign[param] = float(construct.children[1].data)
+                if construct.data == 'Define':
+                    self.current.map[construct.children[0].data] = construct.children[1].data
             self.patterns[constructs[0]] = self.current
 
 

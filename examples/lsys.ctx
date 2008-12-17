@@ -1,0 +1,10 @@
+python = True
+program = "turtle"
+
+contexts = {
+            "CantorDust" : "Turtle",
+            "KochCurve" : "Turtle",
+            "Sierpinski" : "Turtle",
+            "Dragon" : "Turtle",
+            "FractalPlanet" :"Turtle"
+            }

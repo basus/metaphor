@@ -1,57 +1,57 @@
-pattern CantorDust
+grammar CantorDust
         Axiom A B
         
         Production A => A B A
         Production B => B B B
         
-        Map A => draw_forward
-        Map B => move_forward
+        Define A => draw_forward
+        Define B => move_forward
 
 end
 
-pattern KochCurve
+grammar KochCurve
         Axiom F
         
-        Production => F $left F $right F $right F $left F
+        Production F => left F right F right F left F
         
-        Map F => draw_forward
-        Map $left => left[90]
-        Map $right => right[90]
+        Define F => draw_forward
+        Define left => left[90]
+        Define right => right[90]
 
 end
 
-pattern Sierpinski
+grammar Sierpinski
         Axiom A
 
-        Production A => B $right A $right B 
-        Production B => A $left B $left A
+        Production A => B right A right B 
+        Production B => A left B left A
 
-        Map A => draw_forward
-        Map B => draw_forward
-        Map $right => right[60]
-        Map $left => left[60]
+        Define A => draw_forward
+        Define B => draw_forward
+        Define right => right[60]
+        Define left => left[60]
 end
 
-pattern Dragon
-        Axiom $F X
+grammar Dragon
+        Axiom F X
 
-        Production X => X $right Y $F $right 
-        Production Y => $left $F X $left Y
+        Production X => X right Y F right 
+        Production Y => left F X left Y
 
-        Map F => draw_forward
-        Map $right => right[90]
-        Map $left => left[90]
+        Define F => draw_forward
+        Define right => right[90]
+        Define left => left[90]
 end
 
-pattern FractalPlant
+grammar FractalPlant
         Axiom X
 
-        Production X => F $left $save $save X $restore $right X $restore $right F $save $right F X $restore $left X
+        Production X => F left save save X restore right X restore right F save right F X restore left X
         Production F => F F
 
-        Map F => draw_forward
-        Map $left => left[20]
-        Map $right => right[20]
-        Map $save => save
-        Map $restore => restore
+        Define F => draw_forward
+        Define left => left[20]
+        Define right => right[20]
+        Define save => save
+        Define restore => restore
 end
