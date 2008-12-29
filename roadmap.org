@@ -6,9 +6,9 @@
    - [ ] 2D Turtle visualizer context producing and displaying PNGs
 
 ** Internal Architecture
-   - [ ] Typed Abstract Syntax. 
-   - [ ] Visitor over AST
-   - [ ] Grammar Object creation code streamlined by leveraging typed AST nodes
+   - [X] Typed Abstract Syntax. 
+   - [X] Visitor over AST
+   - [X] Grammar Object creation code streamlined by leveraging typed AST nodes
    - [ ] Robust Context Handler
 
 
