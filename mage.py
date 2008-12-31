@@ -24,7 +24,7 @@ def compile(filename, env=None):
     print '\n'
 
 
-def generate(grammar):
+def generate(grammar, generations=1):
     pass
 
 def newenv():
@@ -61,6 +61,7 @@ if __name__ == '__main__':
 
     print "Welcome to the Metaphor Interaction Shell"
     print "Type help for a list of instructions"
+
     instr = ''
     while not instr == 'quit':
         instr = raw_input(">>> ")

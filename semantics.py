@@ -123,6 +123,17 @@ class Grammar:
             generations -= 1
         return axiom
 
+    def map(self, genstring):
+        ''' Takes in a generated string and returns a string representing
+        context instructions'''
+        ctxstring = []
+        for element in genstring:
+            try:
+                ctxstring.extend(self.maps[element])
+            except KeyError:
+                print "Element %s has no mapping" % element
+        return ctxstring
+
 class Environment:
     '''Represents the environment in which the Grammars are to created and their
     strings generated. Responsible for handling interactions between Grammars'''
@@ -143,7 +154,6 @@ class Environment:
 #    builder = property(fget=getbuilder, fset=setbuilder)
 
     def populate(self):
-        print self.builder
         grammarlist = self.builder.build_all()
         newgrammars = []
         for grammar in grammarlist:

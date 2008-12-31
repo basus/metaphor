@@ -46,8 +46,34 @@ class ContextError(ParseError):
     '''Raised if there is a problem with the Context-based transformation'''
 
     def __init__(self, action):
-        self.message = "The element %s caused an error during the visualization step"
+        self.message = "The element %s caused an error during the visualization step" % action
 
     def __str__(self):
         return self.message
 
+class InvalidGrammarError(Exception):
+    ''' Raised if an undefined Grammar is asked to generate a string'''
+
+    def __init__(self, gram):
+        self.message = "The Grammar %s is not defined" % gram
+
+    def __str__(self):
+        return self.message
+
+class InvalidContextError(Exception):
+    ''' Raised if an undefined context is used'''
+
+    def __init__(self, gram):
+        self.message = "The context %s could not be found" % gram
+
+    def __str__(self):
+        return self.message
+
+class NoContextError(Exception):
+    ''' Raised if no context is being used'''
+
+    def __init__(self):
+        self.message = "There is no context currently defined"
+
+    def __str__(self):
+        return self.message

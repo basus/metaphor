@@ -1,28 +1,32 @@
 # Original code by Andrew Kuchling amk@magnet.com
 
-import ImageDraw, math
+import Image, ImageDraw, math
 
 deg2rad = math.pi/180.0
 
-class Turtle:
+#class turtle:
+#
+#    ''' A factory class to create and actually return a Turtle object with 
+#    proper parameters'''
 
-    ''' A factory class to create and actually return a Turtle object with 
-    proper parameters'''
+#    def __init__(self):
+#        img = Image.new("RGB", (1000,1000), "white")
+#        turtle = TurtleDraw(img)
+#        turtle.setxy((500,500))
+#        turtle.pendown()
+#        turtle.sendimg(img)
 
-    def __init__(self):
-        img = Image.new("RGB", (1000,1000), "white")
-        turtle = TurtleDraw(img)
-        turtle.setxy((500,500))
-        turtle.pendown()
-        turtle.sendimg(img)
-        return turtle
 
-class TurtleDraw(ImageDraw.ImageDraw):
-    def __init__(self, *args):
-	apply(ImageDraw.ImageDraw.__init__, (self,)+args)
+class turtle(ImageDraw.ImageDraw):
+    def __init__(self, size=(1000, 1000), bg="black", start=(650,650), *args):
+        self.__img = Image.new("RGB", size, bg)
+#        ImageDraw.ImageDraw.__init__(self, self.__img)
+	apply(ImageDraw.ImageDraw.__init__, (self,self.__img, )+args)
+        
 	self.__x, self.__y, self.__heading = 0.0, 0.0, 90.0
 	self.__pendown=1
-        self.__img = None
+        self.setxy(start)
+
 
     def tell(self):
 	"Return the turtle's X,Y position and heading"
@@ -94,11 +98,12 @@ class TurtleDraw(ImageDraw.ImageDraw):
 
     def sendimg(self, img):
         "Stores the parent image so that teh Turtle can save itself"
-        self.img = img
+        self.__img = img
 
     def wrapup(self, name):
         "Save the image and return the saved image name"
-        self.img.save(name)
+        self.__img.save(name)
+        self.__init__()
         
 
     # Shortcuts
