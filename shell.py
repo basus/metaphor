@@ -32,7 +32,7 @@ class Shell(object):
             generations = int(generations)
             string = self.__env.grammars[grammar].generate(generations)
             self.stringstack.append((grammar,string))
-#            print string
+            print string
             return string
         except KeyError:
             raise error.InvalidGrammarError(grammar)
@@ -50,7 +50,7 @@ class Shell(object):
     def interpretlast(self, filename):
         '''Interprets the last created string in the current context '''
         try:
-            gram, str = self.stringstack.pop()
+            gram, str = self.stringstack[-1]
             ctxstring = self.__env.grammars[gram].map(str)
             self.context.create(ctxstring)
             self.context.save(filename)

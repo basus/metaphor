@@ -2,7 +2,8 @@
   DEADLINE: <2009-01-26 Mon>
 ** User Features
    - [ ] Simplified MeGEN syntax with informative parse error messages
-   - [ ] Cross-platform GUI with text editor, context handler, message window and file browser
+   - [ ] Cross-platform GUI with text editor, context handler, message window and
+         file browser
    - [ ] 2D Turtle visualizer context producing and displaying PNGs
 
 ** Internal Architecture

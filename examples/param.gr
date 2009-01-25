@@ -1,0 +1,18 @@
+grammar tree
+        Axiom root
+
+        Production root => @root trunk
+
+        Production trunk[split] => trunk branch
+        Production trunk[grow] => trunk trunk
+        Production trunk[stop] => @trunk
+
+        Production branch[split] => twig
+        Production branch[grow] => branch branch
+        Production branch[stop] => @branch
+
+        Production twig => @twig @leaf
+
+        Assign split 0.5
+        Assign grow 0.3
+        Assign stop 0.2
