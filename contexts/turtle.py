@@ -24,6 +24,7 @@ class turtle(ImageDraw.ImageDraw):
 	apply(ImageDraw.ImageDraw.__init__, (self,self.__img, )+args)
         
 	self.__x, self.__y, self.__heading = 0.0, 0.0, 90.0
+        self.__orientation_stack = [(self.__x, self.__y, self.__heading)]
 	self.__pendown=1
         self.setxy(start)
 
@@ -95,6 +96,14 @@ class turtle(ImageDraw.ImageDraw):
     def home(self):
 	"Move the turtle to position 0,0"
 	self.setxy( (0,0) )
+
+    def save(self):
+        "Save the turtle's current position and heading to a stack"
+        self.__orientation_stack.append((self.__x, self.__y, self.__heading))
+
+    def restore(self):
+        "Sets the turtle's position and heading to the last saved set"
+        self.__x, self.__y, self.__heading = self.__orientation_stack.pop()
 
     def sendimg(self, img):
         "Stores the parent image so that teh Turtle can save itself"

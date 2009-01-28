@@ -16,3 +16,13 @@ grammar tree
         Assign split 0.5
         Assign grow 0.3
         Assign stop 0.2
+
+grammar parametric
+        Axiom A(1,1)
+        
+        Production A(n0, n1) : n1>5 => B(n1+1) C D(n1+0.5, n0-2)
+
+        Map A(n0, n1) => left[n0] right[n1]
+        Map B(n0) => forward[n0]
+        Map C => backward[5]
+        Map D(n0, n1) => right[n0] forward[n1]
