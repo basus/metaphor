@@ -1,4 +1,5 @@
 * TODO Version 1.0 -- "Linguist" 
+
   DEADLINE: <2009-01-26 Mon>
 ** User Features
    - [ ] Simplified MeGEN syntax with informative parse error messages
@@ -27,3 +28,8 @@
    - Representation of Grammars as distinct Python objects
    - Constructor class to build Grammar objects.
    - Probabilistic determination of productions implemented as object methods
+
+* Directions
+** Extending the core functionality.
+** Understand how L-systems can be used to generate recursive patterns (are the grammars sufficient)
+** Is the system sufficient for the artists.
