@@ -14,7 +14,7 @@ class ContextHandler:
             ctxclass = getattr(module, self.context)
             handler = PyContextHandler(ctxclass())
             return handler
-        except Exception as inst:
+        except Exception, inst:
             print inst
             raise error.InvalidContextError(self.context)
             

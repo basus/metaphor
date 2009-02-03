@@ -89,7 +89,7 @@ if __name__ == '__main__':
         except TypeError:
             print "That command requires additional input"
             print "Type help for additional information"
-        except Exception as err:
+        except Exception, err:
             print "An error occurred: \n"
             print err
 
