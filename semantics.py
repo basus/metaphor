@@ -6,6 +6,7 @@ import random
 import error
 
 class Builder:
+    '''Traverses an abstract syntax tree and builds the grammars described '''
     def __init__(self, node=None):
         self.__node = node
         self.grammars = {}
@@ -15,6 +16,7 @@ class Builder:
 #                    )
     
     def build_all(self):
+        '''Directly traverses the entire tree and builds up the grammar objects'''
         grammars = []
         for grammar in self.__node.grammarlist:
             self.__node = grammar
@@ -22,6 +24,7 @@ class Builder:
         return grammars
 
     def build_grammar(self):
+        '''Builds the grammar object corresponding to the current node.'''
         name = self.__node.name
         base = self.build_base()
         axiom = self.build_axiom()
@@ -32,18 +35,21 @@ class Builder:
 
 
     def build_base(self):
+        '''Returns the base name from the AST '''
         try:
             return self.__node.base.base
         except:
             return None
 
     def build_axiom(self):
+        '''Returns the axiom from the AST '''
         try:
             return self.__node.axiom.axiom
         except:
             return None
 
     def build_productions(self):
+        '''Returns a dictionary of terminal --> productions'''
         prod_dict = {}
         for production in self.__node.productionlist:
             if not production.nonterm in prod_dict.keys():
@@ -52,12 +58,14 @@ class Builder:
         return prod_dict
 
     def build_maps(self):
+        '''Returns a dictionary of symbol --> context function '''
         map_dict = {}
         for elementmap in self.__node.maplist:
             map_dict[elementmap.element] = elementmap.repr
         return map_dict
 
     def build_assigns(self):
+        '''Returns dictionary of variables --> values '''
         assign_dict = {}
         for assign in self.__node.assignlist:
             assign_dict[assign.param] = assign.value
@@ -154,6 +162,7 @@ class Environment:
 #    builder = property(fget=getbuilder, fset=setbuilder)
 
     def populate(self):
+        '''Accesses the builder option and gets all the grammar objects '''
         grammarlist = self.builder.build_all()
         newgrammars = []
         for grammar in grammarlist:
@@ -163,12 +172,14 @@ class Environment:
         return newgrammars
 
     def resolve_inherits(self):
+        '''Clones all the grammars which are used as base grammars '''
         for child in self.grammars.values():
             if child.base and not child.resolved:
                 self.inherit(grammar, grammars[grammar.base])
 
                 
     def inherit(self, child, base):
+        '''Clones a single grammar object and assigns it to a different name '''
         if base.base:
             inherit(base, self.grammars[base.base])
         temp = deepcopy(base)
@@ -182,9 +193,11 @@ class Environment:
         del temp
         
     def add_grammar(self, grammar):
+        '''Adds a grammar to the current set of grammars '''
         self.grammars[grammar.name] = grammar
 
     def list_grammars(self):
+        '''Lists all available grammars '''
         msglist = []
         for name, grammar in self.grammars.items():
             msg =  "Grammar " + name

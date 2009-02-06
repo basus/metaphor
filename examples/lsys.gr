@@ -54,4 +54,15 @@ grammar FractalPlant
         Map right => right[20]
         Map save => save
         Map restore => restore
- 
+
+grammar Roads
+        Axiom A
+        
+        Production A => F save right A left F right left restore save left A right F left F save F A
+        Production F => F F
+
+        Map F => forward[5]
+        Map left => left[90]
+        Map right => right[90]
+        Map save => save
+        Map restore => restore

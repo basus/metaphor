@@ -28,6 +28,7 @@ class Shell(object):
         print '\n'
 
     def generate(self, grammar, generations=2):
+        '''Generates the given grammar name with the number of generations and saves the string '''
         try:
             generations = int(generations)
             string = self.__env.grammars[grammar].generate(generations)
@@ -38,6 +39,7 @@ class Shell(object):
             raise error.InvalidGrammarError(grammar)
 
     def usecontext(self, ctx):
+        '''Sets the specified context as the one to use. '''
         handler = context.ContextHandler(ctx)
         path = sys.path[0] + '/contexts'
         sys.path.insert(0, path)
@@ -89,7 +91,7 @@ if __name__ == '__main__':
         except TypeError:
             print "That command requires additional input"
             print "Type help for additional information"
-        except Exception as err:
+        except Exception, err:
             print "An error occurred: \n"
             print err
 

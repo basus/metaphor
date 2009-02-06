@@ -7,7 +7,8 @@ grammar tree
         Production trunk[grow] => trunk trunk
         Production trunk[stop] => @trunk
 
-        Production branch[split] => twig
+        Production branch[split] => branch
+        Production branch[csplit] => coloredbranch
         Production branch[grow] => branch branch
         Production branch[stop] => @branch
 
@@ -16,6 +17,17 @@ grammar tree
         Assign split 0.5
         Assign grow 0.3
         Assign stop 0.2
+
+        Map trunk => chng_thickness[10] forward[5]
+        Map branch => thickness[5] forward[7]
+        Map coloredbranch => chng_color[10,20,30] forward[5]
+        Map root => thickness[30]
+
+grammar Labyrinth
+        Axiom Door
+        Production Door => 
+
+        Map Door => makeline[10]
 
 grammar parametric
         Axiom A(1,1)

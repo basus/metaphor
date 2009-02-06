@@ -62,6 +62,7 @@ class Parser:
                 raise error.InvalidBlockError(token, self.lineno)
 
     def grammar(self):
+        ''' Parses the individual grammars and calls appropriate functions'''
         name = self.get_token()
         grammar = nodes.GrammarNode(name, self.treenode)
         self.treenode.add_grammar(grammar)
@@ -86,10 +87,12 @@ class Parser:
         self.treenode = grammar.parent
 
     def inherit(self):
+        '''Controls inheritance of grammars'''
         basegrammar = self.get_token()
         self.treenode.add_base(nodes.BaseNode(basegrammar, self.treenode))
 
     def axiom(self):
+        '''Builds nodes for axioms'''
         axiom = []
         token = self.get_token()
         while not token in keywords:
@@ -99,6 +102,7 @@ class Parser:
         self.backtrack()
 
     def production(self):
+        '''Builds the node structure for a production rule'''
         nonterm = self.get_token()
         if nonterm.find('[') != -1:
             ls = nonterm.split('[')
@@ -120,6 +124,7 @@ class Parser:
 
 
     def map(self):
+        '''Adds map nodes '''
         element = self.get_token()
         repr = []
         if self.get_token() == '=>':
