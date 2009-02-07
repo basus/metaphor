@@ -1,0 +1,144 @@
+<ui version="4.0" >
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>890</width>
+    <height>755</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget" >
+   <layout class="QGridLayout" name="gridLayout" >
+    <item rowspan="2" row="0" column="0" >
+     <widget class="QGroupBox" name="groupBox" >
+      <property name="minimumSize" >
+       <size>
+        <width>150</width>
+        <height>500</height>
+       </size>
+      </property>
+      <property name="title" >
+       <string>GroupBox</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout" >
+       <item>
+        <widget class="QListView" name="listView" />
+       </item>
+       <item>
+        <widget class="QLabel" name="label" >
+         <property name="text" >
+          <string>TextLabel</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSpinBox" name="spinBox" />
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item rowspan="2" row="0" column="1" >
+     <widget class="QTextEdit" name="GrammarEdit" >
+      <property name="minimumSize" >
+       <size>
+        <width>700</width>
+        <height>0</height>
+       </size>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0" >
+     <widget class="QGroupBox" name="groupBox_2" >
+      <property name="minimumSize" >
+       <size>
+        <width>150</width>
+        <height>200</height>
+       </size>
+      </property>
+      <property name="title" >
+       <string>GroupBox</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_2" >
+       <item>
+        <widget class="QPushButton" name="generate" >
+         <property name="text" >
+          <string>Generate</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="render" >
+         <property name="text" >
+          <string>Render</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="view" >
+         <property name="text" >
+          <string>View Last</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="2" column="1" >
+     <widget class="QTabWidget" name="UserOut" >
+      <property name="currentIndex" >
+       <number>2</number>
+      </property>
+      <widget class="QWidget" name="messages" >
+       <attribute name="title" >
+        <string>Messages</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_3" >
+        <item>
+         <widget class="QTextBrowser" name="MessageView" />
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="error" >
+       <attribute name="title" >
+        <string>Error</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_4" >
+        <item>
+         <widget class="QTextBrowser" name="ErrorView" />
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="strings" >
+       <attribute name="title" >
+        <string>Strings</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_5" >
+        <item>
+         <widget class="QTextBrowser" name="StringView" />
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>890</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar" />
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
