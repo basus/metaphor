@@ -2,6 +2,7 @@
 MeGEN and building abstract syntax trees"""
 
 import nodes
+import error
 
 keywords = ['grammar', 'Axiom', 'Production', 'Map', 'is', 'Assign', 'ENDofFILE']
 

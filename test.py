@@ -1,18 +1,9 @@
 import syntax
 import semantics
+import script
 
-fl = open('param.gr')
-parse = syntax.Parser(fl)
-root = parse.parse()
-builder = semantics.Builder(root)
-
-genv = semantics.Environment(builder)
-genv.populate()
-print genv.list_grammars()
-
-tree = genv.grammars['tree']
-print tree.assigns
-
-def gen(num):
-    for x in range(num):
-        print tree.generate(x)
+psi = script.PyScriptInterface('./examples/lsys.py')
+psi.compile()
+psi.setcontext()
+psi.generate()
+psi.render()

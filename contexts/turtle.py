@@ -28,7 +28,6 @@ class turtle(ImageDraw.ImageDraw):
 	self.__pendown=1
         self.setxy(start)
 
-
     def tell(self):
 	"Return the turtle's X,Y position and heading"
 	return (self.__x, self.__y, self.__heading)
