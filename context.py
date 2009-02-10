@@ -4,30 +4,24 @@ import imp
 import error
 class ContextHandler:
 
-    def __init__(self, context):
-        self.context = context
+    def __init__(self, contextpath):
+        self.contextpath = contextpath
 
-    def get_context(self, path=None):
+    def load_context(self):
         try:
-            fl, pathname, desc = imp.find_module(self.context, path)
-            module = imp.load_module(self.context, fl, pathname, desc)
-            ctxclass = getattr(module, self.context)
-            handler = PyContextHandler(ctxclass())
-            return handler
+            module = imp.load_source('', self.contextpath)
         except Exception, inst:
             print inst
-            raise error.InvalidContextError(self.context)
-            
+            raise error.InvalidContextError(self.contextpath)
+        
+        contextname = self.contextpath.split('/')[-1]
+        contextname = contextname.rstrip(".py")
+        try:
+            self.context = getattr(module, contextname)()
+        except error.ContextError, inst:
+            print inst
 
-class PyContextHandler:
-    ''' A class that acts as an interface to a Python Context object'''
-
-    def __init__(self, context):
-        ''' Accepts a context object and the translated string to be interpreted'''
-        self.context = context
-
-
-    def create(self, genstring):
+    def render(self, genstring):
         '''Steps through the translated string and makes appropriate method calls
         on the context object'''
         for action in genstring:
@@ -48,7 +42,10 @@ class PyContextHandler:
                 call(*parsed_params)
             except:
                 raise error.ContextError(action)
-            
+
     def save(self, filename):
         ''' Saves the result of context representation'''
         self.context.wrapup(filename)
+
+
+            
