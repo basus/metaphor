@@ -5,7 +5,7 @@ from metaphor import script
 
 def main(argv):
     try:
-        opts, args = getopt.getopt(argv, "s:", ["script="])
+        opts, args = getopt.getopt(argv, "s:q", ["script="])
     except getopt.GetoptError:
         usage()
         sys.exit(2)
@@ -15,9 +15,13 @@ def main(argv):
             path = os.getcwd() + '/' + arg
             interface = script.PyScriptInterface(path)
             interface.run()
+        elif opt in ('-q', '--qtinterface'):
+            qt_mode()
 
     if opts == []:
-        print "You must use the script mode for the time being. Sorry!"
+        from metaphor import gui
+#        print "You must use the script mode for the time being. Sorry!"
+    
             
         
 if __name__ == '__main__':
