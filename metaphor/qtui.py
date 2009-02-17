@@ -48,10 +48,10 @@ class Ui_MainWindow(object):
         self.Generationslabel.setObjectName("Generationslabel")
         self.vboxlayout.addWidget(self.Generationslabel)
 
-        self.spinBox = QtGui.QSpinBox(self.groupBox)
-        self.spinBox.setMinimum(2)
-        self.spinBox.setObjectName("spinBox")
-        self.vboxlayout.addWidget(self.spinBox)
+        self.Generations = QtGui.QSpinBox(self.groupBox)
+        self.Generations.setMinimum(2)
+        self.Generations.setObjectName("Generations")
+        self.vboxlayout.addWidget(self.Generations)
         self.gridlayout.addWidget(self.groupBox,0,0,1,1)
 
         self.GrammarEdit = QtGui.QTextEdit(self.centralwidget)
