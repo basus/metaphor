@@ -23,8 +23,8 @@ class turtle(ImageDraw.ImageDraw):
 #        ImageDraw.ImageDraw.__init__(self, self.__img)
 	apply(ImageDraw.ImageDraw.__init__, (self,self.__img, )+args)
         
-	self.__x, self.__y, self.__heading = 0.0, 0.0, 90.0
-        self.__orientation_stack = [(self.__x, self.__y, self.__heading)]
+	self.__x, self.__y, self.__heading, self.thickness = 0.0, 0.0, 90.0, 5
+        self.__state_stack = [(self.__x, self.__y, self.__heading)]
 	self.__pendown=1
         self.setxy(start)
 
@@ -59,6 +59,16 @@ class turtle(ImageDraw.ImageDraw):
 	    if self.__pendown: self.line( [(sx,sy), (new_ex,new_ey)] )
 	    self.__x, self.__y = new_ex, new_ey
 
+    def ahead(self, distance):
+        "Moves the turtle ahead, but doesn't put down a line"
+        self.__pendown = 0
+        self.forward(distance)
+
+    def behind(self, distance):
+        "Moves the turtle behind without drawing a line"
+        self.__pendown = 0
+        self.backward(distance)
+        
     def penup(self): 
 	"Raise the pen from the paper"
 	self.__pendown=0    
@@ -66,6 +76,39 @@ class turtle(ImageDraw.ImageDraw):
     def pendown(self): 
 	"Lower the pen to the paper"
 	self.__pendown=1
+
+    def thickness(self, thick):
+        "Changes the thickness of the line drawn TO the given amount"
+        self.__thickness = thickness
+
+    def thicken(self, amt):
+        "Changes the thickness of the line BY the given amount"
+        self.__thickness = self.__thickness + float(amt)
+        if self.__thickness < 0:
+            self.__thickness = 1
+
+    def color(self, color):
+        "Changes the color of the pen"
+        self.ink_color = color
+    def save(self):
+        "Save the turtle's current position and heading to a stack"
+        self.__state_stack.append((self.__x, self.__y, self.__heading, self.__thickness, self.__color))
+
+    def restore(self):
+        "Sets the turtle's position and heading to the last saved set"
+        self.__x, self.__y, self.__heading, self.thickness, self.__color = self.__state_stack.pop()
+
+    def restore_without(self, *args):
+        "Restore the turtle's position without the properties specified by the entered numbers"
+        optlist = [1,2,3,4,5]
+        x, y, h, th, col = self.__state_stack.pop()
+        for num in optlist:
+            if not num in args:
+                if num==1: self.__x = x
+                elif num==2: self.__y = y
+                elif num==3: self.__heading = h
+                elif num==4: self.__thickness = th
+                elif num==5: self.__color = col
 
     def setxy(self, t): 
 	"Set the turtle's X and Y position"
@@ -83,7 +126,7 @@ class turtle(ImageDraw.ImageDraw):
 	"Set the turtle's Y position"
 	im_x, im_y = self.im.size
 	self.__y = float(y) % im_y
-
+        
     def seth(self, heading):
 	"Set the turtle's heading"
 	self.__heading = float(heading) % 360.0
@@ -95,15 +138,7 @@ class turtle(ImageDraw.ImageDraw):
     def home(self):
 	"Move the turtle to position 0,0"
 	self.setxy( (0,0) )
-
-    def save(self):
-        "Save the turtle's current position and heading to a stack"
-        self.__orientation_stack.append((self.__x, self.__y, self.__heading))
-
-    def restore(self):
-        "Sets the turtle's position and heading to the last saved set"
-        self.__x, self.__y, self.__heading = self.__orientation_stack.pop()
-
+                
     def sendimg(self, img):
         "Stores the parent image so that teh Turtle can save itself"
         self.__img = img
