@@ -77,7 +77,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit" />
+        <widget class="QLineEdit" name="OutputName" />
        </item>
       </layout>
      </widget>
@@ -220,7 +220,7 @@
   </widget>
   <action name="actionOpen" >
    <property name="icon" >
-    <iconset>../../usr/share/qt4/examples/mainwindows/application/images/open.png</iconset>
+    <iconset resource="../images/metaphor.qrc" >:/general/fileopen.png</iconset>
    </property>
    <property name="text" >
     <string>Open</string>
@@ -231,7 +231,7 @@
   </action>
   <action name="actionNew" >
    <property name="icon" >
-    <iconset>../../usr/share/qt4/examples/mainwindows/application/images/new.png</iconset>
+    <iconset resource="../images/metaphor.qrc" >:/general/filenew.png</iconset>
    </property>
    <property name="text" >
     <string>New</string>
@@ -242,7 +242,7 @@
   </action>
   <action name="actionSaveAs" >
    <property name="icon" >
-    <iconset>../../usr/share/qt4/examples/mainwindows/application/images/save.png</iconset>
+    <iconset resource="../images/metaphor.qrc" >:/general/filesaveas.png</iconset>
    </property>
    <property name="text" >
     <string>Save As</string>
@@ -256,7 +256,7 @@
   </action>
   <action name="actionSave" >
    <property name="icon" >
-    <iconset>../../usr/share/qt4/demos/textedit/images/win/filesave.png</iconset>
+    <iconset resource="../images/metaphor.qrc" >:/general/filesave.png</iconset>
    </property>
    <property name="text" >
     <string>Save</string>
@@ -266,11 +266,19 @@
    </property>
   </action>
   <action name="actionClose" >
+   <property name="icon" >
+    <iconset resource="../images/metaphor.qrc" >:/general/exit.png</iconset>
+   </property>
    <property name="text" >
     <string>Close</string>
    </property>
+   <property name="shortcut" >
+    <string>Ctrl+Q</string>
+   </property>
   </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="../images/metaphor.qrc" />
+ </resources>
  <connections/>
 </ui>
