@@ -7,42 +7,7 @@ import os
 
 import syntax
 import semantics
-
-class GrammarListModel(QAbstractListModel):
-    """ """
-    def __init__(self, grammars, parent=None, *args):
-        QAbstractListModel.__init__(self, parent, *args)
-        self.grammars = grammars
-
-    def rowCount(self, parent):
-        return len(self.grammars)
-
-    def columnCount(self, parent):
-        return 1
-
-    def data(self, index, role):
-        if index.isValid() and role == Qt.DisplayRole:
-            return QVariant(self.grammars[index.row()])
-        else:
-            return QVariant()
-        
-class ContextListModel(QAbstractListModel):
-    """ """
-    def __init__(self, contexts, parent=None, *args):
-        QAbstractListModel.__init__(self, parent, *args)
-        self.contexts = contexts
-
-    def rowCount(self, parent):
-        return len(self.contexts)
-
-    def columnCount(self, parent):
-        return 1
-    
-    def data(self, index, role):
-        if index.isValid() and role == Qt.DisplayRole:
-            return QVariant(self.contexts[index.row()])
-        else:
-            return QVariant()
+import context
 
         
 class QtInterface(QMainWindow):
@@ -51,7 +16,6 @@ class QtInterface(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.ctxpath = os.getcwd() + '/contexts/'
-        self.ctxfiles = []
         self.env = None
         self.guigrammars=[]
         self.savefile = 'test.png'
@@ -62,9 +26,7 @@ class QtInterface(QMainWindow):
         """Looks up a folder and lists all available contexts """
         for ctxfile in os.listdir(self.ctxpath):
             if ctxfile.endswith('.py'):
-                self.ctxfiles.append(ctxfile)
-        self.contextlist = ContextListModel(self.ctxfiles, self)
-        self.ui.Contexts.setModel(self.contextlist)
+                self.ui.Contexts.addItem(ctxfile)
         
     def connections(self):
         self.connect(self.ui.actionOpen,
@@ -79,10 +41,19 @@ class QtInterface(QMainWindow):
                      SIGNAL("activated()"),
                      self.slot_save_current)
 
+        self.connect(self.ui.actionClose,
+                     SIGNAL("activated()"),
+                     qApp,
+                     SLOT('quit()'))
+
         self.connect(self.ui.compile,
                      SIGNAL("clicked()"),
                      self.slot_compile)
 
+        self.connect(self.ui.generate,
+                     SIGNAL("clicked()"),
+                     self.slot_generate)
+        
         self.connect(self.ui.render,
                      SIGNAL("clicked()"),
                      self.slot_render)
@@ -93,23 +64,39 @@ class QtInterface(QMainWindow):
         file.close()
         file = open(self.filename)
         parser = syntax.Parser(file)
-        tree = parser.parse()
-        builder = semantics.Builder(tree)
-        self.env = semantics.Environment(builder)
-        self.grammars = self.env.populate()
-        self.glist = GrammarListModel(self.grammars, self)
-        self.ui.Grammars.setModel(self.glist)
+        try:
+            tree = parser.parse()
+            builder = semantics.Builder(tree)
+            self.env = semantics.Environment(builder)
+            self.grammars = self.env.populate()
+            self.ui.Grammars.clear()
+            self.ui.Grammars.addItems(self.grammars)
+            self.ui.MessageView.insertPlainText("Compilation proceeded without errors\n")
+        except Exception, inst:
+            print inst
+            self.ui.ErrorView.setPlainText("Errors occured: \n")
+            self.ui.ErrorView.setPlainText(str(inst))
+
+    def slot_generate(self):
+        grammar = str(self.ui.Grammars.currentItem().text())
+        string = self.env.grammars[grammar].generate(self.ui.Generations.value())
+        self.ui.StringView.setPlainText(str(string))
+        self.ui.UserOut.setCurrentIndex(2)
+
+        
 
     def slot_render(self):
-        print self.ui.Grammars.currentItem()
-        print currentcontext
-        ctxfile = self.ctxpath + currentcontext
+        ctxfile = self.ctxpath + str(self.ui.Contexts.currentItem().text())
         handler = context.ContextHandler(ctxfile)
         handler.load_context()
-        string = self.env.grammars[self.current_grammar].generate(self.ui.Generations.value())
-        ctxstring = self.env.grammars[self.current_grammar].translate()
-        handler.render()
-        handler.save(self.savefile)
+        grammar = str(self.ui.Grammars.currentItem().text())
+        string = self.env.grammars[grammar].generate(self.ui.Generations.value())
+        ctxstring = self.env.grammars[grammar].map(string)
+        handler.render(ctxstring)
+        filename = str(self.ui.OutputName.text())
+        print filename
+        handler.save(filename)
+        self.ui.MessageView.setPlainText("Output saved in Image file")
 
     def slot_setcontext(self, selected, deselected):
         print selected

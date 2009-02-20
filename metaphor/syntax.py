@@ -2,7 +2,7 @@
 MeGEN and building abstract syntax trees"""
 
 import nodes
-import error
+from  error import *
 
 keywords = ['grammar', 'Axiom', 'Production', 'Map', 'is', 'Assign', 'ENDofFILE']
 
@@ -111,7 +111,8 @@ class Parser:
             param = ls[1].rstrip(']')
         else:
             param = '_'
-        if self.get_token() == '=>':
+        token = self.get_token()
+        if token == '=>':
             productions = []
             token = self.get_token()
             while not token in keywords: 
