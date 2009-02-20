@@ -20,15 +20,10 @@ class PyScriptInterface:
         self.grammars = self.env.populate()
 
     def setcontext(self):
-        try:
-            path = os.getcwd() + '/' + self.script.context
-            self.handler = context.ContextHandler(path)
-            self.handler.load_context()
-        except error.ContextError, inst:
-            print inst
-        except:
-            pass
-
+        path = os.getcwd() + '/' + self.script.context
+        self.handler = context.ContextHandler(path)
+        self.handler.load_context()
+        
     def generate(self):
         for command in self.script.generate:
             grammar = command[0]
@@ -37,24 +32,19 @@ class PyScriptInterface:
             self.stringstack.append((grammar,string))
 
     def render(self):
-        for command in self.script.render:
-            if type(command) == type('str'):
+        for output in self.script.render:
+            if type(output) == type('str'):
                 handler = self.handler
-            elif len(command) == 2:
-                try:
-                    handler = context.ContextHandler(command[1])
-                    handler.load_context()
-                    command = command[0]
-                except error.ContextError, inst:
-                    print inst
-            try:
-                current = self.stringstack.pop()
-                ctxstring =  self.env.grammars[current[0]].map(current[1])
-                handler.render(ctxstring)
-                handler.save(command)
-            except error.ContextError, inst:
-                print inst
-
+            elif len(output) == 2:
+                handler = context.ContextHandler(output[1])
+                handler.load_context()
+                output = output[0]
+                    
+            current = self.stringstack.pop()
+            ctxstring =  self.env.grammars[current[0]].map(current[1])
+            handler.render(ctxstring)
+            handler.save(output)
+                
     def run(self):
         self.compile()
         self.setcontext()

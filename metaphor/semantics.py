@@ -10,10 +10,6 @@ class Builder:
     def __init__(self, node=None):
         self.__node = node
         self.grammars = {}
-
-#    node = property(fset = lambda self, node: self.__node = node,
-#                    fget = lambda self: return self.__node
-#                    )
     
     def build_all(self):
         '''Directly traverses the entire tree and builds up the grammar objects'''
@@ -149,17 +145,6 @@ class Environment:
     def __init__(self, builder=None):
         self.builder = builder
         self.grammars = {}
-
-#    def setbuilder(self, given):
-#        self.__builder = given
-#        print "Printing builder"
-#        print self.builder
-        
-#    def getbuilder(self):
-#        print "Getting builder"
-#        return self.__builder
-
-#    builder = property(fget=getbuilder, fset=setbuilder)
 
     def populate(self):
         '''Accesses the builder option and gets all the grammar objects '''

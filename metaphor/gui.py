@@ -1,6 +1,6 @@
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
-from qtui import Ui_MainWindow
+
 import sys
 import os
 
@@ -8,7 +8,8 @@ import os
 import syntax
 import semantics
 import context
-
+from error import *
+from qtui import Ui_MainWindow
         
 class QtInterface(QMainWindow):
     def __init__(self):
@@ -73,9 +74,9 @@ class QtInterface(QMainWindow):
             self.ui.Grammars.addItems(self.grammars)
             self.ui.MessageView.insertPlainText("Compilation proceeded without errors\n")
         except Exception, inst:
-            print inst
             self.ui.ErrorView.setPlainText("Errors occured: \n")
-            self.ui.ErrorView.setPlainText(str(inst))
+            self.ui.ErrorView.insertPlainText(str(inst))
+            self.ui.UserOut.setCurrentIndex(1)
 
     def slot_generate(self):
         grammar = str(self.ui.Grammars.currentItem().text())
@@ -86,17 +87,23 @@ class QtInterface(QMainWindow):
         
 
     def slot_render(self):
-        ctxfile = self.ctxpath + str(self.ui.Contexts.currentItem().text())
-        handler = context.ContextHandler(ctxfile)
-        handler.load_context()
-        grammar = str(self.ui.Grammars.currentItem().text())
-        string = self.env.grammars[grammar].generate(self.ui.Generations.value())
-        ctxstring = self.env.grammars[grammar].map(string)
-        handler.render(ctxstring)
-        filename = str(self.ui.OutputName.text())
-        print filename
-        handler.save(filename)
-        self.ui.MessageView.setPlainText("Output saved in Image file")
+        try:
+            ctxfile = self.ctxpath + str(self.ui.Contexts.currentItem().text())
+            handler = context.ContextHandler(ctxfile)
+            handler.load_context()
+            grammar = str(self.ui.Grammars.currentItem().text())
+            string = self.env.grammars[grammar].generate(self.ui.Generations.value())
+            ctxstring = self.env.grammars[grammar].map(string)
+            handler.render(ctxstring)
+            filename = str(self.ui.OutputName.text())
+            handler.save(filename)
+            self.ui.MessageView.insertPlainText("Output saved in file: " + filename)
+            self.ui.MessageView.setCurrentIndex(0)
+        except Exception, inst:
+            self.ui.ErrorView.setPlainText("Errors occured: \n")
+            self.ui.ErrorView.insertPlainText(str(inst))
+            self.ui.UserOut.setCurrentIndex(1)
+            
 
     def slot_setcontext(self, selected, deselected):
         print selected

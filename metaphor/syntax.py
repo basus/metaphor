@@ -60,7 +60,7 @@ class Parser:
                 legals[token]()
                 token = self.get_token()
             else:
-                raise error.InvalidBlockError(token, self.lineno)
+                raise InvalidBlockError(token, self.lineno)
 
     def grammar(self):
         ''' Parses the individual grammars and calls appropriate functions'''
@@ -81,7 +81,7 @@ class Parser:
             if token in grammar_legals.keys():
                 grammar_legals[token]()
             else:
-                raise InvalidGrammarRuleError(token)
+                raise InvalidGrammarRuleError(token, self.lineno)
             token = self.get_token()
 
         self.backtrack()
@@ -119,7 +119,7 @@ class Parser:
                 productions.append(token)
                 token = self.get_token()
         else:
-            raise InvalidProductionError(token)
+            raise InvalidProductionError(token, self.lineno)
         self.treenode.add_production( nodes.ProductionNode (nonterm, param,
                                                            productions, self.treenode))
         self.backtrack()
@@ -136,7 +136,7 @@ class Parser:
                 token = self.get_token()
             self.backtrack()
         else:
-            raise error.InvalidGrammarRuleError(token, self.lineno)
+            raise InvalidGrammarRuleError(token, self.lineno)
         self.treenode.add_map(nodes.MapNode(element, repr, self.treenode))
 
 

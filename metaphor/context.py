@@ -1,7 +1,7 @@
 import os
 import sys
 import imp
-import error
+from error import *
 class ContextHandler:
 
     def __init__(self, contextpath):
@@ -10,16 +10,11 @@ class ContextHandler:
     def load_context(self):
         try:
             module = imp.load_source('', self.contextpath)
-        except Exception, inst:
-            print inst
-            raise error.InvalidContextError(self.contextpath)
-        
-        contextname = self.contextpath.split('/')[-1]
-        contextname = contextname.rstrip(".py")
-        try:
+            contextname = self.contextpath.split('/')[-1]
+            contextname = contextname.rstrip(".py")
             self.context = getattr(module, contextname)()
-        except error.ContextError, inst:
-            print inst
+        except Exception:
+            raise InvalidContextError(self.contextpath)
 
     def render(self, genstring):
         '''Steps through the translated string and makes appropriate method calls
@@ -40,12 +35,17 @@ class ContextHandler:
             try:
                 call = getattr(self.context, call)
                 call(*parsed_params)
-            except:
-                raise error.ContextError(action)
+            except AttributeError:
+                raise InvalidContextActionError(call)
+            except Exception, inst:
+                raise ContextAtFaultError(call, inst)
 
     def save(self, filename):
         ''' Saves the result of context representation'''
-        self.context.wrapup(filename)
+        try:
+            self.context.wrapup(filename)
+        except Exception, inst:
+            raise SaveError(inst)
 
 
             

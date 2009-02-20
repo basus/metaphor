@@ -42,7 +42,12 @@ class InvalidAssignmentError(ParseError):
     def __str__(self):
         return self.message
 
-class ContextError(ParseError):
+###############################################
+#  End of parse errors
+#
+###############################################
+    
+class ContextError(Exception):
     '''Raised if there is a problem with the Context-based transformation'''
 
     def __init__(self, action):
@@ -51,29 +56,58 @@ class ContextError(ParseError):
     def __str__(self):
         return self.message
 
+class InvalidContextError(ContextError):
+    ''' Raised if an undefined context is used'''
+
+    def __init__(self, gram):
+        self.message = " %s is not a valid context." % gram
+
+    def __str__(self):
+        return self.message
+
+class NoContextError(ContextError):
+    ''' Raised if no context is being used'''
+
+    def __init__(self):
+        self.message = "There is no context currently defined"
+
+    def __str__(self):
+        return self.message
+
+class InvalidContextActionError(ContextError):
+    '''Raised if a context does not have a specified action '''
+
+    def __init__(self, call):
+        self.message = "The action %s is not allowed by the context in use" % call
+
+    def __str__(self):
+        return self.message
+
+class ContextAtFaultError(ContextError):
+    '''Raised if a context method caused an error. '''
+
+    def __init__(self, call, inst):
+        self.message = "The context did not perform the action \"%s\" properly. Error raised is %s", % call, inst
+
+    def __str__(self):
+        return self.message
+
+class SaveError(ContextError):
+    ''' Raised if the result of the rendering could not be saved'''
+
+    def __init__(self, inst):
+        self.message = "The following occurred when the result was being saved: %s" %inst
+
+
+#############################################
+# Context Errors End
+#
+############################################
 class InvalidGrammarError(Exception):
     ''' Raised if an undefined Grammar is asked to generate a string'''
 
     def __init__(self, gram):
         self.message = "The Grammar %s is not defined" % gram
-
-    def __str__(self):
-        return self.message
-
-class InvalidContextError(Exception):
-    ''' Raised if an undefined context is used'''
-
-    def __init__(self, gram):
-        self.message = "The context %s could not be found" % gram
-
-    def __str__(self):
-        return self.message
-
-class NoContextError(Exception):
-    ''' Raised if no context is being used'''
-
-    def __init__(self):
-        self.message = "There is no context currently defined"
 
     def __str__(self):
         return self.message
