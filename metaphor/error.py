@@ -87,7 +87,7 @@ class ContextAtFaultError(ContextError):
     '''Raised if a context method caused an error. '''
 
     def __init__(self, call, inst):
-        self.message = "The context did not perform the action \"%s\" properly. Error raised is %s" % call, inst
+        self.message = "The context did not perform the action %s. Error raised is %s" % (call, inst)
 
     def __str__(self):
         return self.message
