@@ -40,7 +40,7 @@ class PyScriptInterface:
                 handler.load_context()
                 output = output[0]
                     
-            current = self.stringstack.pop()
+            current = self.stringstack.pop(0)
             ctxstring =  self.env.grammars[current[0]].map(current[1])
             handler.render(ctxstring)
             handler.save(output)
