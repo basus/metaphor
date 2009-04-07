@@ -1,3 +1,13 @@
+grammar Simple
+        Axiom A
+
+        Production A => B
+        Production B => A B
+
+        
+        Map A => forward[20] left[90]
+        Map B => right[90] forward[20]
+
 grammar Sierpinski2
         Axiom A
 
