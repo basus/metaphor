@@ -4,6 +4,15 @@ import getopt
 from metaphor import script
 
 def main(argv):
+    """
+
+    This is the main function controlling interface to the Metaphor system.
+    Based on command line parameters it either launches the GUI or feeds a
+    script to the script interface.
+
+    @param argv: the command line arguments passed to the program
+    
+    """
     try:
         opts, args = getopt.getopt(argv, "s:q", ["script="])
     except getopt.GetoptError:
@@ -20,7 +29,6 @@ def main(argv):
 
     if opts == []:
         from metaphor import gui
-#        print "You must use the script mode for the time being. Sorry!"
     
             
         
