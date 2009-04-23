@@ -12,7 +12,17 @@ from error import *
 from qtui import Ui_MainWindow
         
 class QtInterface(QMainWindow):
+    """
+    Main graphical interface class. Mostly a text editor with displays for available
+    contexts and compiled grammars. Build on PyQt.
+    """
+    
     def __init__(self):
+        """
+        Sets up the main interface, loads the list of contexts and sets up environments
+        for the grammar
+        """
+        
         QDialog.__init__(self)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
@@ -24,12 +34,17 @@ class QtInterface(QMainWindow):
         self.connections()
 
     def detect_contexts(self):
-        """Looks up a folder and lists all available contexts """
+        """Looks up a folder and lists all available contexts. The default folder is
+        the /contexts/ folder in the current directory.
+        """
         for ctxfile in os.listdir(self.ctxpath):
             if ctxfile.endswith('.py'):
                 self.ui.Contexts.addItem(ctxfile)
         
     def connections(self):
+        """
+        Connects all required slots and signals to the GUI elements.
+        """
         self.connect(self.ui.actionOpen,
                      SIGNAL("activated()"),
                      self.slot_open_file)
@@ -60,6 +75,11 @@ class QtInterface(QMainWindow):
                      self.slot_render)
         
     def slot_compile(self):
+        """
+        Executed when the 'compile' button is clicked. The currently open file is used
+        as input to the parser. Correctly compiled grammars are then added to the
+        display list.
+        """
         file = open(self.filename,'w')
         file.write(self.ui.GrammarEdit.toPlainText())
         file.close()
@@ -79,6 +99,10 @@ class QtInterface(QMainWindow):
             self.ui.UserOut.setCurrentIndex(1)
 
     def slot_generate(self):
+        """
+        Executed when the 'generate' button is clicked. Generates the string for
+        the selected grammar and specified number of generations.
+        """
         grammar = str(self.ui.Grammars.currentItem().text())
         string = self.env.grammars[grammar].generate(self.ui.Generations.value())
         self.ui.StringView.setPlainText(str(string))
@@ -87,6 +111,12 @@ class QtInterface(QMainWindow):
         
 
     def slot_render(self):
+        """
+        Executed when the 'render' button is clicked. A string from the selected
+        grammar for the selected number of generations is selected. The selected
+        context module is dynamically loaded and the generated string is then
+        rendered and saved.
+        """
         try:
             ctxfile = self.ctxpath + str(self.ui.Contexts.currentItem().text())
             handler = context.ContextHandler(ctxfile)
@@ -106,20 +136,32 @@ class QtInterface(QMainWindow):
             
 
     def slot_setcontext(self, selected, deselected):
+        """
+        Sets the currently selected context.
+        """
         print selected
         self.current_context = selected
         
     def slot_setgrammar(self, selected, deselected):
+        """
+        Sets the currently selected compiled Grammar 
+        """
         print selected
         self.current_grammar = selected
         
     def slot_open_file(self):
+        """
+        Launches a file selection dialog and shows the text in the text editor
+        """
         self.filename = QFileDialog.getOpenFileName(self, "Open File",os.getcwd(), "*.gr")
         file = open(self.filename)
         data = file.read()
         self.ui.GrammarEdit.setText(data)
 
     def slot_saveas_file(self):
+        """
+        Opens a file saving dialog and writes the contents of the text editor.
+        """
         self.filename = QFileDialog.getSaveFileName(self, "Save File",os.getcwd(), "*.gr")
         file = open(self.filename,'w','utf-8')
         file.write(self.ui.GrammarEdit.toPlainText())
