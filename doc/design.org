@@ -1,4 +1,5 @@
 * What is Metaphor?
+  The Metaphor system arose out of a need to have a tool which would allow the exploration of the pattern-creation potential of formal grammars without having to learn a full programming language first. This version of Metaphor was designed to be useful for artists willing to learn the small amount of formalism required to describe a pattern as a formal grammar. However, it was also necessary to make sure that the system could be easily extended by computer scientists (and anyone with a knowledge of programming) without having to learn a complex API or installing third-party components. 
   Metaphor is a system for expressing patterns as formal grammars and then viewing compliant instances of those patterns in a human-understandable (visual or auditory) form. At the heart of this system is the concept of a Metaphor: a Metaphor is combination of a pattern described as a formal grammar and the context in which the resulting strings are to be expressed. This conceptual organization translates cleanly into implementation:
     * A Grammar file contains the formal grammar expressed in the form of a simplified notation -- the Metaphor Grammar Expression Notation (MeGEN).
     * A Context is an independent executable program that creates the various interpretations of a grammar.
@@ -7,25 +8,24 @@
     1. Abstraction: Users can concentrate on defining grammars and not be bothered about how the visual aspects are implemented.
     2. Modularity: Separate teams can work on Grammars and Contexts as long as they agree on how the Grammar is to be interpeted.
     3. Hot-pluggable: The same Grammar could be expressed in multiple contexts: a turtle graphic, discrete image compositions (like we have now), SVGs, 3D models, sounds etc.
-    4. Platform independence: Metaphor is in Python, but I'm trying to build the Context system so that contexts could be in any language/graphical system.      
 
 ** Disadvantages of the design
-    1. Users are limited to dealing with grammars that can be expressed within the constraints of MeGEN. Currently this supports regular and stochastic context-free grammars. Of course, the modular nature of the system (see below) means that MeGEN can be incrementally augmented. MeGEN is also non-standard. Not quite sure if that is a problem.
-    2. The current state of graphical toolkits means that actually creating a Context will need some real programming. The best we can do is to ship a few example Contexts (built from Khine and Rhody's work).
-    3. No UI yet.
+    1. Users are limited to dealing with grammars that can be expressed within the constraints of the Metaphor Grammar Notation (MeGEN). Currently this supports regular and stochastic context-free grammars. Of course, the modular nature of the system (see below) means that MeGEN can be incrementally augmented. 
+    2. The current state of graphical toolkits means that actually creating a Context will need some real programming.
+    3. The graphical UI is a thin wrapper around the underlying textual system.
 
 * Protocols and Notation
 ** What is a Grammar?
    A grammar is a set of strings over an alphabet. A grammar defines which strings are actually valid for the given language. These grammars are composed of a set of transformation rules: one symbol (or a set of symbols) is transformed into another set of symbols. The Metaphor system currently supports regular and context-free grammars only: a single symbol may be transformed into another or a set of symbols (Type 2 and Type 3 Chomsky Grammars). See [[http://en.wikipedia.org/wiki/Formal_grammar][Formal Grammars]] and [[http://en.wikipedia.org/wiki/Chomsky_hierarchy][Chomsky Hierarchy]] for more information. However, these grammars may be probabilistic: each symbol may have more than one tranformation associated with it, and which transformation is actually used is determined by a parameter which specifies the probability of that production being used. These grammars are specified in files using the Metaphor Grammar Expression Notation.
 
 ** Metaphor Grammar Expression Notation
-   MeGEN is a simplified language for describing regular and context-free grammars. 
+   MeGEN is a simplified language for describing regular and context-free grammars. It allows the definition of context-free grammars with stochastic extensions. The notation is self-explanatory. It should be note that the representation is whitespace-sensitive. The MeGEN notation allows the user to specifying grammars in terms of just an axiom and production rules. There is no real distinction between terminal and non-terminal symbols allowing the production rules to be easily changed and experimented with. Syntax is kept to a minimum both to make it easy for the user and to make the parser simple.
 
 ** What is a Context?
    A Context is a program which accpepts a string of representations and then combines those representations into a single final output. The Metaphor system provides functionality for transforming the generated string into equivalent representations. For Contexts written in Python, there is also a system for translating the representation strings into Context API calls (see Context Python Protocol). Non-Python Contexts (or Python Contexts that do not follow the CPP) must provide their own mechanisms for reading the representation strings. This task is simplified by the Context Protocol which defines a representation string.
 
 ** Context Protocol
-    The CP defines the string format that Contexts must interpret and how they should provide feedback to the Metaphor system. 
+    The CP defines the string format that Contexts must interpret and how they should provide feedback to the Metaphor system. While the following definition holds, it is unimplemented as of Spring 2009.
 
     Each representation string is a space-separated list of representations. A representation is a single word with any number of parameters. Parameters are a comma separated list enclosed in square parentheses [] immediately following the representation name. Though there are no restrictions on the names for the representations, it is recommended that they be easy to understand and logical for the Context in question.
 
@@ -36,8 +36,6 @@
 
     Additionally each Context class must provide a wrapup() method which saves the final output to a file and then returns the filename. Metaphor will handle display of image files (PNG, JPEG, GIF).
 
-** Context File Format
-    .ctx files with the same name as the Grammars file supply instructions to the Metaphor Context Handler. They include the name of the context to use as well as other parameters. The exact format and operation of the .ctx files is to be determined.
 
 * System Components
   The Metaphor system itself consists of the following parts:
@@ -47,7 +45,7 @@
      2. A Validator object traverses the tree and generates skeletons for the individual patterns described
      3. A Constructor object traverses the tree and builds the actual Pattern objects.
   2. The Probability model: Built into the Pattern objects, this allows for the automatic creation of strings compliant with the grammars.
-  3. The Context handler: Still working on this. It'll be a system for executing user-provided code and passing in the generated strings. Think GNU make. Ideally it will be a protocol/framework into which users can drop their own visualizers.
+  3. The Context handler: The Context handler allows for interaction with Python modules created according to the Context Python Protocol. 
 
 ** User Interface
 ** Parser
@@ -62,4 +60,4 @@
 
    This separation is useful to the user by allowing abstraction, but it also allows flexibility. The Context system can be built to allow Mapping macros: each element can be mapped to a sequence of representations. In theory the choice of representation, could be made dynamic: each element has a choice of different representations. However, in our system this will be expressly forbidden. Such polymorphism should be built into the Grammar. There should be multiple Grammar elements each with a single representation rather than the other way round. Our goal is to encourage emphasis on the Grammar development, the mapping should be a much simpler process.
 
-   The Mapping is a part of the Grammar definition itself. Each mapping is a statement of the form "Map <element> => <representation>" The representation should be valid within the context and should conform to the Context Protocol (see below).
+   The Mapping is a part of the Grammar definition itself. Each mapping is a statement of the form "Map <element> => <representation>" The representation should be valid within the context and should conform to the Context Protocol.
