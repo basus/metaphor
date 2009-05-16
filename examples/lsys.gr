@@ -14,11 +14,10 @@ grammar KochCurve
         
         Production F => F left F right F right F left F
         
-        Pull F => forward[10]
+        Map F => forward[10]
         Map left => left[90]
         Map right => right[90]
 
- 
 
 grammar Sierpinski
         Axiom A
@@ -26,8 +25,8 @@ grammar Sierpinski
         Production A => B right A right B 
         Production B => A left B left A
 
-        Map A => forward[10]
-        Map B => forward[10]
+        Map A => forward[1]
+        Map B => forward[1]
         Map right => right[60]
         Map left => left[60]
  

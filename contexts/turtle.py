@@ -18,7 +18,7 @@ deg2rad = math.pi/180.0
 
 
 class turtle(ImageDraw.ImageDraw):
-    def __init__(self, size=(1000, 1000), bg="black", start=(650,650), *args):
+    def __init__(self, size=(1000, 1000), bg="black", start=(0,0), *args):
         self.__img = Image.new("RGB", size, bg)
 #        ImageDraw.ImageDraw.__init__(self, self.__img)
 	apply(ImageDraw.ImageDraw.__init__, (self,self.__img, )+args)

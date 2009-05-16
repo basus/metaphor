@@ -1,0 +1,53 @@
+grammar Simple
+        Axiom A
+
+        Production A => B
+        Production B => A B
+
+        
+        Map A => forward[20] left[90]
+        Map B => right[90] forward[20]
+
+grammar Sierpinski2
+        Axiom A
+
+        Production A => B right A right B 
+        Production B => A left B left A
+
+        Map A => forward[100]
+        Map B => forward[100]
+        Map right => right[60]
+        Map left => left[60]
+
+grammar Sierpinski4
+        Axiom A
+
+        Production A => B right A right B 
+        Production B => A left B left A
+
+        Map A => forward[50]
+        Map B => forward[50]
+        Map right => right[60]
+        Map left => left[60]
+
+grammar Sierpinski6
+        Axiom A
+
+        Production A => B right A right B 
+        Production B => A left B left A
+
+        Map A => forward[15]
+        Map B => forward[15]
+        Map right => right[60]
+        Map left => left[60]
+
+grammar Sierpinski9
+        Axiom A
+
+        Production A => B right A right B 
+        Production B => A left B left A
+
+        Map A => forward[2]
+        Map B => forward[2]
+        Map right => right[60]
+        Map left => left[60]
