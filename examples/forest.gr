@@ -38,5 +38,5 @@ grammar WeedTree
     Map [ => save
     Map ] => restore
     Map posn => setx[1000] sety[1000]
-    Map weed_seed => left[90] forward[200]
+    Map weed_seed => left[90] forward[200] color[#ff0000]
 

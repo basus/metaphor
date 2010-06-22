@@ -26,6 +26,7 @@ class turtle(ImageDraw.ImageDraw):
 	self.__x, self.__y, self.__heading, self.__thickness = 0.0, 0.0, 90.0, 5
         self.__state_stack = [(self.__x, self.__y, self.__heading)]
 	self.__pendown=1
+        self.__color = '#ffffff'
         self.setxy(start)
 
     def tell(self):
@@ -51,12 +52,12 @@ class turtle(ImageDraw.ImageDraw):
 	distance=float(distance) 
 	ex=sx+distance*math.cos(self.__heading*deg2rad)
 	ey=sy-distance*math.sin(self.__heading*deg2rad)
-	if self.__pendown: self.line( [(sx,sy), (ex,ey)] )
+	if self.__pendown: self.line( [(sx,sy), (ex,ey)], fill=self.__color )
  	self.__x, self.__y = ex, ey
 	if not (0<=ex<im_x) or not (0<=ey<im_y):
 	    new_ex=ex % im_x ; new_ey=ey % im_y
 	    sx=sx + (new_ex-ex) ; sy=sy + (new_ey-ey)
-	    if self.__pendown: self.line( [(sx,sy), (new_ex,new_ey)] )
+	    if self.__pendown: self.line( [(sx,sy), (new_ex,new_ey)], fill=self.__color )
 	    self.__x, self.__y = new_ex, new_ey
 
     def ahead(self, distance):
@@ -89,15 +90,15 @@ class turtle(ImageDraw.ImageDraw):
 
     def color(self, color):
         "Changes the color of the pen"
-        self.ink_color = color
+        self.__color = color
 
     def save(self):
         "Save the turtle's current position and heading to a stack"
-        self.__state_stack.append((self.__x, self.__y, self.__heading, self.__thickness))
+        self.__state_stack.append((self.__x, self.__y, self.__heading, self.__thickness, self.__color))
 
     def restore(self):
         "Sets the turtle's position and heading to the last saved set"
-        self.__x, self.__y, self.__heading, self.thickness = self.__state_stack.pop()
+        self.__x, self.__y, self.__heading, self.__thickness, self.__color = self.__state_stack.pop()
 
     def restore_without(self, *args):
         "Restore the turtle's position without the properties specified by the entered numbers"
