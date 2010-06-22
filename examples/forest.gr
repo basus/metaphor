@@ -1,0 +1,42 @@
+grammar WeedFern
+    Axiom seed
+
+    Production seed => posn [ fern ]  weed
+    Production fern => fern_seed Z
+    Production weed => weed_seed G
+    
+    Production Z => F + [ [ Z ] - Z ] - F [ - F Z ] + Z
+    Production F => F F
+
+    Production G => G G - [ - G + G + G ] + [ + G - G - G ]
+
+    Map F => forward[10]
+    Map G => forward[10]
+    Map - => right[25]
+    Map + => left[25]
+    Map [ => save
+    Map ] => restore
+    Map posn => setx[1000] sety[1000]
+    Map weed_seed => right[90] right[90]
+
+grammar WeedTree
+
+    Axiom seed
+
+    Production seed => posn [ tree ]  [ weed ]
+    Prodcution tree => tree_seed F
+    Production weed => weed_seed G
+    
+    Production F => F [ + F ] F [ - F ] F
+
+    Production G => G G - [ - G + G + G ] + [ + G - G - G ]
+
+    Map F => forward[10]
+    Map G => forward[10]
+    Map - => right[25]
+    Map + => left[25]
+    Map [ => save
+    Map ] => restore
+    Map posn => setx[1000] sety[1000]
+    Map weed_seed => left[90] forward[200]
+
