@@ -29,7 +29,8 @@ class ContextHandler:
             contextname = self.contextpath.split('/')[-1]
             contextname = contextname.rstrip(".py")
             self.context = getattr(module, contextname)()
-        except Exception:
+        except Exception as e:
+            print e
             raise InvalidContextError(self.contextpath)
 
     def render(self, genstring):
@@ -55,8 +56,12 @@ class ContextHandler:
                     parsed_params.append(param)
             try:
                 call = getattr(self.context, call)
-                call(*parsed_params)
-            except AttributeError:
+                if parsed_params == []:
+                    call()
+                else:
+                    call(*parsed_params)
+            except AttributeError as a:
+                print a
                 raise InvalidContextActionError(call)
             except Exception, inst:
                 raise ContextAtFaultError(call, inst)
@@ -70,8 +75,10 @@ class ContextHandler:
                          created
         """
         try:
+            print filename
             self.context.wrapup(filename)
         except Exception, inst:
+            print inst
             raise SaveError(inst)
 
 

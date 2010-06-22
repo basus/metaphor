@@ -18,12 +18,12 @@ deg2rad = math.pi/180.0
 
 
 class turtle(ImageDraw.ImageDraw):
-    def __init__(self, size=(1000, 1000), bg="black", start=(0,0), *args):
+    def __init__(self, size=(2000, 2000), bg="black", start=(0,0), *args):
         self.__img = Image.new("RGB", size, bg)
 #        ImageDraw.ImageDraw.__init__(self, self.__img)
 	apply(ImageDraw.ImageDraw.__init__, (self,self.__img, )+args)
         
-	self.__x, self.__y, self.__heading, self.thickness = 0.0, 0.0, 90.0, 5
+	self.__x, self.__y, self.__heading, self.__thickness = 0.0, 0.0, 90.0, 5
         self.__state_stack = [(self.__x, self.__y, self.__heading)]
 	self.__pendown=1
         self.setxy(start)
@@ -90,17 +90,18 @@ class turtle(ImageDraw.ImageDraw):
     def color(self, color):
         "Changes the color of the pen"
         self.ink_color = color
+
     def save(self):
         "Save the turtle's current position and heading to a stack"
-        self.__state_stack.append((self.__x, self.__y, self.__heading, self.__thickness, self.__color))
+        self.__state_stack.append((self.__x, self.__y, self.__heading, self.__thickness))
 
     def restore(self):
         "Sets the turtle's position and heading to the last saved set"
-        self.__x, self.__y, self.__heading, self.thickness, self.__color = self.__state_stack.pop()
+        self.__x, self.__y, self.__heading, self.thickness = self.__state_stack.pop()
 
     def restore_without(self, *args):
         "Restore the turtle's position without the properties specified by the entered numbers"
-        optlist = [1,2,3,4,5]
+        optlist = [1,2,3,4]
         x, y, h, th, col = self.__state_stack.pop()
         for num in optlist:
             if not num in args:
@@ -108,7 +109,6 @@ class turtle(ImageDraw.ImageDraw):
                 elif num==2: self.__y = y
                 elif num==3: self.__heading = h
                 elif num==4: self.__thickness = th
-                elif num==5: self.__color = col
 
     def setxy(self, t): 
 	"Set the turtle's X and Y position"

@@ -135,7 +135,7 @@ class Grammar:
             try:
                 ctxstring.extend(self.maps[element])
             except KeyError:
-                print "Element %s has no mapping" % element
+                pass
         return ctxstring
 
 class Environment:
