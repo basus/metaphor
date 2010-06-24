@@ -52,12 +52,13 @@ class turtle(ImageDraw.ImageDraw):
 	distance=float(distance) 
 	ex=sx+distance*math.cos(self.__heading*deg2rad)
 	ey=sy-distance*math.sin(self.__heading*deg2rad)
-	if self.__pendown: self.line( [(sx,sy), (ex,ey)], fill=self.__color )
+	if self.__pendown: self.line( [(sx,sy), (ex,ey)], fill=self.__color, width=self.__thickness )
  	self.__x, self.__y = ex, ey
 	if not (0<=ex<im_x) or not (0<=ey<im_y):
 	    new_ex=ex % im_x ; new_ey=ey % im_y
 	    sx=sx + (new_ex-ex) ; sy=sy + (new_ey-ey)
-	    if self.__pendown: self.line( [(sx,sy), (new_ex,new_ey)], fill=self.__color )
+	    if self.__pendown:
+                self.line( [(sx,sy), (new_ex,new_ey)], fill=self.__color, width=self.__thickness )
 	    self.__x, self.__y = new_ex, new_ey
 
     def ahead(self, distance):
@@ -80,7 +81,7 @@ class turtle(ImageDraw.ImageDraw):
 
     def thickness(self, thick):
         "Changes the thickness of the line drawn TO the given amount"
-        self.__thickness = thickness
+        self.__thickness = thick
 
     def thicken(self, amt):
         "Changes the thickness of the line BY the given amount"
@@ -88,7 +89,7 @@ class turtle(ImageDraw.ImageDraw):
         if self.__thickness < 0:
             self.__thickness = 1
 
-    def color(self, color):
+  1  def color(self, color):
         "Changes the color of the pen"
         self.__color = color
 
