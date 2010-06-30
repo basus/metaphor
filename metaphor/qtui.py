@@ -8,6 +8,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt4 import QtCore, QtGui
+import highlight
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -67,6 +68,9 @@ class Ui_MainWindow(object):
         self.GrammarEdit = QtGui.QTextEdit(self.centralwidget)
         self.GrammarEdit.setMinimumSize(QtCore.QSize(700,500))
         self.GrammarEdit.setObjectName("GrammarEdit")
+        self.GrammarEdit.setCurrentFont(QtGui.QFont('monospace'))
+        self.GrammarEdit.setFontPointSize(9)
+        self.highlight = highlight.Metaphor(self.GrammarEdit.document())
         self.gridlayout.addWidget(self.GrammarEdit,0,1,1,1)
 
         self.groupBox_2 = QtGui.QGroupBox(self.centralwidget)
