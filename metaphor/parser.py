@@ -27,7 +27,8 @@ comparators = {
     "<" : "LT"
     }
 
-tokens = ["SYMBOL", "OPEN_PAREN", "CLOSE_PAREN", "OPEN_BRACE", "CLOSE_BRACE", "SPECIAL", "BLANK",
+tokens = ["SYMBOL", "OPEN_PAREN", "CLOSE_PAREN", "OPEN_BRACE",
+          "CLOSE_BRACE", "SPECIAL", "BLANK", "SEPARATOR",
           "INT", "FLOAT", ] + list(reserved.values()) + list(operators.values()) + list(comparators.values())
 
 t_OPEN_PAREN = r"\("
@@ -35,6 +36,8 @@ t_CLOSE_PAREN = r"\)"
 
 t_OPEN_BRACE = r"\["
 t_CLOSE_BRACE = r"\]"
+
+t_SEPARATOR = r","
 
 t_ignore_BLANK = r"[ \t\r\f\v]"
 t_ignore_comment = r"\#.*"
@@ -92,7 +95,7 @@ def p_declaration(p):
 
 def p_axiom(p):
     """axiom : AXIOM SYMBOL
-           | AXIOM SYMBOL OPEN_PAREN parameter CLOSE_PAREN"""
+           | AXIOM SYMBOL OPEN_PAREN parameters CLOSE_PAREN"""
     pass
 
 def p_define(p):
@@ -100,14 +103,21 @@ def p_define(p):
     pass
 
 def p_render(p):
-    """render : RENDER SYMBOL OPEN_PAREN SYMBOL CLOSE_PAREN PRODUCE functions
+    """render : RENDER SYMBOL OPEN_PAREN parameters CLOSE_PAREN PRODUCE functions
               | RENDER SYMBOL PRODUCE functions"""
     pass
 
 def p_rule(p):
-    """rule : RULE SYMBOL OPEN_PAREN condition CLOSE_PAREN OPEN_BRACE parameter CLOSE_BRACE PRODUCE productions
+    """rule : RULE SYMBOL OPEN_PAREN conditions CLOSE_PAREN OPEN_BRACE parameter CLOSE_BRACE PRODUCE productions
           | RULE SYMBOL OPEN_BRACE parameter CLOSE_BRACE PRODUCE productions
-          | RULE SYMBOL OPEN_PAREN condition CLOSE_PAREN PRODUCE productions"""
+          | RULE SYMBOL OPEN_PAREN conditions CLOSE_PAREN PRODUCE productions"""
+    pass
+
+def p_conditions(p):
+    """
+    conditions : condition SEPARATOR conditions
+               | empty
+    """
     pass
 
 def p_condition(p):
@@ -119,6 +129,12 @@ def p_condition(p):
                | parameter LTEQ parameter
     """
     pass
+
+def p_parameters(p):
+    """
+    parameters : parameter SEPARATOR parameter
+               | empty
+    """
 
 def p_parameter(p):
     """
@@ -137,7 +153,7 @@ def p_productions(p):
 def p_production(p):
     """
     production : SYMBOL
-                | SYMBOL OPEN_PAREN expression CLOSE_PAREN
+                | SYMBOL OPEN_PAREN expressions CLOSE_PAREN
     """
     pass
 
@@ -151,7 +167,14 @@ def p_functions(p):
 def p_function(p):
     """
     function : SYMBOL
-              | SYMBOL OPEN_PAREN expression CLOSE_PAREN
+              | SYMBOL OPEN_PAREN expressions CLOSE_PAREN
+    """
+    pass
+
+def p_expressions(p):
+    """
+    expressions : expression SEPARATOR expressions
+                | empty
     """
     pass
 
@@ -188,5 +211,3 @@ precedence = (
 )
 
 parser = yacc.yacc()
-    
-    
