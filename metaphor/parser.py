@@ -36,7 +36,8 @@ t_CLOSE_PAREN = r"\)"
 t_OPEN_BRACE = r"\["
 t_CLOSE_BRACE = r"\]"
 
-t_ignore_BLANK = r"\s"
+t_ignore_BLANK = r"[ \t\r\f\v]"
+t_ignore_comment = r"\#.*"
 
 def t_SPECIAL(t):
     r"(>|<)=?|==|=>|,|\+|-|\*|/"
@@ -62,6 +63,10 @@ def t_FLOAT(t):
 
 def t_error(t):
     raise TypeError("Unknown test %s" % (t.value,))
+
+def t_newline(t):
+    r"\n+"
+    t.lexer.lineno += len(t.value)
 
 lex.lex()
 
