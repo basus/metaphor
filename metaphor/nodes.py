@@ -1,39 +1,21 @@
 class Node:
     """
-    A base class for all other Node classes. Each node represents an type of
-    element that can be part of a grammar file. This class provides basic
-    accessor methods.
+    A generic class for representing the Metaphor AST.
     """
-
-    def __init__(self, data, parent):
+    def __init__(self, type, children=None, data=None):
         """
-        This constructor forms a new node object from the parent of that node
-        and the data encapsulated by it.
-        @param data: the data element wrapped by the node
-        @param parent: the parent of the node in the abstract syntax tree
+        Constructor forms a new node using the type, children and data provided
+        @param type: the type of syntax element represented by the node, generally
+                     corresponds to lexical token type
+        @param children: children nodes. None if it is a leaf
+        @param data: data contained by the node (such as number value)
         """
-        self.__parent = parent
-        self.__data = data
-
-    def setdata(self, newdata):
-        """
-        Allows the data element in the node to be replaced. However the type of
-        the new data element must match the one being replaced.
-        @param newdata : The new data element for the node to wrap. 
-        """
-        if type(newdata) == type(self.__data):
-            self.__data = newdata
+        self.type = type
+        if children:
+            self.children = children
         else:
-            raise TypeError
-
-    def getdata(self):
-        """
-        Accessor for the data element that the node wraps.
-        """
-        return self.__data
-
-    data = property(getdata, setdata)
-
+            self.children = []
+        self.data = data
 
 class RootNode(Node):
     """A class for the roots of the ASTs"""
