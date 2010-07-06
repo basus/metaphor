@@ -73,16 +73,23 @@ def t_newline(t):
 
 lex.lex()
 
+f = open("../examples/parametric.gr")
+st = ""
+for l in f:
+    st += l
+
 ## Parser section
 
 def p_system(p):
     "system : SYSTEM SYMBOL declarations"
-    pass
+    p[0] = Node("system", p[3], p[2])
+
 
 def p_declarations(p):
     """declarations : declaration declarations
                   | empty"""
-    pass
+    p[0] = Node("declarations", [p[1]])
+    p[0].children += p[2].children
 
 def p_declaration(p):
     """
@@ -91,16 +98,20 @@ def p_declaration(p):
                 | rule
                 | render
     """
-    pass
+    p[0] = p[1]
 
 def p_axiom(p):
     """axiom : AXIOM SYMBOL
            | AXIOM SYMBOL OPEN_PAREN parameters CLOSE_PAREN"""
-    pass
+    if len(p) == 3:
+        p[0] = Node("axiom", None, p[2])
+    else:
+        p[0] = Node("axiom", p[4], p[2])
+
 
 def p_define(p):
     "define : DEFINE SYMBOL PRODUCE value"
-    pass
+    p[0] = Node("define", None, (p[2],p[4]))
 
 def p_render(p):
     """render : RENDER SYMBOL OPEN_PAREN parameters CLOSE_PAREN PRODUCE functions
@@ -132,44 +143,57 @@ def p_condition(p):
 
 def p_parameters(p):
     """
-    parameters : parameter SEPARATOR parameter
-               | empty
+    parameters : parameter SEPARATOR parameters
+               | parameter
     """
+    if len(p) == 2:
+        p[0] = Node("parameter", p[1], None)
+    else:
+        p[0] = Node("parameter", [], None)
+        p[0].children = p[1] + p[3].children
 
 def p_parameter(p):
     """
     parameter : SYMBOL
-               | value
+              | value
     """
-    pass
+    if type(p[1]) == Node:
+        p[0] = p[1]
+    else:
+        p[0] = Node("symbol",None,p[1])
 
 def p_productions(p):
     """
     productions : production productions
                 | empty
     """
-    pass
+    p[0] = Node("productions", None, None)
+    p[0].children += p[1].children
 
 def p_production(p):
     """
     production : SYMBOL
                 | SYMBOL OPEN_PAREN expressions CLOSE_PAREN
     """
-    pass
+    if len(p) == 2:
+        p[0] = Node("production", None, p[1])
+    else:
+        p[0] = Node("production", p[3], p[1])
 
 def p_functions(p):
     """
     functions : function functions
               | empty
     """
-    pass
+    p[0] = Node("functions", None, None)
+    p[0].children += p[2].children
 
 def p_function(p):
     """
     function : SYMBOL
               | SYMBOL OPEN_PAREN expressions CLOSE_PAREN
     """
-    pass
+    p[0] = Node("function", [])
 
 def p_expressions(p):
     """
@@ -194,7 +218,7 @@ def p_value(p):
     value : INT
            | FLOAT
     """
-    pass
+    p[0] = Node("value", None, p[1])
 
 def p_empty(p):
     "empty :"
@@ -211,3 +235,4 @@ precedence = (
 )
 
 parser = yacc.yacc()
+parser.parse(st)
