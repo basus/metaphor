@@ -44,7 +44,7 @@ t_ignore_BLANK = r"[ \t\r\f\v]"
 t_ignore_comment = r"\#.*"
 
 def t_SPECIAL(t):
-    r"(>|<)=?|==|=>|,|\+|-|\*|/"
+    r"(>|<)=?|==|=>|\+|-|\*|/"
     t.type = operators.get(t.value, "SPECIAL")
     if t.type == "SPECIAL":
         t.type = comparators.get(t.value, "SPECIAL")
@@ -260,10 +260,3 @@ precedence = (
 )
 
 parser = yacc.yacc()
-
-f = open("../examples/parametric.gr")
-st = ""
-for l in f:
-    st += l
-lex.input(st)
-parser.parse(st)
