@@ -80,8 +80,10 @@ def p_system(p):
     p[0] = Node("system", p[3], p[2])
 
 def p_declarations(p):
-    """declarations : declaration declarations
-                    | empty"""
+    """
+    declarations : declaration declarations
+                 | empty
+    """
     if len(p) == 3:
         p[0] = Node("declarations", [p[1]])
         p[0].children += p[2].children
@@ -145,12 +147,13 @@ def p_conditions(p):
         p[0].children = [p[1]] + p[3].children
 
 def p_condition(p):
-    """condition : parameter
-                 | parameter GT parameter
-                 | parameter LT parameter
-                 | parameter EQ parameter
-                 | parameter GTEQ parameter
-                 | parameter LTEQ parameter
+    """
+    condition : parameter
+              | parameter GT parameter
+              | parameter LT parameter
+              | parameter EQ parameter
+              | parameter GTEQ parameter
+              | parameter LTEQ parameter
     """
     if len(p) == 2:
         p[0] = p[1]
