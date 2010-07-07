@@ -63,16 +63,6 @@ def t_NUMBER(t):
         t.value = float(t.value)
     return t
 
-# def t_INT(t):
-#     r"\d+"
-#     t.value = int(t.value)
-#     return t
-
-# def t_FLOAT(t):
-#     r"\d*\.\d+"
-#     t.value = float(t.value)
-#     return t
-
 def t_error(t):
     raise TypeError("Unknown text %s" % (t.value,))
 
@@ -82,27 +72,16 @@ def t_newline(t):
 
 lex.lex()
 
-f = open("../examples/parametric.gr")
-st = ""
-for l in f:
-    st += l
-lex.input(st)
-# while True:
-#     tok = lex.token()
-#     if not tok: break
-#     print tok
 
 ## Parser section
 
 def p_system(p):
     "system : SYSTEM SYMBOL declarations"
     p[0] = Node("system", p[3], p[2])
-    print p[0].children
-
 
 def p_declarations(p):
     """declarations : declaration declarations
-                  | empty"""
+                    | empty"""
     if len(p) == 3:
         p[0] = Node("declarations", [p[1]])
         p[0].children += p[2].children
@@ -119,8 +98,10 @@ def p_declaration(p):
     p[0] = p[1]
 
 def p_axiom(p):
-    """axiom : AXIOM SYMBOL
-           | AXIOM SYMBOL OPEN_PAREN parameters CLOSE_PAREN"""
+    """
+    axiom : AXIOM SYMBOL
+          | AXIOM SYMBOL OPEN_PAREN parameters CLOSE_PAREN
+    """
     if len(p) == 3:
         p[0] = Node("axiom", p[2])
     else:
@@ -132,17 +113,21 @@ def p_define(p):
     p[0] = Node("define", [p[2], p[4]])
 
 def p_render(p):
-    """render : RENDER SYMBOL OPEN_PAREN parameters CLOSE_PAREN PRODUCE functions
-              | RENDER SYMBOL PRODUCE functions"""
+    """
+    render : RENDER SYMBOL OPEN_PAREN parameters CLOSE_PAREN PRODUCE functions
+           | RENDER SYMBOL PRODUCE functions
+    """
     if len(p) == 5:
         p[0] = Node("render", [p[2],p[4]])
     else:
         p[0] = Node("render", [p[2], p[4], p[7]])
 
 def p_rule(p):
-    """rule : RULE SYMBOL OPEN_PAREN conditions CLOSE_PAREN OPEN_BRACE parameter CLOSE_BRACE PRODUCE productions
-          | RULE SYMBOL OPEN_BRACE parameter CLOSE_BRACE PRODUCE productions
-          | RULE SYMBOL OPEN_PAREN conditions CLOSE_PAREN PRODUCE productions"""
+    """
+    rule : RULE SYMBOL OPEN_PAREN conditions CLOSE_PAREN OPEN_BRACE parameter CLOSE_BRACE PRODUCE productions
+         | RULE SYMBOL OPEN_BRACE parameter CLOSE_BRACE PRODUCE productions
+         | RULE SYMBOL OPEN_PAREN conditions CLOSE_PAREN PRODUCE productions
+    """
     if len(p) == 11:
         p[0] = Node("rule", [p[2],p[4],p[7],p[10]])
     else:
@@ -161,11 +146,11 @@ def p_conditions(p):
 
 def p_condition(p):
     """condition : parameter
-               | parameter GT parameter
-               | parameter LT parameter
-               | parameter EQ parameter
-               | parameter GTEQ parameter
-               | parameter LTEQ parameter
+                 | parameter GT parameter
+                 | parameter LT parameter
+                 | parameter EQ parameter
+                 | parameter GTEQ parameter
+                 | parameter LTEQ parameter
     """
     if len(p) == 2:
         p[0] = p[1]
@@ -204,7 +189,7 @@ def p_productions(p):
 def p_production(p):
     """
     production : SYMBOL
-                | SYMBOL OPEN_PAREN expressions CLOSE_PAREN
+               | SYMBOL OPEN_PAREN expressions CLOSE_PAREN
     """
     if len(p) == 2:
         p[0] = Node("production", p[1])
@@ -225,12 +210,11 @@ def p_functions(p):
 def p_function(p):
     """
     function : SYMBOL
-              | SYMBOL OPEN_PAREN expressions CLOSE_PAREN
+             | SYMBOL OPEN_PAREN expressions CLOSE_PAREN
     """
     if len(p) == 2:
         p[0] = Node("function", p[1], None)
     else:
-        print p[1]
         p[0] = Node("function", [p[1],p[3]])
 
 def p_expressions(p):
@@ -247,36 +231,27 @@ def p_expressions(p):
 def p_expression(p):
     """
     expression : expression PLUS expression
-           | expression MINUS expression
-           | expression TIMES expression
-           | expression DIVIDE expression
-           | parameter
+               | expression MINUS expression
+               | expression TIMES expression
+               | expression DIVIDE expression
+               | parameter
     """
     if len(p) == 2:
         p[0] = p[1]
     else:
         p[0] = Node("expression",[p[1],p[3]], p[2])
 
-# def p_value(p):
-#     """
-#     value : INT
-#            | FLOAT
-#     """
-#     p[0] = Node("value", None, p[1])
-
 def p_empty(p):
     """empty : """
     p[0] = Node("empty",[],None)
-    print "I'm empty"
     pass
 
 def p_error(p):
     if not p:
         print "EOF"
         return p_empty(p)
-    print p
-    print p.value, p.type
-    print yacc.token()
+    else:
+        print "Syntax error for ", p.value, " at line ", p.lexer.lineno
     
 precedence = (
     ('nonassoc', 'LT', 'GT', 'EQ', 'LTEQ', 'GTEQ'),
@@ -285,4 +260,10 @@ precedence = (
 )
 
 parser = yacc.yacc()
+
+f = open("../examples/parametric.gr")
+st = ""
+for l in f:
+    st += l
+lex.input(st)
 parser.parse(st)
