@@ -122,19 +122,22 @@ def p_axiom(p):
     """axiom : AXIOM SYMBOL
            | AXIOM SYMBOL OPEN_PAREN parameters CLOSE_PAREN"""
     if len(p) == 3:
-        p[0] = Node("axiom", None, p[2])
+        p[0] = Node("axiom", p[2])
     else:
-        p[0] = Node("axiom", p[4], p[2])
+        p[0] = Node("axiom", [p[2], p[4]])
 
 
 def p_define(p):
     "define : DEFINE SYMBOL PRODUCE NUMBER"
-    p[0] = Node("define", None, (p[2],p[4]))
+    p[0] = Node("define", [p[2], p[4]])
 
 def p_render(p):
     """render : RENDER SYMBOL OPEN_PAREN parameters CLOSE_PAREN PRODUCE functions
               | RENDER SYMBOL PRODUCE functions"""
-    pass
+    if len(p) == 5:
+        p[0] = Node("render", [p[2],p[4]])
+    else:
+        p[0] = Node("render", [p[2], p[4], p[7]])
 
 def p_rule(p):
     """rule : RULE SYMBOL OPEN_PAREN conditions CLOSE_PAREN OPEN_BRACE parameter CLOSE_BRACE PRODUCE productions
@@ -146,9 +149,12 @@ def p_conditions(p):
     """
     conditions : condition SEPARATOR conditions
                | condition
-               | empty
     """
-    pass
+    p[0] = Node("conditions")
+    if len(p) == 2:
+        p[0].children = [p[1]]
+    else:
+        p[0].children = [p[1]] + p[3].children
 
 def p_condition(p):
     """condition : parameter
@@ -158,7 +164,10 @@ def p_condition(p):
                | parameter GTEQ parameter
                | parameter LTEQ parameter
     """
-    pass
+    if len(p) == 2:
+        p[0] = Node("condition",p[1])
+    else:
+        p[0] = Node("condition",[p[1],p[3]], p[2])
 
 def p_parameters(p):
     """
@@ -166,9 +175,9 @@ def p_parameters(p):
                | parameter
     """
     if len(p) == 2:
-        p[0] = Node("parameter", p[1], None)
+        p[0] = Node("parameters", p[1], None)
     else:
-        p[0] = Node("parameter", [], None)
+        p[0] = Node("parameters", [], None)
         p[0].children = p[1] + p[3].children
 
 def p_parameter(p):
@@ -176,15 +185,18 @@ def p_parameter(p):
     parameter : SYMBOL
               | NUMBER
     """
-    p[0] = p[1]
+    p[0] = Node("parameter", None, p[1])
 
 def p_productions(p):
     """
     productions : production productions
                 | empty
     """
-    p[0] = Node("productions", None, None)
-    p[0].children += p[1].children
+    if len(p) == 3:
+        p[0] = Node("productions")
+        p[0].children = [p[1]] + p[2].children
+    else:
+        p[0] = p[1]
 
 def p_production(p):
     """
@@ -202,9 +214,8 @@ def p_functions(p):
               | empty
     """
     if len(p) == 3:
-        print p[1].type, p[1].children
         p[0] = Node("functions", None, None)
-        p[0].children += p[2].children
+        p[0].children = [p[1]] + p[2].children
     else:
         p[0] = p[1]
 
@@ -223,9 +234,12 @@ def p_expressions(p):
     """
     expressions : expression SEPARATOR expressions
                 | expression
-                | empty
     """
-    pass
+    p[0] = Node("expressions")
+    if len(p) == 2:
+        p[0].children = [p[1]]
+    else:
+        p[0].children = [p[1]] + p[3].children
 
 def p_expression(p):
     """
@@ -233,10 +247,12 @@ def p_expression(p):
            | expression MINUS expression
            | expression TIMES expression
            | expression DIVIDE expression
-           | OPEN_PAREN expression CLOSE_PAREN
            | parameter
     """
-    pass
+    if len(p) == 2:
+        p[0] = Node("expression", [p[1]])
+    else:
+        p[0] = Node("expression",[p[1],p[3]], p[2])
 
 # def p_value(p):
 #     """
