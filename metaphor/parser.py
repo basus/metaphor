@@ -143,7 +143,10 @@ def p_rule(p):
     """rule : RULE SYMBOL OPEN_PAREN conditions CLOSE_PAREN OPEN_BRACE parameter CLOSE_BRACE PRODUCE productions
           | RULE SYMBOL OPEN_BRACE parameter CLOSE_BRACE PRODUCE productions
           | RULE SYMBOL OPEN_PAREN conditions CLOSE_PAREN PRODUCE productions"""
-    pass
+    if len(p) == 11:
+        p[0] = Node("rule", [p[2],p[4],p[7],p[10]])
+    else:
+        p[0] = Node("rule", [p[2],p[4],p[7]])
 
 def p_conditions(p):
     """
@@ -165,7 +168,7 @@ def p_condition(p):
                | parameter LTEQ parameter
     """
     if len(p) == 2:
-        p[0] = Node("condition",p[1])
+        p[0] = p[1]
     else:
         p[0] = Node("condition",[p[1],p[3]], p[2])
 
@@ -178,7 +181,7 @@ def p_parameters(p):
         p[0] = Node("parameters", p[1], None)
     else:
         p[0] = Node("parameters", [], None)
-        p[0].children = p[1] + p[3].children
+        p[0].children = [p[1]] + p[3].children
 
 def p_parameter(p):
     """
@@ -204,9 +207,9 @@ def p_production(p):
                 | SYMBOL OPEN_PAREN expressions CLOSE_PAREN
     """
     if len(p) == 2:
-        p[0] = Node("production", None, p[1])
+        p[0] = Node("production", p[1])
     else:
-        p[0] = Node("production", p[3], p[1])
+        p[0] = Node("production", [p[1],p[3]])
 
 def p_functions(p):
     """
@@ -225,7 +228,7 @@ def p_function(p):
               | SYMBOL OPEN_PAREN expressions CLOSE_PAREN
     """
     if len(p) == 2:
-        p[0] = Node("function", [p[1]], None)
+        p[0] = Node("function", p[1], None)
     else:
         print p[1]
         p[0] = Node("function", [p[1],p[3]])
@@ -250,7 +253,7 @@ def p_expression(p):
            | parameter
     """
     if len(p) == 2:
-        p[0] = Node("expression", [p[1]])
+        p[0] = p[1]
     else:
         p[0] = Node("expression",[p[1],p[3]], p[2])
 
