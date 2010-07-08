@@ -34,7 +34,10 @@ def browse_ast(src=None):
     import parser
     parser.lex.input(src)
     root = parser.parser.parse(src)
-    print root
+    parent = [root]
+    while True:
+        comm = input(">> ")
+
             
 if __name__ == "__main__":
     print_syntax()
