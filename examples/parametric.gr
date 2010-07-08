@@ -1,12 +1,14 @@
 System rows
     Axiom F(0)
 
-    Rule F(0)      => F{}1) A
+    Rule F(0)      => F(1) A
     Rule F(1)      => F(p) rt F(h) lt lt F(h) rt F(q)
     Rule F(x>1){a} => F(x*p) lt F(x*h) rt rt F(x*h) lt F(x*q)
     Rule F(x>1){a} => X(x+1)
-    Rule A{1}      => A A
+    Rule A{1}      => A B(1,1)
     Rule A{2}      => A
+    Rule B(x>y)    => B(x,x)
+    Rule B(x<y)    => B(y,y)
 
     Define a => 1
     Define p => 2
