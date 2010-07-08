@@ -116,8 +116,8 @@ def p_define(p):
 
 def p_render(p):
     """
-    render : RENDER SYMBOL OPEN_PAREN parameters CLOSE_PAREN PRODUCE functions
-           | RENDER SYMBOL PRODUCE functions
+    render : RENDER SYMBOL OPEN_PAREN parameters CLOSE_PAREN PRODUCE productions
+           | RENDER SYMBOL PRODUCE productions
     """
     if len(p) == 5:
         p[0] = Node("render", [p[2],p[4]])
@@ -195,30 +195,9 @@ def p_production(p):
                | SYMBOL OPEN_PAREN expressions CLOSE_PAREN
     """
     if len(p) == 2:
-        p[0] = Node("production", p[1])
+        p[0] = Node("production", [p[1]])
     else:
         p[0] = Node("production", [p[1],p[3]])
-
-def p_functions(p):
-    """
-    functions : function functions
-              | empty
-    """
-    if len(p) == 3:
-        p[0] = Node("functions", None, None)
-        p[0].children = [p[1]] + p[2].children
-    else:
-        p[0] = p[1]
-
-def p_function(p):
-    """
-    function : SYMBOL
-             | SYMBOL OPEN_PAREN expressions CLOSE_PAREN
-    """
-    if len(p) == 2:
-        p[0] = Node("function", p[1], None)
-    else:
-        p[0] = Node("function", [p[1],p[3]])
 
 def p_expressions(p):
     """
