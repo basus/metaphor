@@ -1,4 +1,6 @@
 import random
+from metaphor.parser import parser
+from metaphor.context import ContextHandler
 """
 Classes required to implemented the semantics of Metaphor.
 Some classes require a proper AST.
@@ -163,6 +165,8 @@ class System:
         return axiom
 
     def render(self, generated):
+        '''Takes in a generated string and returns a string representing
+        context instructions'''
         rules = self.rules
         self.rules = self.renders
         ctx = self.generate(generated)
@@ -284,3 +288,57 @@ class System:
             return bindings[param]
         except:
             return param
+
+class Environment:
+    '''
+    Represents the environment in which L-systems are created and their
+    strings generated. Provides debug and inspection facilities
+    '''
+
+    def __init__(self):
+        self.systems = {}
+        self.handlers = {}
+        self.string_stack = []
+
+    def add(self, sys):
+        self.systems[sys.name] = sys
+
+    def add_from_file(self,fname):
+        fl = open(fname)
+        text = fl.read()
+        self.add_from_text(text)
+
+    def add_from_text(self,text):
+        systexts = text.split("System ")[1:]
+        for systext in systexts:
+            systext = "System " + systext
+            print systext
+            root = parser.parse(systext)
+            builder = Builder(root)
+            system = builder.build_system()
+            self.systems[sys.name] = sys
+
+    def add_context(self, handler):
+        self.handlers[handler.name] = handler
+        self.last_handler = handler.name
+
+    def add_context_from_file(self, fname):
+        handler = ContenxtHandler(path)
+        handler.load_handler()
+        self.add_handler(handler)
+        
+    def generate(self, name, generations):
+        sys = self.systems[name]
+        string = sys.generate[generations]
+        self.string_stack.append((name,string))
+        return string
+
+    def render(self, string=None, handler=None, save=None):
+        if not string:
+            string = self.string_stack[0]
+        if not handler:
+            handler = self.last_handler
+        sys = self.systems[string[0]]
+        ctxstring = sys.render(string)
+        self.handlers[handler].render(ctxstring)
+        self.handlers[handler].save(save)

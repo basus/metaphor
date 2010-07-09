@@ -1,9 +1,8 @@
 import os
 import imp
-import syntax
-import semantics
-import error
-import context
+
+from metaphor import context
+from metaphor import system
 
 class PyScriptInterface:
     """
@@ -19,20 +18,17 @@ class PyScriptInterface:
         rest of the class methods.
         @param string with the path to the script to run
         """
-        self.stringstack = []
         self.script = imp.load_source('', scriptpath)
+        self.gen = self.script.generate
+        self.ren = self.script.render
+        self.env = system.Environment()
 
     def compile(self):
         """
         Compiles the grammar file specified in the script and turns it into the
         corresponding grammar objects.
         """
-        grammar = open(self.script.compile)
-        parser = syntax.Parser(grammar)
-        tree = parser.parse()
-        builder = semantics.Builder(tree)
-        self.env = semantics.Environment(builder)
-        self.grammars = self.env.populate()
+        self.env.add_from_file(self.script.compile)
 
     def setcontext(self):
         """
@@ -41,35 +37,32 @@ class PyScriptInterface:
         path = os.getcwd() + '/' + self.script.context
         self.handler = context.ContextHandler(path)
         self.handler.load_context()
+        self.env.add_context(self.handler)
         
-    def generate(self):
-        """
-        Generates the strings from the grammars according to the script.
-        """
-        for command in self.script.generate:
-            grammar = command[0]
+    def make(self):
+        '''
+        Generates the strings and then renders them using the specified context
+        '''
+        if not len(self.ren) == len(self.gen):
+            print "Renders do not match strings"
+            
+        for i in range(len(self.gen)):
+            command = self.gen[i]
+            output = self.ren[i]
+            
+            system = command[0]
             num = command[1]
-            string = self.env.grammars[grammar].generate(num)
-            self.stringstack.append((grammar,string))
-
-    def render(self):
-        """
-        Renders the images according to the script using the specified context.
-        Context can be either the global context specified in the script or a
-        separate context specified for that particular string render.
-        """
-        for output in self.script.render:
+            string = self.env.generate(system,num)
+            
             if type(output) == type('str'):
                 handler = self.handler
             elif len(output) == 2:
                 handler = context.ContextHandler(output[1])
                 handler.load_context()
+                self.env.add_context(handler)
                 output = output[0]
-                    
-            current = self.stringstack.pop(0)
-            ctxstring =  self.env.grammars[current[0]].map(current[1])
-            handler.render(ctxstring)
-            handler.save(output)
+
+            self.env.render(None,handler=handler,save=output)
                 
     def run(self):
         """
@@ -78,7 +71,4 @@ class PyScriptInterface:
         """
         self.compile()
         self.setcontext()
-        self.generate()
-        self.render()
-
-                    
+        self.make()

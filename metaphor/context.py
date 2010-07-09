@@ -27,8 +27,8 @@ class ContextHandler:
         try:
             module = imp.load_source('', self.contextpath)
             contextname = self.contextpath.split('/')[-1]
-            contextname = contextname.rstrip(".py")
-            self.context = getattr(module, contextname)()
+            self.name = name.rstrip(".py")
+            self.context = getattr(module, name)()
         except Exception as e:
             print e
             raise InvalidContextError(self.contextpath)
@@ -42,24 +42,15 @@ class ContextHandler:
                           object, not the string of grammar symbols
         """
         for action in genstring:
-            call = action.split('[')[0]
-            try:
-                params = action.split('[')[1]
-                params = params.rstrip(']').split(',')
-            except:
-                params = []
-            parsed_params = []
-            for param in params:
-                if param.isdigit():
-                    parsed_params.append(int(param))
-                else:
-                    parsed_params.append(param)
+            call = action.symbol
+            params = action.params
+            
             try:
                 call = getattr(self.context, call)
-                if parsed_params == []:
+                if not params:
                     call()
                 else:
-                    call(*parsed_params)
+                    call(*params)
             except AttributeError as a:
                 print a
                 raise InvalidContextActionError(call)
