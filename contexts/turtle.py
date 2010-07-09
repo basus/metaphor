@@ -89,7 +89,7 @@ class turtle(ImageDraw.ImageDraw):
         if self.__thickness < 0:
             self.__thickness = 1
 
-  1  def color(self, color):
+    def color(self, color):
         "Changes the color of the pen"
         self.__color = color
 

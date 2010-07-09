@@ -4,16 +4,16 @@ context = 'contexts/turtle.py'
 
 generate = []
 
-for x in range(1, 10):
-    tup = ('FractalPlant', x)
-    generate.append(tup)
+# for x in range(1, 10):
+#     tup = ('FractalPlant', x)
+#     generate.append(tup)
     
-#generate = [('Dragon', 10), ('KochCurve',3)]
+generate = [('Sierpinski',6)]
 
-render = []
+render = ['new.png']
 
-for x in range(1,10):
-    fname = "plant"+str(x)+".png"
-    render.append(fname)
+# for x in range(1,10):
+#     fname = "plant"+str(x)+".png"
+#     render.append(fname)
     
 #render = ['dragon.png', ('curve.png', 'contexts/turtle.py')]
