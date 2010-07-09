@@ -30,8 +30,8 @@ class Builder:
             r = self.build_rule(decl)
             self.system.add_rule(r)
         elif decl.type == "render":
-            r = self.build_render(decl)
-            self.system.add_render(*r)
+            r = self.build_rule(decl)
+            self.system.add_render(r)
         elif decl.type == "define":
             (symbol, number) = self.build_define(decl)
             self.system.defines[symbol] = number
@@ -140,14 +140,35 @@ class System:
         self.renders = {}
         self.rules = {}
 
-    def add_render(self, symbol, functions):
-        self.renders[symbol.symbol] = (symbol.params, functions)
+    def add_render(self, render):
+        self.renders[render.symbol] = [render]
 
     def add_rule(self,rule):
         if rule.symbol not in self.rules:
             self.rules[rule.symbol] = []
         self.rules[rule.symbol].append(rule)
 
+    def generate(self, generations):
+        '''Generate a compatible string after the given number of generaions'''
+        axiom = self.axiom
+        while generations > 0:
+            temp = []
+            for element in axiom:
+                if element.symbol in self.rules:
+                    temp.extend(self.transform(element))
+                else:
+                    temp.append(element)
+            axiom = temp
+            generations -= 1
+        return axiom
+
+    def render(self, generated):
+        rules = self.rules
+        self.rules = self.renders
+        ctx = self.generate(generated)
+        self.rules = rules
+        return ctx
+        
     def transform(self, symbol):
         rule = self.pick(symbol)
         symbols = []
