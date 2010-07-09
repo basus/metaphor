@@ -102,14 +102,29 @@ def p_declaration(p):
 
 def p_axiom(p):
     """
-    axiom : AXIOM SYMBOL
-          | AXIOM SYMBOL OPEN_PAREN parameters CLOSE_PAREN
+    axiom : AXIOM symbols
     """
-    if len(p) == 3:
-        p[0] = Node("axiom", p[2])
-    else:
-        p[0] = Node("axiom", [p[2], p[4]])
+    p[0] = Node("axiom", p[2])
 
+def p_symbols(p):
+    """
+    symbols : symbol symbols
+            | symbol
+    """
+    if len(p) == 2:
+        p[0] = [p[1]]
+    else:
+        p[0] = [p[1]] + p[2]
+
+def p_symbol(p):
+    """
+    symbol : SYMBOL
+           | SYMBOL OPEN_PAREN parameters CLOSE_PAREN
+    """
+    if len(p) == 2:
+        p[0] = [p[1]]
+    else:
+        p[0] = [p[1],p[3]]
 
 def p_define(p):
     "define : DEFINE SYMBOL PRODUCE NUMBER"
@@ -127,16 +142,19 @@ def p_render(p):
 
 def p_rule(p):
     """
-    rule : RULE SYMBOL OPEN_PAREN parameters PIPE conditions CLOSE_PAREN OPEN_BRACE parameter CLOSE_BRACE PRODUCE productions
+    rule : RULE SYMBOL PRODUCE productions
          | RULE SYMBOL OPEN_BRACE parameter CLOSE_BRACE PRODUCE productions
          | RULE SYMBOL OPEN_PAREN parameters PIPE conditions CLOSE_PAREN PRODUCE productions
+         | RULE SYMBOL OPEN_PAREN parameters PIPE conditions CLOSE_PAREN OPEN_BRACE parameter CLOSE_BRACE PRODUCE productions
     """
     if len(p) == 13:
         p[0] = Node("rule", [p[2],p[4],p[6],p[9],p[12]])
     elif len(p) == 10:
         p[0] = Node("rule", [p[2],p[4],p[6],p[9]])
-    else:
+    elif len(p) == 8:
         p[0] = Node("rule", [p[2],p[4],p[7]])
+    else:
+        p[0] = Node("rule", [p[2],p[4]])
 
 def p_conditions(p):
     """
@@ -245,3 +263,22 @@ precedence = (
 )
 
 parser = yacc.yacc()
+
+class Node:
+    """
+    A generic class for representing the Metaphor AST.
+    """
+    def __init__(self, type, children=None, data=None):
+        """
+        Constructor forms a new node using the type, children and data provided
+        @param type: the type of syntax element represented by the node, generally
+                     corresponds to lexical token type
+        @param children: children nodes. None if it is a leaf
+        @param data: data contained by the node (such as number value)
+        """
+        self.type = type
+        if children:
+            self.children = children
+        else:
+            self.children = []
+        self.data = data

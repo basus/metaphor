@@ -39,12 +39,14 @@ class Builder:
             self.system.defines[symbol] = number
 
     def build_axiom(self, axnode):
-        symbol = axnode.children[0]
-        try:
-            param = self.build_params(axnode.children[1])
-        except IndexError:
-            param = []
-        axiom = Symbol(symbol,param)
+        axiom = []
+        for each in axnode.children:
+            symbol = each[0]
+            try:
+                param = self.build_params(each[1])
+            except IndexError:
+                param = []
+            axiom.append(Symbol(symbol,param))
         return axiom
 
     def build_rule(self, rulenode):
@@ -157,7 +159,8 @@ class System:
             temp = []
             for element in axiom:
                 if element.symbol in self.rules:
-                    temp.extend(self.transform(element))
+                    new = self.transform(element)
+                    temp.extend(new)
                 else:
                     temp.append(element)
             axiom = temp
@@ -168,13 +171,17 @@ class System:
         '''Takes in a generated string and returns a string representing
         context instructions'''
         rules = self.rules
+        axiom = self.axiom
         self.rules = self.renders
-        ctx = self.generate(generated)
+        self.axiom = generated
+        ctx = self.generate(1)
         self.rules = rules
+        self.axiom = axiom
         return ctx
         
     def transform(self, symbol):
         rule = self.pick(symbol)
+        if not rule: return [symbol]
         symbols = []
         for each in rule.productions:
             symb = each.symbol
@@ -206,17 +213,20 @@ class System:
             
     def eval(self, exprs, params, values):
         '''Wraps parameters and values before passing to evaluator'''
+        if not exprs: return None
         bindings = self.bind(params,values)
         return self.evaluate(exprs, bindings, False)
 
-    def condition(self,exprs, params, values):
+    def condition(self,conds, params, values):
         '''Wraps parameters and values and signifies that expression is a
         condition to evaluator'''
+        if not conds: return True
         bindings = self.bind(params,values)
-        return self.evaluate(exprs, bindings, True)
+        return self.evaluate(conds, bindings, True)
 
     def bind(self,params,values):
         ''' Binds the parameters and values into a dict'''
+        if not params: return {}
         bindings = {}
         for i in range(len(params)):
             bindings[params[i]] = values[i]
@@ -225,7 +235,6 @@ class System:
     def evaluate(self, exprs, bindings, condition=False):
         '''Postfix expression evaluator for a set of expresssions'''
         results = []
-        if not exprs: return None
         for expr in exprs:
             if len(expr) == 1 and condition:
                 if type(expr[0]) == type("str"):
@@ -237,7 +246,7 @@ class System:
             elif len(expr) == 1 and not condition:
                 try:
                     results.append(bindings[expr[0]])
-                except KeyError:
+                except:
                     results.append(expr[0])
             else:
                 results.append(self.eval_expr(expr,bindings))
@@ -312,11 +321,10 @@ class Environment:
         systexts = text.split("System ")[1:]
         for systext in systexts:
             systext = "System " + systext
-            print systext
             root = parser.parse(systext)
             builder = Builder(root)
             system = builder.build_system()
-            self.systems[sys.name] = sys
+            self.systems[system.name] = system
 
     def add_context(self, handler):
         self.handlers[handler.name] = handler
@@ -329,7 +337,7 @@ class Environment:
         
     def generate(self, name, generations):
         sys = self.systems[name]
-        string = sys.generate[generations]
+        string = sys.generate(generations)
         self.string_stack.append((name,string))
         return string
 
@@ -339,6 +347,6 @@ class Environment:
         if not handler:
             handler = self.last_handler
         sys = self.systems[string[0]]
-        ctxstring = sys.render(string)
+        ctxstring = sys.render(string[1])
         self.handlers[handler].render(ctxstring)
         self.handlers[handler].save(save)

@@ -61,8 +61,7 @@ class PyScriptInterface:
                 handler.load_context()
                 self.env.add_context(handler)
                 output = output[0]
-
-            self.env.render(None,handler=handler,save=output)
+            self.env.render(None,handler=handler.name,save=output)
                 
     def run(self):
         """

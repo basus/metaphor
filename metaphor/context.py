@@ -27,8 +27,8 @@ class ContextHandler:
         try:
             module = imp.load_source('', self.contextpath)
             contextname = self.contextpath.split('/')[-1]
-            self.name = name.rstrip(".py")
-            self.context = getattr(module, name)()
+            self.name = contextname.rstrip(".py")
+            self.context = getattr(module, self.name)()
         except Exception as e:
             print e
             raise InvalidContextError(self.contextpath)
@@ -44,7 +44,6 @@ class ContextHandler:
         for action in genstring:
             call = action.symbol
             params = action.params
-            
             try:
                 call = getattr(self.context, call)
                 if not params:
