@@ -141,42 +141,104 @@ class System:
     def add_render(self, symbol, functions):
         self.renders{symbol.symbol} = (symbol.params, functions)
 
-    def add_rule(self,symbol,conds,prob,prods):
-        if symbol not in self.rules:
+    def add_rule(self,rule):
+        if rule.symbol not in self.rules:
             self.rules[symbol] = []
-        self.rules[symbol].append((conds, prob, prods))
+        self.rules[symbol].append(rule)
 
     def transform(self, symbol):
-        production = pick(self, symbol)
+        rule = pick(self, symbol)
         symbols = []
-        for each in production:
+        for each in rule.productions:
             symbol = each.symbol
-            params = evaluate(each.exprs,symbol.params)
+            params = self.eval(each.exprs,rule.parameters,symbol.params)
             newsymb = Symbol(symbol, params)
             symbols.append(newsymb)
         return symbols
             
     def pick(self, symbol):
-        transforms = self.rules[symbol.symbol]
+        '''Return a rule matching the given symbol '''
+        rules = self.rules[symbol.symbol]
         total = 0
         lookup = {}
 
         # Gather all rules with true conditions
-        for each in transforms:
-            if evaluate(each[0], symbol.params):
-                if not each[1]:
-                    return each[2]
+        for each in rules:
+            if self.condition(each.conditions, each.parameters, symbol.params):
+                if not each.probability:
+                    return each
                 else:
-                    total += each[1]
-                    lookup[total] = each[2]
+                    total += each.probability
+                    lookup[total] = each
 
         # Pick a production a random
         pick = random.uniform(0,total)
         for cutoff in sorted(lookup.keys()):
             if pick =< cutoff:
-                production = lookup[cutoff]
+                rule = lookup[cutoff]
 
-        return production
+        return rule
             
-    def evaluate(self, exprs, params):
-        '''Postfix expression evaluator'''
+    def eval(self, exprs, params, values):
+        '''Wraps parameters and values before passing to evaluator'''
+        bindings = self.bind(params,values)
+        return self.evaluate(exprs, bindings, False)
+
+    def condition(self,exprs, params, values):
+        '''Wraps parameters and values and signifies that expression is a
+        condition to evaluator'''
+        bindings = self.bind(params,values)
+        return self.evaluate(exprs, bindings, True)
+
+    def bind(self,params,values):
+        ''' Binds the parameters and values into a dict'''
+        for i in range(len(params)):
+            bindings[params[i]] = values[i]
+        return bindings
+
+    def evaluate(self, exprs, bindings, condition=False):
+        '''Postfix expression evaluator for a set of expresssions'''
+        results = []
+        for expr in exprs:
+            if len(expr) == 1 and condition:
+                results.append(True)
+            elif len(expr) == 1 and not condition:
+                try:
+                    results.append(bindings[expr])
+                except IndexError:
+                    results.append(expr)
+            else:
+                result.append(self.eval_expr(expr,bindings))
+
+    def eval_expr(self, expr, bindings):
+        '''Evaluate a single postfix expression'''
+        while len(expr) > 1:
+            arg1 = self.lookup(expr.pop(0),bindings)
+            arg2 = self.lookup(expr.pop(0),bindings)
+            op = expr.pop(0)
+            if op == '+':
+                res = arg1 + arg2
+            elif op == '-':
+                res = arg1 - arg2
+            elif op == '*':
+                res = arg1 * arg2
+            elif op == '/':
+                res = arg1 / arg2
+            elif op == '>':
+                res = arg1 > arg2
+            elif op == '<':
+                res = arg1 < arg2
+            elif op == '<=':
+                res = arg1 <= arg2
+            elif op == '>=':
+                res = arg1 >= arg2
+            elif op == '==':
+                res = arg1 == arg2
+            expr.push(res)
+        return expr[0]
+            
+    def lookup(self, param, bindings):
+        try:
+            return bindings[param]
+        else:
+            return param
