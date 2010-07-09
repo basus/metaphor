@@ -1,3 +1,4 @@
+import random
 """
 Classes required to implemented the semantics of Metaphor.
 Some classes require a proper AST.
@@ -14,6 +15,7 @@ class Builder:
         '''Builds the system starting from the root node'''
         self.system = System(self.__root.data)
         self.build_declarations(self.__root.children)
+        return self.system
 
     def build_declarations(self, declarations):
         decls = declarations.children
@@ -48,13 +50,13 @@ class Builder:
         conds, params, prob, prods = None, None, None, None
         for ch in rulenode.children:
             if ch.type == "conditions":
-                conds = build_exprs(ch)
+                conds = self.build_exprs(ch)
             elif ch.type == "parameters":
-                params == build_params(ch)
+                params = self.build_params(ch)
             elif ch.type == "parameter":
                 prob = ch.data
             elif ch.type == "productions":
-                prods = build_productions(ch)
+                prods = self.build_productions(ch)
         return Rule(symbol,params,conds,prob,prods)
 
     def build_define(self, defnode):
@@ -64,11 +66,11 @@ class Builder:
     
     def build_render(self, renode):
         if renode.children[1].type == "parameters":
-            params = build_params(renode.children[1])
-            functions = build_productions(renode.children[2])
+            params = self.build_params(renode.children[1])
+            functions = self.build_productions(renode.children[2])
         else:
             params = None
-            functions = build_productions(renode.children[1])
+            functions = self.build_productions(renode.children[1])
         symbol = Symbol(renode.children[0], params)
         return (symbol, functions)
 
@@ -83,7 +85,7 @@ class Builder:
         for fn in fns.children:
             symbol = fn.children[0]
             try:
-                expressions = build_exprs(fn.children[1])
+                expressions = self.build_exprs(fn.children[1])
             except IndexError:
                 expressions = None
             func = Production(symbol, expressions)
@@ -93,7 +95,7 @@ class Builder:
     def build_exprs(self, exnode):
         exprs = []
         for expr in exnode.children:
-            expr = build_expr(expr)
+            expr = self.build_expr(expr)
             exprs.append(expr)
         return exprs
 
@@ -104,8 +106,8 @@ class Builder:
             return [exnode.data]
         else:
             stack = []
-            stack += build_expr(exnode.children[0])
-            stack += build_expr(exnode.children[1])
+            stack += self.build_expr(exnode.children[0])
+            stack += self.build_expr(exnode.children[1])
             stack.append(exnode.data)
             return stack
             
@@ -125,7 +127,7 @@ class Rule:
         self.symbol = symbol
         self.parameters = params
         self.conditions = conds
-        self.probability = probs
+        self.probability = prob
         self.productions = prods
 
 class System:
@@ -139,20 +141,20 @@ class System:
         self.rules = {}
 
     def add_render(self, symbol, functions):
-        self.renders{symbol.symbol} = (symbol.params, functions)
+        self.renders[symbol.symbol] = (symbol.params, functions)
 
     def add_rule(self,rule):
         if rule.symbol not in self.rules:
-            self.rules[symbol] = []
-        self.rules[symbol].append(rule)
+            self.rules[rule.symbol] = []
+        self.rules[rule.symbol].append(rule)
 
     def transform(self, symbol):
-        rule = pick(self, symbol)
+        rule = self.pick(symbol)
         symbols = []
         for each in rule.productions:
-            symbol = each.symbol
+            symb = each.symbol
             params = self.eval(each.exprs,rule.parameters,symbol.params)
-            newsymb = Symbol(symbol, params)
+            newsymb = Symbol(symb, params)
             symbols.append(newsymb)
         return symbols
             
@@ -160,7 +162,7 @@ class System:
         '''Return a rule matching the given symbol '''
         rules = self.rules[symbol.symbol]
         total = 0
-        lookup = {}
+        index = {}
 
         # Gather all rules with true conditions
         for each in rules:
@@ -168,16 +170,14 @@ class System:
                 if not each.probability:
                     return each
                 else:
-                    total += each.probability
-                    lookup[total] = each
+                    total += self.lookup(each.probability)
+                    index[total] = each
 
         # Pick a production a random
         pick = random.uniform(0,total)
-        for cutoff in sorted(lookup.keys()):
-            if pick =< cutoff:
-                rule = lookup[cutoff]
-
-        return rule
+        for cutoff in sorted(index.keys()):
+            if pick <= cutoff:
+                return index[cutoff]
             
     def eval(self, exprs, params, values):
         '''Wraps parameters and values before passing to evaluator'''
@@ -192,6 +192,7 @@ class System:
 
     def bind(self,params,values):
         ''' Binds the parameters and values into a dict'''
+        bindings = {}
         for i in range(len(params)):
             bindings[params[i]] = values[i]
         return bindings
@@ -199,19 +200,34 @@ class System:
     def evaluate(self, exprs, bindings, condition=False):
         '''Postfix expression evaluator for a set of expresssions'''
         results = []
+        if not exprs: return None
         for expr in exprs:
             if len(expr) == 1 and condition:
-                results.append(True)
+                if type(expr[0]) == type("str"):
+                    results.append(True)
+                elif bindings.values()[0] == expr[0]:
+                    results.append(True)
+                else:
+                    results.append(False)
             elif len(expr) == 1 and not condition:
                 try:
-                    results.append(bindings[expr])
-                except IndexError:
-                    results.append(expr)
+                    results.append(bindings[expr[0]])
+                except KeyError:
+                    results.append(expr[0])
             else:
-                result.append(self.eval_expr(expr,bindings))
+                results.append(self.eval_expr(expr,bindings))
 
-    def eval_expr(self, expr, bindings):
+        if condition:
+            result = True
+            for res in results:
+                result = result and res
+            return res
+        else:
+            return results
+
+    def eval_expr(self, ex, bindings):
         '''Evaluate a single postfix expression'''
+        expr = list(ex)
         while len(expr) > 1:
             arg1 = self.lookup(expr.pop(0),bindings)
             arg2 = self.lookup(expr.pop(0),bindings)
@@ -234,11 +250,16 @@ class System:
                 res = arg1 >= arg2
             elif op == '==':
                 res = arg1 == arg2
-            expr.push(res)
+            expr.insert(0,res)
         return expr[0]
             
-    def lookup(self, param, bindings):
+    def lookup(self, param, bind=None):
+        if not bind:
+            bindings = self.defines
+        else:
+            bindings = dict(self.defines)
+            bindings.update(bind)
         try:
             return bindings[param]
-        else:
+        except:
             return param

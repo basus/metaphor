@@ -132,7 +132,7 @@ def p_rule(p):
          | RULE SYMBOL OPEN_PAREN parameters PIPE conditions CLOSE_PAREN PRODUCE productions
     """
     if len(p) == 13:
-        p[0] = Node("rule", [p[2],p[4],p[7],p[10],p[12]])
+        p[0] = Node("rule", [p[2],p[4],p[6],p[9],p[12]])
     elif len(p) == 10:
         p[0] = Node("rule", [p[2],p[4],p[6],p[9]])
     else:
