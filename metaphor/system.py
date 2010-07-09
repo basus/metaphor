@@ -26,7 +26,7 @@ class Builder:
             self.system.axiom = a
         elif decl.type == "rule":
             r = self.build_rule(decl)
-            self.system.add_rule(*r)
+            self.system.add_rule(r)
         elif decl.type == "render":
             r = self.build_render(decl)
             self.system.add_render(*r)
@@ -45,15 +45,17 @@ class Builder:
 
     def build_rule(self, rulenode):
         symbol = rulenode.children.pop(0)
-        conds, params, prods = None, None, None
+        conds, params, prob, prods = None, None, None, None
         for ch in rulenode.children:
             if ch.type == "conditions":
                 conds = build_exprs(ch)
+            elif ch.type == "parameters":
+                params == build_params(ch)
             elif ch.type == "parameter":
                 prob = ch.data
             elif ch.type == "productions":
-                prods = build_prodcutions(ch)
-        return (symbol,conds,param,prods)
+                prods = build_productions(ch)
+        return Rule(symbol,params,conds,prob,prods)
 
     def build_define(self, defnode):
         symbol = defnode.children[0]
@@ -117,6 +119,14 @@ class Production:
     def __init__(self,symbol,exprs=None):
         self.symbol = symbol
         self.exprs = exprs
+
+class Rule:
+    def __init__(self,symbol,params,conds,prob,prods):
+        self.symbol = symbol
+        self.parameters = params
+        self.conditions = conds
+        self.probability = probs
+        self.productions = prods
 
 class System:
     '''A class representing a Lindenmayer System'''

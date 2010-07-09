@@ -29,7 +29,7 @@ comparators = {
     }
 
 tokens = ["SYMBOL", "OPEN_PAREN", "CLOSE_PAREN", "OPEN_BRACE",
-          "CLOSE_BRACE", "SPECIAL", "BLANK", "SEPARATOR",
+          "CLOSE_BRACE", "SPECIAL", "BLANK", "SEPARATOR", "PIPE",
           "NUMBER", ] + list(reserved.values()) + list(operators.values()) + list(comparators.values())
 
 t_OPEN_PAREN = r"\("
@@ -39,6 +39,7 @@ t_OPEN_BRACE = r"\{"
 t_CLOSE_BRACE = r"\}"
 
 t_SEPARATOR = r","
+t_PIPE = r"\|"
 
 t_ignore_BLANK = r"[ \t\r\f\v]"
 t_ignore_comment = r"\#.*"
@@ -126,12 +127,14 @@ def p_render(p):
 
 def p_rule(p):
     """
-    rule : RULE SYMBOL OPEN_PAREN conditions CLOSE_PAREN OPEN_BRACE parameter CLOSE_BRACE PRODUCE productions
+    rule : RULE SYMBOL OPEN_PAREN parameters PIPE conditions CLOSE_PAREN OPEN_BRACE parameter CLOSE_BRACE PRODUCE productions
          | RULE SYMBOL OPEN_BRACE parameter CLOSE_BRACE PRODUCE productions
-         | RULE SYMBOL OPEN_PAREN conditions CLOSE_PAREN PRODUCE productions
+         | RULE SYMBOL OPEN_PAREN parameters PIPE conditions CLOSE_PAREN PRODUCE productions
     """
-    if len(p) == 11:
-        p[0] = Node("rule", [p[2],p[4],p[7],p[10]])
+    if len(p) == 13:
+        p[0] = Node("rule", [p[2],p[4],p[7],p[10],p[12]])
+    elif len(p) == 10:
+        p[0] = Node("rule", [p[2],p[4],p[6],p[9]])
     else:
         p[0] = Node("rule", [p[2],p[4],p[7]])
 
@@ -166,7 +169,7 @@ def p_parameters(p):
                | parameter
     """
     if len(p) == 2:
-        p[0] = Node("parameters", p[1], None)
+        p[0] = Node("parameters", [p[1]], None)
     else:
         p[0] = Node("parameters", [], None)
         p[0].children = [p[1]] + p[3].children
