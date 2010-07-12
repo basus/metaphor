@@ -1,6 +1,6 @@
 import random
-from metaphor.parser import parser
-from metaphor.context import ContextHandler
+from parser import parser
+from context import ContextHandler
 """
 Classes required to implemented the semantics of Metaphor.
 Some classes require a proper AST.

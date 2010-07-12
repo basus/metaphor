@@ -1,7 +1,7 @@
 import os
 import sys
 import getopt
-from metaphor import script
+from metaphor.ui import script
 
 def main(argv):
     """

@@ -1,6 +1,5 @@
-from ply import lex
-from ply import yacc
-from nodes import Node
+from metaphor.lib.ply import lex
+from metaphor.lib.ply import yacc
 
 ## Major classes of lexemes
 

@@ -1,8 +1,8 @@
 import os
 import imp
 
-from metaphor import context
-from metaphor import system
+from metaphor.core import context
+from metaphor.core import system
 
 class PyScriptInterface:
     """
