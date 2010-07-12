@@ -1,0 +1,26 @@
+* Basic usage
+  Metaphor is designed to be used both by CS professionals and users not
+  familiar with programming and the command line. The current version (3.0) only
+  includes two command-line interfaces. GUI options are being developed.
+
+** Command line options
+   Metaphor supports a variety of command line options, many of which are
+   responsible for toggling between the different user interfaces. The options
+   for the different interfaces are:
+    - -c Toggles the command line interface
+    - -s <script>, --script=<script> Toggles the script interface. See later
+      documentation
+
+** Command line interface
+   Metaphor can be used as a command line tool when launched with the -c
+   option. In that case, the following arguments are required:
+    - --source=<filename> A system declaration file to be used
+    - --system=<name> The name of the L-System to be used
+    - --generations=<number> The number of generations to be iterated for
+    - --context=<name> The name of the context to be used for rendering
+    - --render=<filename> The filename to save the output as
+
+* Describing L-systems
+  L-systems can be described using text files in a simple declarative
+  language. Please see the examples for a tutorial on describing L-systems and
+  using the Metaphor to create images.

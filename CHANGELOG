@@ -1,0 +1,9 @@
+July 12, 2010 - Release 3.0
+* Added new, more uniform syntax for L-System declarations
+* Added support for parametric L-systems
+* Cleaner, simpler AST generation from source declarations using PLY
+* Classes for representing production, rules, symbols and systems
+* Environment for controlling interaction with L-systems to provide debug
+  support in later releases
+* Reorganized source code to separate core code, ui code and 3rd party libraries
+* Started adding unit tests

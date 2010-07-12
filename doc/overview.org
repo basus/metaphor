@@ -1,0 +1,26 @@
+* Overview
+** What is Metaphor?
+   Metaphor is meant to be a tool to explore generative formal grammars,
+   especially Lindenmayer systems and the patterns they create. It is designed to
+   allow scientists and artists to use computers to explore the patterns they see
+   in their daily work without having to resort to learning extensive
+   programming. 
+
+   Metaphor is:
+
+    - A simplified language for describing patterns as [[http://en.wikipedia.org/wiki/L-system][Lindenmayer Systems]]
+    - An engine to automatically generate strings based on those systems
+    - A set of contexts in which to render the strings as graphics (or sound)
+
+** What Metaphor isn't.
+   Metaphor is not:
+    - A general purpose progamming language/environment
+    - A graphics editing programming (a la Photoshop, the GIMP)
+    - A replacement for other computational art tools like [[http://processing.org][Processing]]
+
+** What is this document?
+   This document is a basic introduction to the Metaphor system. It is designed
+   to give users a basic understanding of the ideas behind Metaphor and some
+   suggestions for how to use the sytem.  If you are a developer wanting to
+   extend Metaphor for whatever reason please see the separate developer
+   documentation as well.  Enjoy.

@@ -1,0 +1,40 @@
+* Background Information
+** Lindenmayer systems
+   A Lindenmayer system (L-system) is a parallel rewriting system. The main
+   concept is that of rewriting: Starting with a simple starting string of
+   symbols, a complex string is created by replacing each symbol in accordance
+   to a set of rewriting rules or productions.
+
+   L-systems were originally developed to provide a mathematical theory of plant
+   growth but since have been applied to study the generation of a wide variety
+   of structures and graphical objects including fractals.
+
+   A basic L-system consists of the following parts:
+    - An alphabet -- the set of symbols that can be replaced
+    - An axiom -- the starting string of symbols
+    - Productions -- the set of rules that define the way variables can be
+      replaced with combinations of other symbols and constants
+
+   There are variations on L-Systems that extend the above with probabilities,
+   context-sensitivity and parameters and mathematical functions on the
+   parameters. The basic types of L-systems are:
+    - D0L -- basic deterministic and context-free
+    - Stochastic 0L -- production rules have a probability associated with them
+    - Parametric 0L -- symbols are modules of letters and numeric parameters
+                       the rules contain operations on the parameters
+    - 1L -- the production of a symbol depends on one neighboring symbol
+    - 2L -- the production of a symbol depends on two neighboring symbols
+   
+   The current version of Metaphor only supports 0L systems.
+
+** Contexts and rendering
+   L-systems only generate strings in accordance to specified rules. In order to
+   visualize the L-Systems the generated have to be rendered in some sort of
+   graphical environment. 
+
+   Metaphor supports the use of ``contexts'' -- pluggable components that act as
+   environments for graphically interpreting the generated strings. Metaphor can
+   translate the symbols (and parameters) in a L-system to instructions for the
+   contexts. The contexts are self-contained: there is no feedback from the
+   context to Metaphor. See the [[technical.org][technical documentation]] information on how
+   to implement contexts. 

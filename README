@@ -1,0 +1,36 @@
+Metaphor README
+===============
+
+
+Overview
+--------
+
+Metaphor is a framework for specifying, generating and exploring Lindenmayer
+systems. It supports specifying L-systems via a declarative markup.
+Metaphor supports using multiple modules for visualizing the generated systems
+and a number of different interfaces.
+
+
+Dependencies
+------------
+
+Metaphor currently uses the following third party Python packages:
+- PLY (Python Lex Yacc)
+
+The main repository contains copies of these packages under metaphor/lib. The
+no-lib branch contains modified code which requires the packages to be installed
+on the system.
+
+
+Version history
+---------------
+
+The current version of Metaphor is 3.0. Version 1.0 was completed in fall 2008.
+Version 2.0 was started in summer 2009 but never completed. Version 3.0 was
+completed in summer 2010. Features in this version include
+
+ - Support for stochastic and parametric L-systems
+ - Rudimentary support for debugging tools
+ - Reorganized code structure
+
+ Check the CHANGELOG for more detailed information

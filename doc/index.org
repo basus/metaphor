@@ -1,0 +1,7 @@
+* Documentation Index
+  The documentation for Metaphor consists of the following parts:
+    
+    1. [[file:overview.org::*Overview][Overview]] -- Overview of the Metaphor system
+    2. [[background.org][Background]] -- Concepts, ideas and terminology behind Metaphor
+    3. [[file:usage.org::*Basic%20usage][Usage]] -- How to run Metaphor and create L-systems
+    4. [[file:technical.org::*Technical%20information][Technical]] -- Notes about the implementation and organization of Metaphor
