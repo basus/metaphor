@@ -1,6 +1,7 @@
 import os
 import sys
-import getopt
+from optparse import OptionParser
+from metaphor.ui import cli
 from metaphor.ui import script
 
 def main(argv):
@@ -13,24 +14,32 @@ def main(argv):
     @param argv: the command line arguments passed to the program
     
     """
-    try:
-        opts, args = getopt.getopt(argv, "s:q", ["script="])
-    except getopt.GetoptError:
-        usage()
-        sys.exit(2)
+    parser = OptionParser()
 
-    for opt, arg in opts:
-        if opt in ('-s', '--script'):
-            path = os.getcwd() + '/' + arg
-            interface = script.PyScriptInterface(path)
-            interface.run()
-        elif opt in ('-q', '--qtinterface'):
-            qt_mode()
+    # Python Script Interface
+    parser.add_option("-s", "--script",dest="script",
+                      help="Use the supplied Python script to run Metaphor")
 
-    if opts == []:
-        from metaphor import gui
+    # Command line interface
+    parser.add_option("-c", "--cli", dest="cli", action="store_true",
+                      help="Use Metaphor as a command-line tool")
+    parser.add_option("--source",dest="source")
+    parser.add_option("--system",dest="system")
+    parser.add_option("--generations",dest="gen", type="int")
+    parser.add_option("--context",dest="context")
+    parser.add_option("--render",dest="render")
+
+    (options, args) = parser.parse_args()
     
-            
+    if options.script: 
+        interface = script.PyScriptInterface(options.script)
+        interface.run()
+    elif options.cli:
+        interface = cli.CLInterface(options.source,options.system,options.generations,
+                                    options.context,options.render)
+        interface.run()
+    else:
+        print "Options required"
         
 if __name__ == '__main__':
     sys.path.insert(0, os.getcwd())

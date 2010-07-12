@@ -18,7 +18,8 @@ class PyScriptInterface:
         rest of the class methods.
         @param string with the path to the script to run
         """
-        self.script = imp.load_source('', scriptpath)
+        path = os.path.abspath(scriptpath)
+        self.script = imp.load_source('', path)
         self.gen = self.script.generate
         self.ren = self.script.render
         self.env = system.Environment()
@@ -34,10 +35,8 @@ class PyScriptInterface:
         """
         Sets the context to be used for rendering (once again read from the script)
         """
-        path = os.getcwd() + '/' + self.script.context
-        self.handler = context.ContextHandler(path)
-        self.handler.load_context()
-        self.env.add_context(self.handler)
+        path = os.path.abspath(self.script.context)
+        self.handler = self.env.add_context_from_file(path)
         
     def make(self):
         '''
@@ -57,11 +56,10 @@ class PyScriptInterface:
             if type(output) == type('str'):
                 handler = self.handler
             elif len(output) == 2:
-                handler = context.ContextHandler(output[1])
-                handler.load_context()
-                self.env.add_context(handler)
+                path = os.path.abspath(output[1])
+                handler = self.env.add_context_from_file(path)
                 output = output[0]
-            self.env.render(None,handler=handler.name,save=output)
+            self.env.render(handler=handler,save=output)
                 
     def run(self):
         """

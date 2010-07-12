@@ -329,11 +329,12 @@ class Environment:
     def add_context(self, handler):
         self.handlers[handler.name] = handler
         self.last_handler = handler.name
+        return handler.name
 
-    def add_context_from_file(self, fname):
-        handler = ContenxtHandler(path)
-        handler.load_handler()
-        self.add_handler(handler)
+    def add_context_from_file(self, path):
+        handler = ContextHandler(path)
+        handler.load_context()
+        return self.add_context(handler)
         
     def generate(self, name, generations):
         sys = self.systems[name]
