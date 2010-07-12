@@ -1,3 +1,4 @@
+import re
 def syntax():
     "Gathers the token specification and BNF grammars for the parser"
     import parser
@@ -16,6 +17,7 @@ def syntax():
     return (tokens,grammars)
 
 def print_syntax():
+    '''Print the token specifications and BNF grammars '''
     (tokens, grammars) = syntax()
     print "\n\n===== Printing token regexes =====\n\n"
     for each in tokens:
@@ -38,6 +40,23 @@ def browse_ast(src=None):
     while True:
         comm = input(">> ")
 
+def to3(filein,fileout=None):
+    ''' Converts system declaration files to version 3 syntax'''
+    fl = open(filein)
+    text = fl.read()
+    text = text.replace("grammar ", "System ")
+    text = text.replace("Production ", "Rule ")
+    text = text.replace("Map ", "Render ")
+    text = text.replace("[","(")
+    text = text.replace("]",")")
+    text = re.sub(r'Assign(\s+\w+)(\s+\d*\.?\d+)',r'Define\1 =>\2',text)
+    fl.close()
+    if fileout:
+        fl = open(fileout,'w')
+    else:
+        fl = open(filein,'w')
+    fl.write(text)
+    fl.close()
             
 if __name__ == "__main__":
     print_syntax()
