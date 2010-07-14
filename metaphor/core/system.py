@@ -7,24 +7,41 @@ Some classes require a proper AST.
 """
 
 class Builder:
-    '''Traverses the AST and builds the L-system described'''
+    """
+    Traverses the AST and builds the L-system described
+    """
 
     def __init__(self, root=None):
+        """
+        Initiate the builder object
+        @param root The root node of the AST
+        """
         self.__root = root
         self.node = root
 
     def build_system(self):
-        '''Builds the system starting from the root node'''
+        """
+        Builds the system starting from the root node
+        """
         self.system = System(self.__root.data)
         self.build_declarations(self.__root.children)
         return self.system
 
     def build_declarations(self, declarations):
+        """
+        Build all the declarations
+        @param the root of the declarations tree
+        """
         decls = declarations.children
         for decl in decls:
             self.build_declaration(decl)
 
     def build_declaration(self, decl):
+        """
+        Traverse each declaration tree and add the required properties to the
+        system object being created
+        @param decl The root node of the declaration
+        """
         if decl.type == "axiom":
             a = self.build_axiom(decl)
             self.system.axiom = a
@@ -39,6 +56,12 @@ class Builder:
             self.system.defines[symbol] = number
 
     def build_axiom(self, axnode):
+        """
+        Traverses the parse tree for an axiom and returns a Symbol object for it
+        @param axnode: The root of the axiom parse tree
+        @rtype: Symbol
+        @return: A symbol representing the axiom for the Lsystem
+        """
         axiom = []
         for each in axnode.children:
             symbol = each[0]
@@ -50,8 +73,16 @@ class Builder:
         return axiom
 
     def build_rule(self, rulenode):
+        """
+        Traverses the parse tree for a rule and creates a rule object
+        @param rulenode: the root node for the rule's parse tree
+        @rtype: Rule
+        @return: A Rule object representing the rule in the parse tree
+        """
         symbol = rulenode.children.pop(0)
         conds, params, prob, prods = None, None, None, None
+
+        # Based on the type of the AST perform a different action
         for ch in rulenode.children:
             if ch.type == "conditions":
                 conds = self.build_exprs(ch)
@@ -64,11 +95,23 @@ class Builder:
         return Rule(symbol,params,conds,prob,prods)
 
     def build_define(self, defnode):
+        """
+        Return a tuple of the symbol and its defined value from
+        @param defnode: The define node
+        @rtype: tuple
+        @return: Tuple of the symbol and its value
+        """
         symbol = defnode.children[0]
         number = defnode.children[1]
         return (symbol, number)
     
     def build_render(self, renode):
+        """
+        Traverse a render node and return the symbol and the functions it renders as
+        @param renode: The root node of the render parse tree
+        @rtype: tuple (Symbol, list of functions)
+        @return: A tuple of the Symbol and its mapped-to functions
+        """
         if renode.children[1].type == "parameters":
             params = self.build_params(renode.children[1])
             functions = self.build_productions(renode.children[2])
@@ -79,12 +122,24 @@ class Builder:
         return (symbol, functions)
 
     def build_params(self, params):
+        """
+        Create the list of parameters
+        @param params: The param parse node
+        @rtype: list
+        @return: a list of values or symbols representing the parameters
+        """
         paramlist = []
         for param in params.children:
             paramlist.append(param.data)
         return paramlist
 
     def build_productions(self, fns):
+        """
+        Builds the list of productions including symbols and expressions
+        @param fns: the node representing the list of functions
+        @rtype: list of Production objects
+        @return: the list of Production objects for a Symbol
+        """
         funcs = []
         for fn in fns.children:
             symbol = fn.children[0]
@@ -97,6 +152,12 @@ class Builder:
         return funcs
 
     def build_exprs(self, exnode):
+        """
+        Build the list of expressions
+        @param exnode: the node for the list of expressions
+        @rtype: list of expressions
+        @return A list of expressions
+        """
         exprs = []
         for expr in exnode.children:
             expr = self.build_expr(expr)
@@ -104,8 +165,13 @@ class Builder:
         return exprs
 
     def build_expr(self, exnode):
-        '''Takes the expression tree from the AST and builds a POSTFIX
-        operation string that can be easily evaluated'''
+        """
+        Takes the expression tree from the AST and builds a POSTFIX
+        operation string recursively for later evaluation
+        @param exnode: The root node for the expression tree
+        @rtype: list
+        @return: the expression in postfix form
+        """
         if exnode.type == "parameter":
             return [exnode.data]
         else:
@@ -117,16 +183,21 @@ class Builder:
             
 
 class Symbol:
+    """Class representing a symbol: the actual symbol and a list of parameters"""
     def __init__(self,symbol,params=None):
         self.symbol = symbol
         self.params = params
 
 class Production:
+    """Class representing a single production -- a symbol and a list of expression"""
     def __init__(self,symbol,exprs=None):
         self.symbol = symbol
         self.exprs = exprs
 
 class Rule:
+    """Class representing a rule -- the symbol, it's parameters, conditions,
+    probability and the list of productions
+    """
     def __init__(self,symbol,params,conds,prob,prods):
         self.symbol = symbol
         self.parameters = params
@@ -135,9 +206,13 @@ class Rule:
         self.productions = prods
 
 class System:
-    '''A class representing a Lindenmayer System'''
+    """A class representing a Lindenmayer System"""
 
     def __init__(self, name):
+        """ Initialize the System. Add the name and create the blank dicts
+        @type name: string
+        @param name: the name of the L-system
+        """
         self.name = name
         self.axiom = None
         self.defines = {}
@@ -145,15 +220,27 @@ class System:
         self.rules = {}
 
     def add_render(self, render):
+        """ Add the render object to the dictionary """
         self.renders[render.symbol] = [render]
 
     def add_rule(self,rule):
+        """
+        Add the rule to the list of rules for each symbol. If it is a new
+        symbol create a blank list first
+        @type rule: Rule
+        @param rule: the rule to be added
+        """
         if rule.symbol not in self.rules:
             self.rules[rule.symbol] = []
         self.rules[rule.symbol].append(rule)
 
     def generate(self, generations):
-        '''Generate a compatible string after the given number of generaions'''
+        """Generate a compatible string after the given number of generaions
+        @type generations: integer
+        @param generations: the number of generations to iterate for
+        @rtype: list of Symbol objects
+        @return: the generated list of symbols after the given generations
+        """
         axiom = self.axiom
         while generations > 0:
             temp = []
@@ -168,8 +255,14 @@ class System:
         return axiom
 
     def render(self, generated):
-        '''Takes in a generated string and returns a string representing
-        context instructions'''
+        """Takes in a generated string and returns a string representing
+        context instructions. Uses the generate() mechanism but replaces the
+        rules dictionaries with the renders dictionary and iterates for a
+        single generation
+        
+        @type generated: list of symbols
+        @param generated: the list of generated symbols to be rendered
+        """
         rules = self.rules
         axiom = self.axiom
         self.rules = self.renders
@@ -180,6 +273,15 @@ class System:
         return ctx
         
     def transform(self, symbol):
+        """Take in a symbol and return a list of symbols according to the
+        production rules. Evaluates the expressions using the parameters of the
+        given symbol
+        
+        @type symbol: Symbol object
+        @param symbol: the object whose productions to return
+        @rtype: list of symbols
+        @return: the list of symbols
+        """
         rule = self.pick(symbol)
         if not rule: return [symbol]
         symbols = []
@@ -191,7 +293,12 @@ class System:
         return symbols
             
     def pick(self, symbol):
-        '''Return a rule matching the given symbol '''
+        """ Return a rule matching the given symbol
+        @type symbol: symbol object
+        @param symbol: the symbol whose rule to return
+        @rtype: Rule object, or None
+        @return: A Rule object for the symbol or None
+        """
         rules = self.rules[symbol.symbol]
         total = 0
         index = {}
@@ -212,20 +319,30 @@ class System:
                 return index[cutoff]
             
     def eval(self, exprs, params, values):
-        '''Wraps parameters and values before passing to evaluator'''
+        """ Wraps parameters and values before passing to evaluator. Or if there
+        is no expression return None.
+        """
         if not exprs: return None
         bindings = self.bind(params,values)
         return self.evaluate(exprs, bindings, False)
 
     def condition(self,conds, params, values):
-        '''Wraps parameters and values and signifies that expression is a
-        condition to evaluator'''
+        """ Wraps parameters and values and signifies that expression is a
+        condition to evaluator. If there is no condition, return True
+        """
         if not conds: return True
         bindings = self.bind(params,values)
         return self.evaluate(conds, bindings, True)
 
     def bind(self,params,values):
-        ''' Binds the parameters and values into a dict'''
+        """ Binds the parameters and values into a dict
+        @type param: list
+        @param params: the list of parameters
+        @type values: list
+        @param values: the list of values for the corresponding parameters
+        @rtype: dict
+        @return: dictionary mapping parameters to their values
+        """
         if not params: return {}
         bindings = {}
         for i in range(len(params)):
@@ -233,7 +350,13 @@ class System:
         return bindings
 
     def evaluate(self, exprs, bindings, condition=False):
-        '''Postfix expression evaluator for a set of expresssions'''
+        """ Postfix expression evaluator for a set of expresssions
+        @type exprs: list
+        @param exprs: list of expressions to evaluate
+        @type bindings: dict
+        @param bindings: the mapping from parameters to values
+        @rtype: list
+        @return: the list of expression evaluation results"""
         results = []
         for expr in exprs:
             if len(expr) == 1 and condition:
@@ -251,6 +374,7 @@ class System:
             else:
                 results.append(self.eval_expr(expr,bindings))
 
+        # AND over all the conditions to see if the combination is true
         if condition:
             result = True
             for res in results:
@@ -260,7 +384,7 @@ class System:
             return results
 
     def eval_expr(self, ex, bindings):
-        '''Evaluate a single postfix expression'''
+        """Evaluate a single postfix expression"""
         expr = list(ex)
         while len(expr) > 1:
             arg1 = self.lookup(expr.pop(0),bindings)
@@ -288,6 +412,10 @@ class System:
         return expr[0]
             
     def lookup(self, param, bind=None):
+        """
+        Perform a name lookup, with priority given to local bindings and then
+        to global defines
+        """
         if not bind:
             bindings = self.defines
         else:

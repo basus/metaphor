@@ -8,8 +8,8 @@ def main(argv):
     """
 
     This is the main function controlling interface to the Metaphor system.
-    Based on command line parameters it either launches the GUI or feeds a
-    script to the script interface.
+    Based on command line parameters it launches one of the supported interfaces.
+    Currently supports the script and command line interfaces
 
     @param argv: the command line arguments passed to the program
     
