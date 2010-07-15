@@ -427,25 +427,39 @@ class System:
             return param
 
 class Environment:
-    '''
-    Represents the environment in which L-systems are created and their
+    """Replaces the environment in which L-systems are created and their
     strings generated. Provides debug and inspection facilities
-    '''
+    """
 
     def __init__(self):
+        """ Initialize the system by making blank dicts for the Lsystems and
+        context handlers. Also create a blank stack.
+        """
         self.systems = {}
         self.handlers = {}
         self.string_stack = []
 
     def add(self, sys):
+        """ Add an Lsystem to the environment
+        @type sys: System object
+        @param sys: The Lsystem to be added
+        """
         self.systems[sys.name] = sys
 
     def add_from_file(self,fname):
+        """ Add Lsystems from a given file path
+        @type fname: string
+        @param fname: path to the file to containing Lsystem declarations
+        """
         fl = open(fname)
         text = fl.read()
         self.add_from_text(text)
 
     def add_from_text(self,text):
+        """ Add Lsystems from a given block of text
+        @type text: string
+        @param text: the string with Lsystem declarations
+        """
         systexts = text.split("System ")[1:]
         for systext in systexts:
             systext = "System " + systext
@@ -455,22 +469,45 @@ class Environment:
             self.systems[system.name] = system
 
     def add_context(self, handler):
+        """ Add a context object the Environment
+        @type handler: ContextHandler
+        @param handler: the context handler to add to the environment
+        """
         self.handlers[handler.name] = handler
         self.last_handler = handler.name
         return handler.name
 
     def add_context_from_file(self, path):
+        """ Add a context from a file to the environment
+        @type path: string
+        @param path: The path to a .py file meeting the context specifications
+        """
         handler = ContextHandler(path)
         handler.load_context()
         return self.add_context(handler)
         
     def generate(self, name, generations):
+        """ Generate a string of the given Lsystem for the given number of
+        generations
+        @type name: string
+        @param name: the name of the Lsystem to generate
+        @type generations: integer
+        @param generations: the number of generations to iterate for
+        """
         sys = self.systems[name]
         string = sys.generate(generations)
         self.string_stack.append((name,string))
         return string
 
     def render(self, string=None, handler=None, save=None):
+        """ Render a string in a given context and save the output to a file
+        @type string: list of Symbols
+        @param string: The string to render, None for one on top of stack
+        @type handler: string
+        @param handler: the name of the context to use for rendering
+        @type save: string
+        @param save: the path to the output file
+        """
         if not string:
             string = self.string_stack[0]
         if not handler:
