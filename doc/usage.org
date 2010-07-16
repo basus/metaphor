@@ -10,6 +10,8 @@
     - -c Toggles the command line interface
     - -s <script>, --script=<script> Toggles the script interface. See later
       documentation
+    - -u <filename>, --update=<filename> Updates the given file to the most
+      recent syntax
 
 ** Command line interface
    Metaphor can be used as a command line tool when launched with the -c

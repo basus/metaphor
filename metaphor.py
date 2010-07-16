@@ -3,6 +3,7 @@ import sys
 from optparse import OptionParser
 from metaphor.ui import cli
 from metaphor.ui import script
+from metaphor.core import util
 
 def main(argv):
     """
@@ -15,6 +16,10 @@ def main(argv):
     
     """
     parser = OptionParser()
+
+    # Update Lsystem declaration file
+    parser.add_option("-u", "--update", dest="update",
+                      help="Update the given declaration file to the current syntax")
 
     # Python Script Interface
     parser.add_option("-s", "--script",dest="script",
@@ -38,6 +43,8 @@ def main(argv):
         interface = cli.CLInterface(options.source,options.system,options.generations,
                                     options.context,options.render)
         interface.run()
+    elif options.update:
+        util.to2(update,update+'.lsys')
     else:
         print "Options required"
         
