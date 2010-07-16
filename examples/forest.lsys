@@ -1,0 +1,131 @@
+grammar WeedFern
+    Axiom seed
+
+    Production seed => posn save fern restore  weed
+    Production fern => fern_seed Z
+    Production weed => weed_seed G
+    
+    Production Z => F lt save save Z restore rt Z restore rt F save rt F Z restore lt Z
+    Production F => F F
+
+    Production G => G G rt save rt G lt G lt G restore lt save lt G rt G rt G restore
+
+    Map F => forward[10]
+    Map G => forward[10]
+    Map rt => right[25]
+    Map lt => left[25]
+    Map save => save
+    Map restore => restore
+    Map posn => setx[1000] sety[800]
+    Map fern_seed => color[#ff0000]
+    Map weed_seed => right[180] color[#00ff00]
+
+grammar WeedFernProb
+    Axiom seed
+
+    Production seed => posn save fern restore  weed
+    Production fern => fern_seed Z
+    Production weed => weed_seed G
+    
+    Production Z[a] => F lt save save Z restore rt Z restore rt F save rt F Z restore lt Z
+    Production Z[a] => F rt save save Z restore lt Z restore lt F save lt F Z restore rt Z
+    Production F => F F
+
+    Production G[a] => G G rt save rt G lt G lt G restore lt save lt G rt G rt G restore
+    Production G[a] => G G lt save lt G rt G rt G restore rt save rt G lt G lt G restore
+
+    Assign a 1
+
+    Map F => forward[15]
+    Map G => forward[15]
+    Map rt => right[25]
+    Map lt => left[25]
+    Map / => right[65]
+    Map lt1 => left[65]
+    Map save => save
+    Map restore => restore
+    Map posn => setx[1000] sety[800]
+    Map fern_seed => color[#ff0000] thickness[10]
+    Map weed_seed => right[180] color[#00ff00] thickness[1]
+
+grammar WeedTree
+
+    Axiom seed
+
+    Production seed => posn save tree restore  save weed restore
+    Prodcution tree => tree_seed F
+    Production weed => weed_seed G
+    
+    Production F => F save lt F restore F save rt F restore F
+
+    Production G => G G rt save rt G lt G lt G restore lt save lt G rt G rt G restore
+
+    Map F => forward[10]
+    Map G => forward[10]
+    Map rt => right[25]
+    Map lt => left[25]
+    Map save => save
+    Map restore => restore
+    Map posn => setx[1000] sety[1000]
+    Map weed_seed => left[90] forward[200] color[#ff0000]
+
+grammar TreeWeedFern
+    Axiom seed
+
+    Production seed => posn save tree restore save weed restore save fern restore
+    Production tree => tree_seed F
+    Production weed => weed_seed G
+    Production fern => fern_seed H
+
+    Production F => F save lt F restore F save rt F restore F
+
+    Production G => G G rt save rt G lt G lt G restore lt save lt G rt G rt G restore
+
+    Production H => I lt save save H restore rt H restore rt I save rt I H restore lt H
+    Production I => I I
+
+    Map F => forward[10]
+    Map G => forward[7]
+    Map I => forward[10]
+    Map rt => right[25]
+    Map lt => left[25]
+    Map save => save
+    Map restore => restore
+    Map posn => setx[1000] sety[1000]
+    Map weed_seed => left[90] forward[200] color[#ff0000]
+    Map fern_seed => right[90] forward[200] color[#00ff00]
+
+grammar TreeWeedFernProb
+    Axiom seed
+
+    Production seed => posn save tree restore save weed restore save fern restore
+    Production tree => tree_seed F
+    Production weed => weed_seed G
+    Production fern => fern_seed H
+
+    Production F[a] => F save lt F restore F save rt F restore F
+    Production F[a] => F save rt F restore F save lt F restore F
+    Production F[a] => F save lt1 F restore F save / F restore F
+    Production F[a] => F save / F restore F save lt1 F restore F
+
+    Production G => G G rt save rt G lt G lt G restore lt save lt G rt G rt G restore
+
+    Production H => I lt save save H restore rt H restore rt I save rt I H restore lt H
+    Production I => I I
+
+    Assign a 1
+
+    Map F => forward[10]
+    Map G => forward[7]
+    Map I => forward[10]
+    
+    Map rt => right[25]
+    Map lt => left[25]
+    Map lt1 => left[65]
+    Map / => right[65]
+    
+    Map save => save
+    Map restore => restore
+    Map posn => setx[1000] sety[1000]
+    Map weed_seed => left[90] forward[200] color[#ff0000]
+    Map fern_seed => right[90] forward[200] color[#00ff00]
