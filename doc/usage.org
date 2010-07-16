@@ -22,5 +22,108 @@
 
 * Describing L-systems
   L-systems can be described using text files in a simple declarative
-  language. Please see the examples for a tutorial on describing L-systems and
-  using the Metaphor to create images.
+  language. The examples provide complete examples. The rest of this document
+  will describe the Metaphor language
+** Basic structure
+   To describe an Lsystem at least 4 components are needed:
+
+    1. A name
+    2. An axiom (set of starting symbols)
+    3. A set of production rules
+    4. A set of render instructions mapping symbols to instructions in a context
+
+  The Metaphor language provides constructs to describe each of them.
+
+** Symbols
+   L-systems operate by replacing symbols in a string with other symbols. A
+   symbol is simply a string of alphanumeric characters starting with a
+   letter. The following are valid symbols:
+
+    A B A1 abc Ab1cd
+
+   Metaphor also allows symbols to have one or more parameters associated with
+   them. To specifying a symbol with parameters, place the parameters in (). For
+   example:
+    
+    A(1) B(3,4,5) C(x)
+
+   If a symbol is part of the productions of a rule, the parameters can be
+   mathematical functions on the parameters of the parent symbol. For example,
+   if the parent symbol has a parameter, the following are valid:
+
+    A(x+1) A(x/2) A(x*x)
+
+** Starting a system
+   You can start a new L-System by using the following declaration:
+
+    System <name>
+
+   where name is a sequence of alphanumeric character starting with an alphabet.
+
+** The Axiom
+   The Axiom for a system is declared in the following form:
+
+    Axiom <symbol>
+
+   Please see the notation for describing different symbols.
+
+** Rules
+   Metaphor supports a number of different types of rules. Each of the types
+   share a common pattern with additions for the different features. In the
+   following section anything inside <> should be replaced with actual data in a
+   real System. Everything else can be copied verbatim.
+
+*** Basic rules
+    A basic rule is of the form:
+
+     Rule <Symbol> => <list of symbols>
+
+    These symbols must be non-parametric. Again, see the symbol notation above.
+
+*** Stochastic rules
+    Stochastic rules have a probability assigned to the rule. The probability
+    can be a number or a variable and is placed inside braces {} after the
+    symbol. The rules are of the form:
+
+     Rule <symbol>{<variable or number>} => <list of symbols>
+
+*** Parametric rules
+    Parametric rules have parameters associated with each rule and the symbols
+    in the productions can have mathematical operations on those parameters. The
+    form of the rules are:
+
+     Rule <symbol>(<parameters>) => <list of symbols>
+
+    Such rules will only match for the /presence/ of parameters in symbols. It
+    also possible to perform comparisons against the values of parameters. For a
+    comparison, the list of parameters must be specified as usual, followed by
+    a |, followed by the conditions. The comparisons allowed are: ==, <, >, <=,
+    >=. As a a shorthand, the == operator and the parameter can be dropped if
+    there is a single parameter and only the comparison value specified. The
+    comparison values can be numbers or variables. The general form is:
+
+     Rule <symbol>(<parameters> | <conditions>) => <list of symbols>
+
+    The shorthand for comparison is:
+     
+     Rule <symbol>(<value>) => <list of symbols>
+
+** Defines
+   Metaphor supports using variables in the rules which are later defined to
+   have numeric values. Definitions are of the form:
+
+    Define <variable> => <number>
+
+** Renders
+   Render rules allow mapping the symbols in the Lsystem to instructions in a
+   context. Simple renders are of the form:
+    
+    Render <symbol> => <list of instructions>
+
+   Since metaphor also allows symbols to have parameters, it can also pass the
+   parameters to the context. 
+    
+    Render <symbol>(<parameters>) => <list of instructions>
+
+   These declarations cannot have conditions on the parameters, but the list of
+   instructions do support mathematical operations on the parameters.
