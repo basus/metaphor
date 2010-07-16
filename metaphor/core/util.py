@@ -40,7 +40,7 @@ def browse_ast(src=None):
     while True:
         comm = input(">> ")
 
-def to3(filein,fileout=None):
+def to2(filein,fileout=None):
     ''' Converts system declaration files to version 3 syntax'''
     fl = open(filein)
     text = fl.read()
