@@ -1,3 +1,4 @@
+import error
 from metaphor.lib.ply import lex
 from metaphor.lib.ply import yacc
 
@@ -77,8 +78,9 @@ lex.lex()
 
 def p_system(p):
     "system : SYSTEM SYMBOL declarations"
+    handle('system', name=p[2])
     p[0] = Node("system", p[3], p[2])
-
+    
 def p_declarations(p):
     """
     declarations : declaration declarations
@@ -250,16 +252,32 @@ def p_empty(p):
 
 def p_error(p):
     if not p:
-        print "EOF"
         return p_empty(p)
     else:
-        print "Syntax error for ", p.value, " at line ", p.lexer.lineno
+        handle('error',val=p.value,line=p.lineno)
+        while True:
+            tok = yacc.token()
+            if not tok.type == 'newline':break
+#            if not tok or tok.type == 'RULE' or tok.type == 'RENDER' or tok.type == 'DEFINE': break
+        yacc.errok()
     
 precedence = (
     ('nonassoc', 'LT', 'GT', 'EQ', 'LTEQ', 'GTEQ'),
     ('left', 'PLUS', 'MINUS'),
     ('left', 'TIMES', 'DIVIDE'),
 )
+
+#################################################
+## utility functions and data structures
+################################################
+
+sys = {'name':''}
+err = []
+def handle(do, *args, **kwargs):
+    if do == "system":
+        sys['name'] = kwargs['name']
+    elif do == "error":
+        err.append((kwargs['val'],kwargs['line']))
 
 parser = yacc.yacc()
 

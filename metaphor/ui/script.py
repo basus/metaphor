@@ -3,6 +3,7 @@ import imp
 
 from metaphor.core import context
 from metaphor.core import system
+from metaphor.core import error
 
 class PyScriptInterface:
     """
@@ -28,6 +29,8 @@ class PyScriptInterface:
         """
         Compiles the grammar file specified in the script and turns it into the
         corresponding grammar objects.
+        @rtype boolean:
+        @return: True if compilation succeeded else false
         """
         self.env.add_from_file(self.script.compile)
 
@@ -66,6 +69,9 @@ class PyScriptInterface:
         Calls each of the class methods that results in grammars being compiled,
         strings generated and then rendered.
         """
-        self.compile()
-        self.setcontext()
-        self.make()
+        try:
+            self.compile()
+            self.setcontext()
+            self.make()
+        except error.ParseError as e:
+            print e

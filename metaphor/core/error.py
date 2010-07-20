@@ -1,6 +1,14 @@
 class ParseError(Exception):
+    def __init__(self, system, errors):
+        self.system = system
+        self.errors = errors
+        
     def __str__(self):
-        return "Some parsing error"
+        msg = "The following errors were found: \n"
+        errs = '\n'.join(["Unexpected Token " + `err[0]` + " at line " +
+                          `err[1]` + " in system " +
+                          self.system for err in self.errors])
+        return msg + errs
 
 class InvalidBlockError(ParseError):
     '''Raised if an invalid top level element is found'''

@@ -1,5 +1,6 @@
 import random
-from parser import parser
+import error
+import parser
 from context import ContextHandler
 """
 Classes required to implemented the semantics of Metaphor.
@@ -463,10 +464,13 @@ class Environment:
         systexts = text.split("System ")[1:]
         for systext in systexts:
             systext = "System " + systext
-            root = parser.parse(systext)
-            builder = Builder(root)
-            system = builder.build_system()
-            self.systems[system.name] = system
+            root = parser.parser.parse(systext)
+            if parser.err:
+                raise error.ParseError(parser.sys['name'], parser.err)
+            else:
+                builder = Builder(root)
+                system = builder.build_system()
+                self.systems[system.name] = system
 
     def add_context(self, handler):
         """ Add a context object the Environment

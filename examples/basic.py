@@ -1,4 +1,4 @@
-compile = 'examples/lsys.gr'
+compile = 'examples/basic.lsys'
 
 context = 'contexts/turtle.py'
 
