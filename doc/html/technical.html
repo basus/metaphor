@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+lang="en" xml:lang="en">
+<head>
+<title>Technical information</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="<2010-10-21 Wed>"/>
+<meta name="author" content="Shrutarshi Basu"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  html { font-family: Times, serif; font-size: 12pt; }
+  .title  { text-align: center; }
+  .todo   { color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #add8e6; font-weight:normal }
+  .target { }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  p.verse { margin-left: 3% }
+  pre {
+	border: 1pt solid #AEBDCC;
+	background-color: #F3F5F7;
+	padding: 5pt;
+	font-family: courier, monospace;
+        font-size: 90%;
+        overflow:auto;
+  }
+  table { border-collapse: collapse; }
+  td, th { vertical-align: top; }
+  dt { font-weight: bold; }
+  div.figure { padding: 0.5em; }
+  div.figure p { text-align: center; }
+  .linenr { font-size:smaller }
+  .code-highlighted {background-color:#ffff00;}
+  .org-info-js_info-navigation { border-style:none; }
+  #org-info-js_console-label { font-size:10px; font-weight:bold;
+                               white-space:nowrap; }
+  .org-info-js_search-highlight {background-color:#ffff00; color:#000000;
+                                 font-weight:bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+
+<h1 class="title">Technical information</h1>
+
+
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1 Technical information </a>
+<ul>
+<li><a href="#sec-1.1">1.1 Code organization </a></li>
+<li><a href="#sec-1.2">1.2 Contexts </a></li>
+</ul>
+</li>
+<li><a href="#sec-2">2 Developer information </a>
+<ul>
+<li><a href="#sec-2.1">2.1 General coding practices </a></li>
+<li><a href="#sec-2.2">2.2 The Metaphor API </a></li>
+<li><a href="#sec-2.3">2.3 Unit tests </a>
+<ul>
+<li><a href="#sec-2.3.1">2.3.1 Running tests </a></li>
+<li><a href="#sec-2.3.2">2.3.2 Writing tests </a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Technical information </h2>
+<div class="outline-text-2" id="text-1">
+
+<p>Metaphor is written in Python making use of third party pure Python
+libraries. It has been tested with Python 2.6.
+</p>
+
+</div>
+
+<div id="outline-container-1.1" class="outline-3">
+<h3 id="sec-1.1"><span class="section-number-3">1.1</span> Code organization </h3>
+<div class="outline-text-3" id="text-1.1">
+
+<p>The metaphor repository contains the following directories:
+</p><ul>
+<li>
+metaphor &ndash; the source code for the Metaphor system
+</li>
+<li>
+contexts &ndash; a number of useful contexts
+</li>
+<li>
+doc &ndash; documentation for Metaphor
+</li>
+<li>
+examples &ndash; a number of systems and scripts to create images
+</li>
+<li>
+test &ndash; unit tests (incomplete as of v3.0)
+</li>
+<li>
+metaphor.py &ndash; the starter script
+
+</li>
+</ul>
+
+<p>The /metaphor directory contains the following subdirectory
+</p><ul>
+<li>
+core &ndash; the code for the core system
+</li>
+<li>
+lib &ndash; third party libraries used by Metaphor
+</li>
+<li>
+ui &ndash; different user front-ends
+
+</li>
+</ul>
+
+<p>Each of the core/ files contained code relevant to a particular part of
+Metaphor. In particular:
+</p><ul>
+<li>
+parser.py &ndash; contains functions to autogenerate the parser using PLY
+</li>
+<li>
+system.py &ndash; contains the core code components including a visitor over the
+AST, a class representing an Lsystem and a class for an interaction Environment
+</li>
+<li>
+context.py &ndash; contains a handler class for contexts which performs loading,
+validation and interaction
+
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-1.2" class="outline-3">
+<h3 id="sec-1.2"><span class="section-number-3">1.2</span> Contexts </h3>
+<div class="outline-text-3" id="text-1.2">
+
+<p>Contexts are Python classes that implement visualization (or other rendering)
+environments. Each context must have at least the following:
+</p><ul>
+<li>
+A .py file with the same name as the context
+</li>
+<li>
+A class in the .py file with the same name as the file and context
+</li>
+<li>
+A wrapup() method in the class
+
+</li>
+</ul>
+
+<p>When a context is loaded into Metaphor a new instance of the context class
+is created. No arguments are passed into the constructor. The string
+generated by the L-system is translated into method calls (with arguments) on
+the created context object. If the context object does not implement a
+particular method, the rendering is aborted. Once the string is finished
+Metaphor calls a wrapup() method on the object. It is suggested that the
+wrapup() method implement saving of the final output and any cleanup.
+</p>
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> Developer information </h2>
+<div class="outline-text-2" id="text-2">
+
+<p>Before starting development on Metaphor, please take some time to read through
+the code and get familiar with the basic structure of the layout (See code
+organization above). The rest of this section focuses on some guidelines you
+should follow when writing code for Metaphor.
+</p>
+
+</div>
+
+<div id="outline-container-2.1" class="outline-3">
+<h3 id="sec-2.1"><span class="section-number-3">2.1</span> General coding practices </h3>
+<div class="outline-text-3" id="text-2.1">
+
+<p>Please follow standard Python coding practices. In particular, read <a href="http://www.python.org/dev/peps/pep-0008/">PEP 8</a> for
+guidelines on naming and indentation conventions. If you are adding classes
+and functions, try to group them together into files intelligently. 
+</p>
+<p>
+Use comments when necessary, try not to overdo it. Classes and methods should
+have API documentation in the form of docstrings according to <a href="http://epydoc.sourceforge.net/">Epydoc</a>. It's
+similar to Javadoc. It's probably a good idea to write the docstrings as
+you're writing code instead of waiting till later. Again, don't overdo it.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-2.2" class="outline-3">
+<h3 id="sec-2.2"><span class="section-number-3">2.2</span> The Metaphor API </h3>
+<div class="outline-text-3" id="text-2.2">
+
+<p>The Metaphor API is designed to support multiple user interfaces. The
+text-based L-System decalaration is only one of the possible ways to create
+Lsystems and interact with them. The Metaphor API is mostly implemented via 2
+classes: System and Environment. There are supporting classes for
+representing Symbols, Productions and Rules. 
+</p>
+<p>
+System and it's supporting classes should be used for expressing the actual
+Lsystems. Interfaces should create instances of these classes and add them to
+an Environment. The supporting classes are essentially data containers and do
+not contain any methods. The System class contains methods for adding Rules
+and Render directives. It also contains methods for generating and rendering
+strings.
+</p>
+<p>
+The Environment class is meant to be the main API for interfaces. It can
+create Lsystems from text declarations and can load contexts. It also
+provides methods for generating strings and rendering. Environment should be
+extended to provide a debug environment including inspection and editing of
+strings and render instructions. As of v0.2 much of this functionality is
+missing.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-2.3" class="outline-3">
+<h3 id="sec-2.3"><span class="section-number-3">2.3</span> Unit tests </h3>
+<div class="outline-text-3" id="text-2.3">
+
+<p>Writing unit tests suck. There, I said it. Luckily I made some of the
+decisions for you and provide a test setup that will hopefully make it easier
+for you to write tests with minimum pain. Here we go.
+</p>
+
+</div>
+
+<div id="outline-container-2.3.1" class="outline-4">
+<h4 id="sec-2.3.1"><span class="section-number-4">2.3.1</span> Running tests </h4>
+<div class="outline-text-4" id="text-2.3.1">
+
+<p>Metaphor tests use the built-in unittest framework, but makes use of the
+nosetest framework to make it easier to run tests. You can run ``nosetests''
+from the command line in the metaphor top-level directory. Or you can run
+the metaphor.py script with the -t or &ndash;test option. Using the command line
+lets you use all of nosetests options while the script just provides a basic
+run. See the excellent <a href="http://somethingaboutorange.com/mrl/projects/nose/0.11.2/index.html">nose</a> documentation for all the running options.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-2.3.2" class="outline-4">
+<h4 id="sec-2.3.2"><span class="section-number-4">2.3.2</span> Writing tests </h4>
+<div class="outline-text-4" id="text-2.3.2">
+
+<p>There are a few simple rules you should follow to write unit tests for
+Metaphor:
+</p><ol>
+<li>
+All tests go in the test/ directory
+</li>
+<li>
+If you're testing a file, create a test file. If you're testing a
+function, create a test function. If you're testing a class create a
+test class. Prefix files, functions and methods with test_. Prefix classes with
+Test. Use meaningful suffixes to test different paths through the same
+method or function. Be smart and keep names small.
+</li>
+<li>
+Read the <a href="http://docs.python.org/library/unittest.html">unittest documentation</a>. Now.
+</li>
+<li>
+Look at some of the existing tests to get a feel for what your tests
+should be like.
+</li>
+<li>
+If you're adding tests for contexts, be sure that your names do not
+conflict with other contexts. Don't overwrite other peoples test files.
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</body>
+</html>

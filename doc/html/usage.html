@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+lang="en" xml:lang="en">
+<head>
+<title>Usage</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="<2010-10-21 Wed>"/>
+<meta name="author" content="Shrutarshi Basu"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  html { font-family: Times, serif; font-size: 12pt; }
+  .title  { text-align: center; }
+  .todo   { color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #add8e6; font-weight:normal }
+  .target { }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  p.verse { margin-left: 3% }
+  pre {
+	border: 1pt solid #AEBDCC;
+	background-color: #F3F5F7;
+	padding: 5pt;
+	font-family: courier, monospace;
+        font-size: 90%;
+        overflow:auto;
+  }
+  table { border-collapse: collapse; }
+  td, th { vertical-align: top; }
+  dt { font-weight: bold; }
+  div.figure { padding: 0.5em; }
+  div.figure p { text-align: center; }
+  .linenr { font-size:smaller }
+  .code-highlighted {background-color:#ffff00;}
+  .org-info-js_info-navigation { border-style:none; }
+  #org-info-js_console-label { font-size:10px; font-weight:bold;
+                               white-space:nowrap; }
+  .org-info-js_search-highlight {background-color:#ffff00; color:#000000;
+                                 font-weight:bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+
+<h1 class="title">Usage</h1>
+
+
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1 Basic usage </a>
+<ul>
+<li><a href="#sec-1.1">1.1 Command line options </a></li>
+<li><a href="#sec-1.2">1.2 Command line interface </a></li>
+</ul>
+</li>
+<li><a href="#sec-2">2 Describing L-systems </a>
+<ul>
+<li><a href="#sec-2.1">2.1 Basic structure </a></li>
+<li><a href="#sec-2.2">2.2 Symbols </a></li>
+<li><a href="#sec-2.3">2.3 Starting a system </a></li>
+<li><a href="#sec-2.4">2.4 The Axiom </a></li>
+<li><a href="#sec-2.5">2.5 Rules </a>
+<ul>
+<li><a href="#sec-2.5.1">2.5.1 Basic rules </a></li>
+<li><a href="#sec-2.5.2">2.5.2 Stochastic rules </a></li>
+<li><a href="#sec-2.5.3">2.5.3 Parametric rules </a></li>
+</ul>
+</li>
+<li><a href="#sec-2.6">2.6 Defines </a></li>
+<li><a href="#sec-2.7">2.7 Renders </a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Basic usage </h2>
+<div class="outline-text-2" id="text-1">
+
+<p>Metaphor is designed to be used both by CS professionals and users not
+familiar with programming and the command line. The current version (3.0) only
+includes two command-line interfaces. GUI options are being developed.
+</p>
+
+</div>
+
+<div id="outline-container-1.1" class="outline-3">
+<h3 id="sec-1.1"><span class="section-number-3">1.1</span> Command line options </h3>
+<div class="outline-text-3" id="text-1.1">
+
+<p>Metaphor supports a variety of command line options, many of which are
+responsible for toggling between the different user interfaces. The options
+for the different interfaces are:
+</p><ul>
+<li>
+-c Toggles the command line interface
+</li>
+<li>
+-s &lt;script&gt;, &ndash;script=&lt;script&gt; Toggles the script interface. See later
+documentation
+</li>
+<li>
+-u &lt;filename&gt;, &ndash;update=&lt;filename&gt; Updates the given file to the most
+recent syntax
+
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-1.2" class="outline-3">
+<h3 id="sec-1.2"><span class="section-number-3">1.2</span> Command line interface </h3>
+<div class="outline-text-3" id="text-1.2">
+
+<p>Metaphor can be used as a command line tool when launched with the -c
+option. In that case, the following arguments are required:
+</p><ul>
+<li>
+&ndash;source=&lt;filename&gt; A system declaration file to be used
+</li>
+<li>
+&ndash;system=&lt;name&gt; The name of the L-System to be used
+</li>
+<li>
+&ndash;generations=&lt;number&gt; The number of generations to be iterated for
+</li>
+<li>
+&ndash;context=&lt;name&gt; The name of the context to be used for rendering
+</li>
+<li>
+&ndash;render=&lt;filename&gt; The filename to save the output as
+
+</li>
+</ul>
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> Describing L-systems </h2>
+<div class="outline-text-2" id="text-2">
+
+<p>L-systems can be described using text files in a simple declarative
+language. The examples provide complete examples. The rest of this document
+will describe the Metaphor language
+</p>
+</div>
+
+<div id="outline-container-2.1" class="outline-3">
+<h3 id="sec-2.1"><span class="section-number-3">2.1</span> Basic structure </h3>
+<div class="outline-text-3" id="text-2.1">
+
+<p>To describe an Lsystem at least 4 components are needed:
+</p>
+<ol>
+<li>
+A name
+</li>
+<li>
+An axiom (set of starting symbols)
+</li>
+<li>
+A set of production rules
+</li>
+<li>
+A set of render instructions mapping symbols to instructions in a context
+
+</li>
+</ol>
+
+<p>The Metaphor language provides constructs to describe each of them.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-2.2" class="outline-3">
+<h3 id="sec-2.2"><span class="section-number-3">2.2</span> Symbols </h3>
+<div class="outline-text-3" id="text-2.2">
+
+<p>L-systems operate by replacing symbols in a string with other symbols. A
+symbol is simply a string of alphanumeric characters starting with a
+letter. The following are valid symbols:
+</p>
+<p>
+A B A1 abc Ab1cd
+</p>
+<p>
+Metaphor also allows symbols to have one or more parameters associated with
+them. To specifying a symbol with parameters, place the parameters in (). For
+example:
+</p>
+<p>
+A(1) B(3,4,5) C(x)
+</p>
+<p>
+If a symbol is part of the productions of a rule, the parameters can be
+mathematical functions on the parameters of the parent symbol. For example,
+if the parent symbol has a parameter, the following are valid:
+</p>
+<p>
+A(x+1) A(x/2) A(x*x)
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-2.3" class="outline-3">
+<h3 id="sec-2.3"><span class="section-number-3">2.3</span> Starting a system </h3>
+<div class="outline-text-3" id="text-2.3">
+
+<p>You can start a new L-System by using the following declaration:
+</p>
+<p>
+System &lt;name&gt;
+</p>
+<p>
+where name is a sequence of alphanumeric character starting with an alphabet.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-2.4" class="outline-3">
+<h3 id="sec-2.4"><span class="section-number-3">2.4</span> The Axiom </h3>
+<div class="outline-text-3" id="text-2.4">
+
+<p>The Axiom for a system is declared in the following form:
+</p>
+<p>
+Axiom &lt;symbol&gt;
+</p>
+<p>
+Please see the notation for describing different symbols.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-2.5" class="outline-3">
+<h3 id="sec-2.5"><span class="section-number-3">2.5</span> Rules </h3>
+<div class="outline-text-3" id="text-2.5">
+
+<p>Metaphor supports a number of different types of rules. Each of the types
+share a common pattern with additions for the different features. In the
+following section anything inside &lt;&gt; should be replaced with actual data in a
+real System. Everything else can be copied verbatim.
+</p>
+
+</div>
+
+<div id="outline-container-2.5.1" class="outline-4">
+<h4 id="sec-2.5.1"><span class="section-number-4">2.5.1</span> Basic rules </h4>
+<div class="outline-text-4" id="text-2.5.1">
+
+<p>A basic rule is of the form:
+</p>
+<p>
+Rule &lt;Symbol&gt; =&gt; &lt;list of symbols&gt;
+</p>
+<p>
+These symbols must be non-parametric. Again, see the symbol notation above.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-2.5.2" class="outline-4">
+<h4 id="sec-2.5.2"><span class="section-number-4">2.5.2</span> Stochastic rules </h4>
+<div class="outline-text-4" id="text-2.5.2">
+
+<p>Stochastic rules have a probability assigned to the rule. The probability
+can be a number or a variable and is placed inside braces {} after the
+symbol. The rules are of the form:
+</p>
+<p>
+Rule &lt;symbol&gt;{&lt;variable or number&gt;} =&gt; &lt;list of symbols&gt;
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-2.5.3" class="outline-4">
+<h4 id="sec-2.5.3"><span class="section-number-4">2.5.3</span> Parametric rules </h4>
+<div class="outline-text-4" id="text-2.5.3">
+
+<p>Parametric rules have parameters associated with each rule and the symbols
+in the productions can have mathematical operations on those parameters. The
+form of the rules are:
+</p>
+<p>
+Rule &lt;symbol&gt;(&lt;parameters&gt;) =&gt; &lt;list of symbols&gt;
+</p>
+<p>
+Such rules will only match for the <i>presence</i> of parameters in symbols. It
+also possible to perform comparisons against the values of parameters. For a
+comparison, the list of parameters must be specified as usual, followed by
+a |, followed by the conditions. The comparisons allowed are: ==, &lt;, &gt;, &lt;=,
+&gt;=. As a a shorthand, the == operator and the parameter can be dropped if
+there is a single parameter and only the comparison value specified. The
+comparison values can be numbers or variables. The general form is:
+</p>
+<p>
+Rule &lt;symbol&gt;(&lt;parameters&gt; | &lt;conditions&gt;) =&gt; &lt;list of symbols&gt;
+</p>
+<p>
+The shorthand for comparison is:
+</p>
+<p>
+Rule &lt;symbol&gt;(&lt;value&gt;) =&gt; &lt;list of symbols&gt;
+</p>
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-2.6" class="outline-3">
+<h3 id="sec-2.6"><span class="section-number-3">2.6</span> Defines </h3>
+<div class="outline-text-3" id="text-2.6">
+
+<p>Metaphor supports using variables in the rules which are later defined to
+have numeric values. Definitions are of the form:
+</p>
+<p>
+Define &lt;variable&gt; =&gt; &lt;number&gt;
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-2.7" class="outline-3">
+<h3 id="sec-2.7"><span class="section-number-3">2.7</span> Renders </h3>
+<div class="outline-text-3" id="text-2.7">
+
+<p>Render rules allow mapping the symbols in the Lsystem to instructions in a
+context. Simple renders are of the form:
+</p>
+<p>
+Render &lt;symbol&gt; =&gt; &lt;list of instructions&gt;
+</p>
+<p>
+Since metaphor also allows symbols to have parameters, it can also pass the
+parameters to the context. 
+</p>
+<p>
+Render &lt;symbol&gt;(&lt;parameters&gt;) =&gt; &lt;list of instructions&gt;
+</p>
+<p>
+These declarations cannot have conditions on the parameters, but the list of
+instructions do support mathematical operations on the parameters.
+</p></div>
+</div>
+</div>
+
+</div>
+</body>
+</html>

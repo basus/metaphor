@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+lang="en" xml:lang="en">
+<head>
+<title>Background Information</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="<2010-10-21 Wed>"/>
+<meta name="author" content="Shrutarshi Basu"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  html { font-family: Times, serif; font-size: 12pt; }
+  .title  { text-align: center; }
+  .todo   { color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #add8e6; font-weight:normal }
+  .target { }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  p.verse { margin-left: 3% }
+  pre {
+	border: 1pt solid #AEBDCC;
+	background-color: #F3F5F7;
+	padding: 5pt;
+	font-family: courier, monospace;
+        font-size: 90%;
+        overflow:auto;
+  }
+  table { border-collapse: collapse; }
+  td, th { vertical-align: top; }
+  dt { font-weight: bold; }
+  div.figure { padding: 0.5em; }
+  div.figure p { text-align: center; }
+  .linenr { font-size:smaller }
+  .code-highlighted {background-color:#ffff00;}
+  .org-info-js_info-navigation { border-style:none; }
+  #org-info-js_console-label { font-size:10px; font-weight:bold;
+                               white-space:nowrap; }
+  .org-info-js_search-highlight {background-color:#ffff00; color:#000000;
+                                 font-weight:bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+
+<h1 class="title">Background Information</h1>
+
+
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1 Background Information </a>
+<ul>
+<li><a href="#sec-1.1">1.1 Lindenmayer systems </a></li>
+<li><a href="#sec-1.2">1.2 Contexts and rendering </a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Background Information </h2>
+<div class="outline-text-2" id="text-1">
+
+
+</div>
+
+<div id="outline-container-1.1" class="outline-3">
+<h3 id="sec-1.1"><span class="section-number-3">1.1</span> Lindenmayer systems </h3>
+<div class="outline-text-3" id="text-1.1">
+
+<p>A Lindenmayer system (L-system) is a parallel rewriting system. The main
+concept is that of rewriting: Starting with a simple starting string of
+symbols, a complex string is created by replacing each symbol in accordance
+to a set of rewriting rules or productions.
+</p>
+<p>
+L-systems were originally developed to provide a mathematical theory of plant
+growth but since have been applied to study the generation of a wide variety
+of structures and graphical objects including fractals.
+</p>
+<p>
+A basic L-system consists of the following parts:
+</p><ul>
+<li>
+An alphabet &ndash; the set of symbols that can be replaced
+</li>
+<li>
+An axiom &ndash; the starting string of symbols
+</li>
+<li>
+Productions &ndash; the set of rules that define the way variables can be
+replaced with combinations of other symbols and constants
+
+</li>
+</ul>
+
+<p>There are variations on L-Systems that extend the above with probabilities,
+context-sensitivity and parameters and mathematical functions on the
+parameters. The basic types of L-systems are:
+</p><ul>
+<li>
+D0L &ndash; basic deterministic and context-free
+</li>
+<li>
+Stochastic 0L &ndash; production rules have a probability associated with them
+</li>
+<li>
+Parametric 0L &ndash; symbols are modules of letters and numeric parameters
+the rules contain operations on the parameters
+</li>
+<li>
+1L &ndash; the production of a symbol depends on one neighboring symbol
+</li>
+<li>
+2L &ndash; the production of a symbol depends on two neighboring symbols
+
+</li>
+</ul>
+
+<p>The current version of Metaphor only supports 0L systems.
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-1.2" class="outline-3">
+<h3 id="sec-1.2"><span class="section-number-3">1.2</span> Contexts and rendering </h3>
+<div class="outline-text-3" id="text-1.2">
+
+<p>L-systems only generate strings in accordance to specified rules. In order to
+visualize the L-Systems the generated have to be rendered in some sort of
+graphical environment. 
+</p>
+<p>
+Metaphor supports the use of ``contexts'' &ndash; pluggable components that act as
+environments for graphically interpreting the generated strings. Metaphor can
+translate the symbols (and parameters) in a L-system to instructions for the
+contexts. The contexts are self-contained: there is no feedback from the
+context to Metaphor. See the <a href="#technical.org">technical documentation</a> information on how
+to implement contexts. 
+</p></div>
+</div>
+</div>
+
+</div>
+</body>
+</html>
