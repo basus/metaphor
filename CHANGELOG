@@ -1,4 +1,8 @@
-July 12, 2010 - Release 3.0
+July 20, 2010 - v0.2 beta2
+* Added error handling for parse errors
+* Much better documentation in the form of .org files
+
+July 12, 2010 - v0.2 beta1
 * Added new, more uniform syntax for L-System declarations
 * Added support for parametric L-systems
 * Cleaner, simpler AST generation from source declarations using PLY
