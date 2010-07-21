@@ -1,3 +1,5 @@
+#+SETUPFILE: level-0.org
+#+TITLE: Usage
 * Basic usage
   Metaphor is designed to be used both by CS professionals and users not
   familiar with programming and the command line. The current version (3.0) only

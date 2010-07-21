@@ -1,3 +1,5 @@
+#+SETUPFILE: level-0.org
+#+TITLE: Overview
 * Overview
 ** What is Metaphor?
    Metaphor is meant to be a tool to explore generative formal grammars,

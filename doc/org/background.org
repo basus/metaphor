@@ -1,3 +1,5 @@
+#+SETUPFILE: level-0.org
+#+TITLE: Background Information
 * Background Information
 ** Lindenmayer systems
    A Lindenmayer system (L-system) is a parallel rewriting system. The main

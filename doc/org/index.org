@@ -1,7 +1,10 @@
+#+SETUPFILE: level-0.org
+#+OPTIONS: toc:nil
+#+TITLE: Documentation Index
 * Documentation Index
-  The documentation for Metaphor consists of the following parts:
+  The documentation for Metaphor consists of the following parts. Some files link to source code:
     
     1. [[file:overview.org::*Overview][Overview]] -- Overview of the Metaphor system
-    2. [[background.org][Background]] -- Concepts, ideas and terminology behind Metaphor
+    2. [[file:background.org::*Background%20Information][Background]] -- Concepts, ideas and terminology behind Metaphor
     3. [[file:usage.org::*Basic%20usage][Usage]] -- How to run Metaphor and create L-systems
     4. [[file:technical.org::*Technical%20information][Technical]] -- Notes about the implementation and organization of Metaphor
