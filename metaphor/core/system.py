@@ -17,15 +17,15 @@ class Builder:
         Initiate the builder object
         @param root The root node of the AST
         """
-        self.__root = root
+        self.root = root
         self.node = root
 
     def build_system(self):
         """
         Builds the system starting from the root node
         """
-        self.system = System(self.__root.data)
-        self.build_declarations(self.__root.children)
+        self.system = System(self.root.data)
+        self.build_declarations(self.root.children)
         return self.system
 
     def build_declarations(self, declarations):
@@ -290,7 +290,7 @@ class System:
             symb = each.symbol
             params = self.eval(each.exprs,rule.parameters,symbol.params)
             newsymb = Symbol(symb, params)
-            symbols.append(newsymb)
+\            symbols.append(newsymb)
         return symbols
             
     def pick(self, symbol):

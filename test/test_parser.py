@@ -1,4 +1,4 @@
-from metaphor import parser as p
+from metaphor.core import parser as p
 import os
 
 def lex(text, types, values):
@@ -12,7 +12,7 @@ def lex(text, types, values):
         assert t.value == values[i]
     
 def test_all():
-    fl = open("examples/parametric.gr")
+    fl = open("examples/parametric.lsys")
     st = ""
     for line in fl:
         st += line

@@ -21,6 +21,10 @@ def main(argv):
     parser.add_option("-u", "--update", dest="update",
                       help="Update the given declaration file to the current syntax")
 
+    # Run unit tests
+    parser.add_option("-t", "--test", dest="test", action="store_true",
+                      help="Run all unit tests using the nose framework")
+    
     # Python Script Interface
     parser.add_option("-s", "--script",dest="script",
                       help="Use the supplied Python script to run Metaphor")
@@ -43,6 +47,9 @@ def main(argv):
         interface = cli.CLInterface(options.source,options.system,options.generations,
                                     options.context,options.render)
         interface.run()
+    elif options.test:
+        import nose
+        nose.main()
     elif options.update:
         util.to2(update,update+'.lsys')
     else:
