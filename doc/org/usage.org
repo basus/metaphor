@@ -9,20 +9,20 @@
    Metaphor supports a variety of command line options, many of which are
    responsible for toggling between the different user interfaces. The options
    for the different interfaces are:
-    - -c Toggles the command line interface
-    - -s <script>, --script=<script> Toggles the script interface. See later
+    - =-c= Toggles the command line interface
+    - =-s <script>, --script=<script>= Toggles the script interface. See later
       documentation
-    - -u <filename>, --update=<filename> Updates the given file to the most
+    - =-u <filename>, --update=<filename>= Updates the given file to the most
       recent syntax
 
 ** Command line interface
    Metaphor can be used as a command line tool when launched with the -c
    option. In that case, the following arguments are required:
-    - --source=<filename> A system declaration file to be used
-    - --system=<name> The name of the L-System to be used
-    - --generations=<number> The number of generations to be iterated for
-    - --context=<name> The name of the context to be used for rendering
-    - --render=<filename> The filename to save the output as
+    - =--source=<filename>= A system declaration file to be used
+    - =--system=<name>= The name of the L-System to be used
+    - =--generations=<number>= The number of generations to be iterated for
+    - =--context=<name>= The name of the context to be used for rendering
+    - =--render=<filename>= The filename to save the output as
 
 * Describing L-systems
   L-systems can be described using text files in a simple declarative
@@ -43,31 +43,31 @@
    symbol is simply a string of alphanumeric characters starting with a
    letter. The following are valid symbols:
 
-    A B A1 abc Ab1cd
+    : A B A1 abc Ab1cd
 
    Metaphor also allows symbols to have one or more parameters associated with
    them. To specifying a symbol with parameters, place the parameters in (). For
    example:
     
-    A(1) B(3,4,5) C(x)
+    : A(1) B(3,4,5) C(x)
 
    If a symbol is part of the productions of a rule, the parameters can be
    mathematical functions on the parameters of the parent symbol. For example,
    if the parent symbol has a parameter, the following are valid:
 
-    A(x+1) A(x/2) A(x*x)
+    : A(x+1) A(x/2) A(x*x)
 
 ** Starting a system
    You can start a new L-System by using the following declaration:
 
-    System <name>
+    : System <name>
 
    where name is a sequence of alphanumeric character starting with an alphabet.
 
 ** The Axiom
    The Axiom for a system is declared in the following form:
 
-    Axiom <symbol>
+    : Axiom <symbol>
 
    Please see the notation for describing different symbols.
 
@@ -80,7 +80,7 @@
 *** Basic rules
     A basic rule is of the form:
 
-     Rule <Symbol> => <list of symbols>
+     : Rule <Symbol> => <list of symbols>
 
     These symbols must be non-parametric. Again, see the symbol notation above.
 
@@ -89,14 +89,14 @@
     can be a number or a variable and is placed inside braces {} after the
     symbol. The rules are of the form:
 
-     Rule <symbol>{<variable or number>} => <list of symbols>
+     : Rule <symbol>{<variable or number>} => <list of symbols>
 
 *** Parametric rules
     Parametric rules have parameters associated with each rule and the symbols
     in the productions can have mathematical operations on those parameters. The
     form of the rules are:
 
-     Rule <symbol>(<parameters>) => <list of symbols>
+     : Rule <symbol>(<parameters>) => <list of symbols>
 
     Such rules will only match for the /presence/ of parameters in symbols. It
     also possible to perform comparisons against the values of parameters. For a
@@ -106,28 +106,28 @@
     there is a single parameter and only the comparison value specified. The
     comparison values can be numbers or variables. The general form is:
 
-     Rule <symbol>(<parameters> | <conditions>) => <list of symbols>
+     : Rule <symbol>(<parameters> | <conditions>) => <list of symbols>
 
     The shorthand for comparison is:
      
-     Rule <symbol>(<value>) => <list of symbols>
+     : Rule <symbol>(<value>) => <list of symbols>
 
 ** Defines
    Metaphor supports using variables in the rules which are later defined to
    have numeric values. Definitions are of the form:
 
-    Define <variable> => <number>
+    : Define <variable> => <number>
 
 ** Renders
    Render rules allow mapping the symbols in the Lsystem to instructions in a
    context. Simple renders are of the form:
     
-    Render <symbol> => <list of instructions>
+    : Render <symbol> => <list of instructions>
 
    Since metaphor also allows symbols to have parameters, it can also pass the
    parameters to the context. 
     
-    Render <symbol>(<parameters>) => <list of instructions>
+    : Render <symbol>(<parameters>) => <list of instructions>
 
    These declarations cannot have conditions on the parameters, but the list of
    instructions do support mathematical operations on the parameters.

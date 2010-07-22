@@ -20,9 +20,28 @@
     - A graphics editing programming (a la Photoshop, the GIMP)
     - A replacement for other computational art tools like [[http://processing.org][Processing]]
 
-** What is this document?
-   This document is a basic introduction to the Metaphor system. It is designed
-   to give users a basic understanding of the ideas behind Metaphor and some
-   suggestions for how to use the sytem.  If you are a developer wanting to
-   extend Metaphor for whatever reason please see the separate developer
-   documentation as well.  Enjoy.
+** Where am I?
+   You are in the Metaphor documenatation. This page is an
+   introduction to the Metaphor system. It is designed to give users a
+   basic understanding of the ideas behind Metaphor and some
+   suggestions for how to use the sytem.  If you only want to use
+   Metaphor to create art, see the [[file:usage.org::*Basic%20usage][usage page]]. If you are a developer
+   wanting to write tests or additions to Metaphor please see the
+   separate [[file:technical.org::*Technical%20information][developer documentation]]. Enjoy.
+
+** Who made Metaphor? Why?
+   Metaphor started as a research project at [[http://www.lafayette.edu/][Lafayette College]] in
+   summer of 2008. The purpose was to explore the power of L-Systems
+   to generate artistic images. A GUI interface was added in 2009 and
+   a major rewrite and overhaul of the code brought it up to the
+   current release in 2010 (v0.2).
+
+   The original Metaphor core was written in 2008 by [[http://basushr.net/][Shrutarshi Basu]]
+   (me) . Khine Lin and Rhodes Baker used Metaphor to create images
+   and added contexts. In 2009 Long Ho and Haruki Yamaguchi created a
+   GUI on top of the Metaphor core. Samantha Smith wrote a tutorial
+   for this GUI. I rewrote most the Metaphor core, added features and
+   wrote this documentation in summer 2010. An improved GUI was
+   created by [[http://cs.lafayette.edu/~kimh/][Paul Kim]] to interface with the new core. Professor [[http://cs.lafayette.edu/~liew][Chun
+   Wai Liew]] was the advisor for entire project along with artistic
+   advise from Ed Kerns.

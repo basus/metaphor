@@ -44,6 +44,7 @@ lang="en" xml:lang="en">
                                  font-weight:bold; }
   /*]]>*/-->
 </style>
+<link rel="stylesheet" type="text/css" href="css/metaphor.css" />
 <script type="text/javascript">
 <!--/*--><![CDATA[/*><!--*/
  function CodeHighlightOn(elem, id)
@@ -69,6 +70,11 @@ lang="en" xml:lang="en">
 </head>
 <body>
 <div id="content">
+<div id="org-div-home-and-up" style="text-align:right;font-size:70%;white-space:nowrap;">
+ <a accesskey="h" href="index.html"> UP </a>
+ |
+ <a accesskey="H" href="index.html"> HOME </a>
+</div>
 
 <h1 class="title">Background Information</h1>
 
@@ -99,14 +105,14 @@ lang="en" xml:lang="en">
 <div class="outline-text-3" id="text-1.1">
 
 <p>A Lindenmayer system (L-system) is a parallel rewriting system. The main
-concept is that of rewriting: Starting with a simple starting string of
-symbols, a complex string is created by replacing each symbol in accordance
-to a set of rewriting rules or productions.
+concept is that of rewriting: Starting with a string of symbols, a more
+complex string is created by replacing each symbol in accordance to a set of
+<i>rewriting rules</i>.
 </p>
 <p>
-L-systems were originally developed to provide a mathematical theory of plant
-growth but since have been applied to study the generation of a wide variety
-of structures and graphical objects including fractals.
+L-systems were originally developed to provide a mathematical and algorithmic
+a wide variety of structures and graphical objects including fractals.
+theory of plant growth but since have been applied to study the generation of
 </p>
 <p>
 A basic L-system consists of the following parts:
@@ -135,7 +141,7 @@ D0L &ndash; basic deterministic and context-free
 Stochastic 0L &ndash; production rules have a probability associated with them
 </li>
 <li>
-Parametric 0L &ndash; symbols are modules of letters and numeric parameters
+Parametric 0L &ndash; symbols are <i>modules</i> of letters and numeric parameters
 the rules contain operations on the parameters
 </li>
 <li>
@@ -147,7 +153,7 @@ the rules contain operations on the parameters
 </li>
 </ul>
 
-<p>The current version of Metaphor only supports 0L systems.
+<p>The current version of Metaphor only supports the 0L systems.
 </p>
 </div>
 
@@ -158,16 +164,16 @@ the rules contain operations on the parameters
 <div class="outline-text-3" id="text-1.2">
 
 <p>L-systems only generate strings in accordance to specified rules. In order to
-visualize the L-Systems the generated have to be rendered in some sort of
-graphical environment. 
+visualize the L-Systems the generated strings have to be rendered in some
+sort of graphical environment.
 </p>
 <p>
-Metaphor supports the use of ``contexts'' &ndash; pluggable components that act as
+Metaphor supports the use of <i>contexts</i> &ndash; pluggable components that act as
 environments for graphically interpreting the generated strings. Metaphor can
 translate the symbols (and parameters) in a L-system to instructions for the
 contexts. The contexts are self-contained: there is no feedback from the
-context to Metaphor. See the <a href="#technical.org">technical documentation</a> information on how
-to implement contexts. 
+context to Metaphor. See the <a href="technical.html">technical documentation</a> on how to implement
+contexts.
 </p></div>
 </div>
 </div>

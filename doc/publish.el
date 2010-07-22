@@ -5,6 +5,8 @@
          :base-directory "~/src/metaphor/doc/org"
          :base-extension "org"
          :publishing-directory "~/src/metaphor/doc/html"
+         :link-home "~/src/metaphor/doc/html/index.html"
+         :link-up "~/src/metaphor/doc/html/index.html"
          :recursive t
          :publishing-function org-publish-org-to-html
          :exclude "level-0.org"

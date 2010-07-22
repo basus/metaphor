@@ -2,4 +2,7 @@
 #+EMAIL:     basus@lafayette.edu
 #+DATE:      <2010-10-21 Wed>
 #+LANGUAGE:  en
-#+OPTIONS:   H:3 num:t \n:nil @:t ::t |:t ^:t -:t f:t *:t TeX:t LaTeX:nil skip:nil d:t tags:not-in-toc timestamp:nil
+#+OPTIONS:   H:3 num:t \n:nil @:t ::t |:t ^:t -:t f:t *:t TeX:t LaTeX:nil skip:t d:t tags:not-in-toc timestamp:nil
+#+STYLE:     <link rel="stylesheet" type="text/css" href="css/metaphor.css" />
+#+LINK_UP:    index.html
+#+LINK_HOME:    index.html
