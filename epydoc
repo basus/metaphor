@@ -1,0 +1,10 @@
+[epydoc]
+
+name: Metaphor
+url: http://github.com/basus/metaphor
+
+modules: metaphor/core, metaphor/ui
+
+output: html
+target: doc/html/api
+css: doc/html/css/metaphor.css

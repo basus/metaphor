@@ -15,7 +15,7 @@ class Builder:
     def __init__(self, root=None):
         """
         Initiate the builder object
-        @param root The root node of the AST
+        @param root: The root node of the AST
         """
         self.root = root
         self.node = root
@@ -31,7 +31,7 @@ class Builder:
     def build_declarations(self, declarations):
         """
         Build all the declarations
-        @param the root of the declarations tree
+        @param declarations: the root of the declarations tree
         """
         decls = declarations.children
         for decl in decls:
@@ -41,7 +41,7 @@ class Builder:
         """
         Traverse each declaration tree and add the required properties to the
         system object being created
-        @param decl The root node of the declaration
+        @param decl: The root node of the declaration
         """
         if decl.type == "axiom":
             a = self.build_axiom(decl)
@@ -290,7 +290,7 @@ class System:
             symb = each.symbol
             params = self.eval(each.exprs,rule.parameters,symbol.params)
             newsymb = Symbol(symb, params)
-\            symbols.append(newsymb)
+            symbols.append(newsymb)
         return symbols
             
     def pick(self, symbol):
@@ -337,7 +337,7 @@ class System:
 
     def bind(self,params,values):
         """ Binds the parameters and values into a dict
-        @type param: list
+        @type params: list
         @param params: the list of parameters
         @type values: list
         @param values: the list of values for the corresponding parameters

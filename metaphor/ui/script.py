@@ -29,7 +29,7 @@ class PyScriptInterface:
         """
         Compiles the grammar file specified in the script and turns it into the
         corresponding grammar objects.
-        @rtype boolean:
+        @rtype: boolean
         @return: True if compilation succeeded else false
         """
         self.env.add_from_file(self.script.compile)

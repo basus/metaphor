@@ -13,11 +13,11 @@ class CLInterface:
         Takes the required commandline parameters and creates an Environment
         for the grammars
 
-        @param src The filepath fo the Lsystem declaration code
-        @param sys The Lsystem to be used
-        @param gen The number of generations to iterate for
-        @param cont The context used to render
-        @param ren The output filepath
+        @param src: The filepath fo the Lsystem declaration code
+        @param sys: The Lsystem to be used
+        @param gen: The number of generations to iterate for
+        @param cont: The context used to render
+        @param ren: The output filepath
         """
         self.src = src
         self.system = sys
