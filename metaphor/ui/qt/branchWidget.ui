@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Branch</class>
+ <widget class="QWidget" name="Branch">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>180</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>180</width>
+    <height>200</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>180</width>
+    <height>16777215</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Branch</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>5</number>
+   </property>
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QToolButton" name="nameButton">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>Edit branch name</string>
+       </property>
+       <property name="statusTip">
+        <string>Edit branch name</string>
+       </property>
+       <property name="text">
+        <string>New Branch</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="deleteBranchButton">
+       <property name="toolTip">
+        <string>Delete branch</string>
+       </property>
+       <property name="statusTip">
+        <string>Delete branch</string>
+       </property>
+       <property name="text">
+        <string>X</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QScrollArea" name="scrollArea">
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>176</width>
+        <height>236</height>
+       </rect>
+      </property>
+      <property name="acceptDrops">
+       <bool>true</bool>
+      </property>
+      <layout class="QVBoxLayout" name="actionsLayout">
+       <property name="spacing">
+        <number>2</number>
+       </property>
+       <property name="margin">
+        <number>0</number>
+       </property>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QToolButton" name="addActionButton">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="toolTip">
+      <string>Add action</string>
+     </property>
+     <property name="statusTip">
+      <string>Add action</string>
+     </property>
+     <property name="text">
+      <string>Add action</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>nameButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Branch</receiver>
+   <slot>editName()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>43</x>
+     <y>15</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>81</x>
+     <y>64</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>addActionButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Branch</receiver>
+   <slot>addAction()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>63</x>
+     <y>286</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>82</x>
+     <y>217</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>deleteBranchButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Branch</receiver>
+   <slot>deleteBranch()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>155</x>
+     <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>123</x>
+     <y>113</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>editName()</slot>
+  <slot>addAction()</slot>
+  <slot>deleteAction()</slot>
+  <slot>deleteBranch()</slot>
+  <slot>editAction(QTreeWidgetItem*)</slot>
+ </slots>
+</ui>

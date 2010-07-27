@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar context="turtle">
+	<entity id="0" name="A" axiom="true">
+		<subtree id="0" name="branch0" weight="1">
+			<children>F save right A left F right left restore save left A right
+				F left F save F A </children>
+		</subtree>
+	</entity>
+	<entity id="1" name="F">
+		<method name="forward" values="5"></method>
+		<subtree id="0" name="branch0" weight="1">
+			<children>F F </children>
+		</subtree>
+	</entity>
+	<entity id="2" name="right">
+		<method name="right" values="90"></method>
+	</entity>
+	<entity id="3" name="left">
+		<method name="left" values="90"></method>
+	</entity>
+	<entity id="4" name="save">
+		<method name="save" values=""></method>
+	</entity>
+	<entity id="5" name="restore">
+		<method name="restore" values=""></method>
+	</entity>
+</grammar>

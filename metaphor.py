@@ -3,6 +3,7 @@ import sys
 from optparse import OptionParser
 from metaphor.ui import cli
 from metaphor.ui import script
+from metaphor.ui.qt.main import run
 from metaphor.core import util
 
 def main(argv):
@@ -38,6 +39,10 @@ def main(argv):
     parser.add_option("--context",dest="context")
     parser.add_option("--render",dest="render")
 
+    # QT interface
+    parser.add_option("-q", "--qt", dest="qt", action="store_true",
+                      help="Launch the Qt interface")
+
     (options, args) = parser.parse_args()
     
     if options.script: 
@@ -47,6 +52,8 @@ def main(argv):
         interface = cli.CLInterface(options.source,options.system,options.generations,
                                     options.context,options.render)
         interface.run()
+    elif options.qt:
+        run()
     elif options.test:
         import nose
         nose.main()

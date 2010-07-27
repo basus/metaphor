@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<grammar context="BranchContext3D">
+<entity id="0" name="trunk" axiom="true">
+<subtree id="0" name="branch0" weight="1">
+<children>trunk1 continue </children>
+</subtree></entity>
+<entity id="1" name="trunk1">
+<method name="sett" values="0.6"></method>
+<method name="setCamera" values="1,1,1,1.0,1.0,1.0,1.0,1.0,1.0"></method>
+<method name="set_curvature" values="3.1"></method>
+<method name="setx" values="0"></method>
+<method name="sety" values="0"></method>
+<method name="seth" values="90,0"></method>
+<method name="set_color" values="0.4,0.0,0.0,0.0"></method>
+<method name="forward" values="3.0"></method>
+</entity>
+<entity id="2" name="continue">
+<method name="forward" values="20.0"></method>
+<subtree id="0" name="stop" weight="10">
+<children>exit </children>
+</subtree><subtree id="1" name="split" weight="100">
+<children>saveP saveC turn thin lighter continue continue restore restoreC continue </children>
+</subtree><subtree id="2" name="grow" weight="10">
+<children>continue continue </children>
+</subtree><subtree id="3" name="circle" weight="1">
+<children>dot continue </children>
+</subtree></entity>
+<entity id="3" name="saveP">
+<method name="save_point" values=""></method>
+</entity>
+<entity id="4" name="saveC">
+<method name="save_color" values=""></method>
+</entity>
+<entity id="5" name="thin">
+<method name="change_t" values="0.0"></method>
+</entity>
+<entity id="6" name="lighter">
+<method name="alter_color" values="0.0,-0.01,0.0,0.1"></method>
+</entity>
+<entity id="7" name="turn">
+<subtree id="0" name="left" weight="5">
+<children>turnL </children>
+</subtree><subtree id="1" name="right" weight="5">
+<children>turnR </children>
+</subtree><subtree id="2" name="up" weight="5">
+<children>turnU </children>
+</subtree><subtree id="3" name="down" weight="5">
+<children>turnD </children>
+</subtree></entity>
+<entity id="8" name="restore">
+<method name="restore_point" values=""></method>
+</entity>
+<entity id="9" name="restoreC">
+<method name="restore_color" values=""></method>
+</entity>
+<entity id="10" name="dot">
+<method name="draw_dot" values="3,14"></method>
+</entity>
+<entity id="11" name="turnL">
+<method name="turn" values="-15,0"></method>
+</entity>
+<entity id="12" name="turnR">
+<method name="turn" values="15,0"></method>
+</entity>
+<entity id="13" name="turnU">
+<method name="turn" values="0,15"></method>
+</entity>
+<entity id="14" name="turnD">
+<method name="turn" values="0,-15"></method>
+</entity>
+<entity id="17" name="exit">
+</entity>
+</grammar>
