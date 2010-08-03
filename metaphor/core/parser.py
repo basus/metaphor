@@ -49,6 +49,8 @@ def t_SPECIAL(t):
     t.type = operators.get(t.value, "SPECIAL")
     if t.type == "SPECIAL":
         t.type = comparators.get(t.value, "SPECIAL")
+    if t.value == '-':
+        t.lexer.has_negative = True
     return t
 
 def t_SYMBOL(t):
@@ -197,8 +199,13 @@ def p_parameter(p):
     """
     parameter : SYMBOL
               | NUMBER
+              | MINUS NUMBER %prec UMINUS
     """
-    p[0] = Node("parameter", None, p[1])
+    p[0] = Node("parameter", None, None)
+    if len(p) > 2:
+        p[0].data = -p[2]
+    else:
+        p[0].data = p[1]
 
 def p_productions(p):
     """
@@ -265,6 +272,7 @@ precedence = (
     ('nonassoc', 'LT', 'GT', 'EQ', 'LTEQ', 'GTEQ'),
     ('left', 'PLUS', 'MINUS'),
     ('left', 'TIMES', 'DIVIDE'),
+    ('right', 'UMINUS'),
 )
 
 #################################################
