@@ -29,7 +29,7 @@ class ContextHandler:
             contextname = self.contextpath.split('/')[-1]
             self.name = contextname.rstrip(".py")
             self.context = getattr(module, self.name)()
-        except Exception as e:
+        except Exception, e:
             print e
             raise InvalidContextError(self.contextpath)
 
@@ -50,7 +50,7 @@ class ContextHandler:
                     call()
                 else:
                     call(*params)
-            except AttributeError as a:
+            except AttributeError,a:
                 print a
                 raise InvalidContextActionError(call)
             except Exception, inst:

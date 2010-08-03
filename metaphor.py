@@ -3,7 +3,6 @@ import sys
 from optparse import OptionParser
 from metaphor.ui import cli
 from metaphor.ui import script
-from metaphor.ui.qt.main import run
 from metaphor.core import util
 
 def main(argv):
@@ -53,6 +52,7 @@ def main(argv):
                                     options.context,options.render)
         interface.run()
     elif options.qt:
+        from metaphor.ui.qt.main import run
         run()
     elif options.test:
         import nose

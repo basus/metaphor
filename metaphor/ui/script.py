@@ -15,7 +15,7 @@ class PyScriptInterface:
 
     def __init__(self, scriptpath):
         """
-        Loads the actual script as a module so that it can be accessed by the
+        Loads the actual script, a module so that it can be accessed by the
         rest of the class methods.
         @param string with the path to the script to run
         """
@@ -73,5 +73,5 @@ class PyScriptInterface:
             self.compile()
             self.setcontext()
             self.make()
-        except error.ParseError as e:
+        except error.ParseError, e:
             print e
