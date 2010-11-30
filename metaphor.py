@@ -58,7 +58,7 @@ def main(argv):
         import nose
         nose.main()
     elif options.update:
-        util.to2(update,update+'.lsys')
+        util.to2(options.update,options.update+'.lsys')
     else:
         print "Options required"
         
