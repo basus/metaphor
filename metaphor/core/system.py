@@ -513,7 +513,7 @@ class Environment:
         @param save: the path to the output file
         """
         if not string:
-            string = self.string_stack[0]
+            string = self.string_stack.pop()
         if not handler:
             handler = self.last_handler
         sys = self.systems[string[0]]

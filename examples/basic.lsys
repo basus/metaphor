@@ -23,8 +23,8 @@ System Sierpinski
         Rule A => B right A right B 
         Rule B => A left B left A
 
-        Render A => forward(50)
-        Render B => forward(50)
+        Render A => forward(5)
+        Render B => forward(5)
         Render right => right(60)
         Render left => left(60)
 
@@ -35,7 +35,7 @@ System Dragon
         Rule X => X right Y F right 
         Rule Y => left F X left Y
 
-        Render F => forward(20)
+        Render F => forward(40)
         Render right => right(90)
         Render left => left(90)
 

@@ -52,7 +52,7 @@ class ContextHandler:
                     call(*params)
             except AttributeError,a:
                 print a
-                raise InvalidContextActionError(call)
+#                raise InvalidContextActionError(call)
             except Exception, inst:
                 raise ContextAtFaultError(call, inst)
 
