@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Metaphor.  If not, see <http://www.gnu.org/licenses/>.
 
-compile = 'examples/forest.gr'
+compile = 'examples/forest.lsys'
 
 context = 'contexts/turtle.py'
 
