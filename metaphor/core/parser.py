@@ -43,7 +43,7 @@ comparators = {
     "<" : "LT"
     }
 
-tokens = ["SYMBOL", "OPEN_PAREN", "CLOSE_PAREN", "OPEN_BRACE",
+tokens = ["SYMBOL", "HEXCOLOR", "OPEN_PAREN", "CLOSE_PAREN", "OPEN_BRACE",
           "CLOSE_BRACE", "SPECIAL", "BLANK", "SEPARATOR", "PIPE",
           "NUMBER", ] + list(reserved.values()) + list(operators.values()) + list(comparators.values())
 
@@ -56,8 +56,10 @@ t_CLOSE_BRACE = r"\}"
 t_SEPARATOR = r","
 t_PIPE = r"\|"
 
+t_HEXCOLOR = r"\#[A-Fa-f0-9]{3,6}"
+
 t_ignore_BLANK = r"[ \t\r\f\v]"
-t_ignore_comment = r"\#.*"
+t_ignore_comment = r";.*"
 
 def t_SPECIAL(t):
     r"(>|<)=?|==|=>|\+|-|\*|/"
@@ -69,7 +71,7 @@ def t_SPECIAL(t):
     return t
 
 def t_SYMBOL(t):
-    "[A-za-z]\w*"
+    r"[A-za-z]\w*"
     t.type = reserved.get(t.value,"SYMBOL")         # Check is symbol is a keyword
     return t
 
@@ -213,6 +215,7 @@ def p_parameters(p):
 def p_parameter(p):
     """
     parameter : SYMBOL
+              | HEXCOLOR
               | NUMBER
               | MINUS NUMBER %prec UMINUS
     """
